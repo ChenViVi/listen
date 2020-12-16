@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Dang</string>
+    <string name="tv_bilibili">B站</string>
+    <string name="tv_image">图片</string>
+</resources>
