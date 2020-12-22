@@ -32,7 +32,7 @@ import java.util.List;
 public class BilibiliFragment extends Fragment {
 
     private RecyclerView rvList;
-    private List<BilibiliVideo> videoList = new ArrayList<>();
+    private List<BilibiliVideo> itemList = new ArrayList<>();
     private BilibiliVideoAdapter adapter;
 
     @Nullable
@@ -46,7 +46,7 @@ public class BilibiliFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvList = view.findViewById(R.id.rvList);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BilibiliVideoAdapter(getContext(), videoList);
+        adapter = new BilibiliVideoAdapter(getContext(), itemList);
         rvList.setAdapter(adapter);
         RxHttpUtils.createApi("bilibili","https://api.bilibili.com/", BilibiliService.class)
                 .getVideos("345630501", 16, 1,
@@ -71,7 +71,7 @@ public class BilibiliFragment extends Fragment {
                             JSONArray vlist = dataJson.getJSONObject("data").getJSONObject("list").getJSONArray("vlist");
                             Gson gson = new Gson();
                             List<BilibiliVideo> videos = gson.fromJson(vlist.toString(), new TypeToken<List<BilibiliVideo>>() {}.getType());
-                            videoList.addAll(videos);
+                            itemList.addAll(videos);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();

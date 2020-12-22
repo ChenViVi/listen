@@ -24,11 +24,10 @@ public class BilibiliVideoAdapter extends BaseQuickAdapter<BilibiliVideo, BaseVi
     @Override
     protected void convert(BaseViewHolder viewHolder, BilibiliVideo item) {
         viewHolder.setText(R.id.tvTitle, item.getTitle())
-                .setText(R.id.tvPlayCount, String.valueOf(item.getPlay()))
-                .setText(R.id.tvPlayCount, String.valueOf(item.getVideoReview()));
+                .setText(R.id.tvPlayCount, "播放量：" + item.getPlay())
+                .setText(R.id.tvDanmkuCount, "弹幕数：" + item.getVideoReview());
         Glide.with(context)
                 .load(item.getPic())
-                //.placeholder(R.drawable.img_video_loading)
                 .into((ImageView) viewHolder.getView(R.id.ivCover));
     }
 }
