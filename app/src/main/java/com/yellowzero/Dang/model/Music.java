@@ -1,11 +1,20 @@
 package com.yellowzero.Dang.model;
 
 public class Music {
+    private boolean isSelected;
     private int id;
     private String name;
     private String url;
     private String link;
     private String cover;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public int getId() {
         return id;

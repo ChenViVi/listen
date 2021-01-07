@@ -17,6 +17,8 @@ import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.DataObserver;
 import com.allen.library.utils.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
@@ -48,6 +50,15 @@ public class MusicListFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MusicAdapter(getContext(), itemList);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                for (Music music : itemList)
+                    music.setSelected(false);
+                itemList.get(position).setSelected(true);
+                adapter.notifyDataSetChanged();
+            }
+        });
         rvList.setAdapter(adapter);
         Bundle bundle = getArguments();
         if (bundle != null)
