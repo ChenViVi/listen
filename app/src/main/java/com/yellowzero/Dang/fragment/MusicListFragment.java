@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
@@ -30,6 +31,7 @@ public class MusicListFragment extends Fragment {
     private static final String KEY_TAG_ID = "tagId";
     private int tagId;
     private RecyclerView rvList;
+    private SwipeRefreshLayout refreshLayout;
     private List<Music> itemList = new ArrayList<>();
     private MusicAdapter adapter;
 
@@ -43,12 +45,24 @@ public class MusicListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvList = view.findViewById(R.id.rvList);
+        refreshLayout = view.findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MusicAdapter(getContext(), itemList);
         rvList.setAdapter(adapter);
         Bundle bundle = getArguments();
         if (bundle != null)
             tagId = bundle.getInt(KEY_TAG_ID);
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadList();
+            }
+        });
+        loadList();
+    }
+
+    public void loadList() {
         RxHttpUtils.createApi(MusicService.class)
                 .list(tagId)
                 .compose(Transformer.<BaseData<List<Music>>>switchSchedulers())
@@ -60,8 +74,10 @@ public class MusicListFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(List<Music> data) {
+                        itemList.clear();
                         itemList.addAll(data);
                         adapter.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
                     }
                 });
     }

@@ -48,6 +48,7 @@ public class MusicFragment extends Fragment {
         TabViewPagerAdapter adapterTab = new TabViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapterTab);
         tabLayout.setupWithViewPager(viewPager);
+
         RxHttpUtils.createApi(MusicService.class)
                 .tags()
                 .compose(Transformer.<BaseData<List<MusicTag>>>switchSchedulers())

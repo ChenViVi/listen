@@ -10,11 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.allen.library.utils.ToastUtils;
+import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yellowzero.Dang.R;
@@ -31,7 +33,11 @@ import java.util.List;
 
 public class BilibiliFragment extends Fragment {
 
+    private final int PAGE_SIZE = 20;
+    private int page = 1;
+
     private RecyclerView rvList;
+    private SwipeRefreshLayout refreshLayout;
     private List<BilibiliVideo> itemList = new ArrayList<>();
     private BilibiliVideoAdapter adapter;
 
@@ -45,12 +51,36 @@ public class BilibiliFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvList = view.findViewById(R.id.rvList);
+        refreshLayout = view.findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BilibiliVideoAdapter(getContext(), itemList);
         rvList.setAdapter(adapter);
+        adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                page++;
+                loadList();
+            }
+        });
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshList();
+            }
+        });
+        loadList();
+    }
+
+    public void refreshList() {
+        page = 1;
+        loadList();
+    }
+
+    public void loadList() {
         RxHttpUtils.createApi("bilibili","https://api.bilibili.com/", BilibiliService.class)
-                .getVideos("345630501", 16, 1,
-                "pubdate", "jsonp")
+                .getVideos("345630501", PAGE_SIZE, page,
+                        "pubdate", "jsonp")
                 .compose(Transformer.<String>switchSchedulers())
                 .subscribe(new StringObserver() {
 
@@ -71,8 +101,15 @@ public class BilibiliFragment extends Fragment {
                             JSONArray vlist = dataJson.getJSONObject("data").getJSONObject("list").getJSONArray("vlist");
                             Gson gson = new Gson();
                             List<BilibiliVideo> videos = gson.fromJson(vlist.toString(), new TypeToken<List<BilibiliVideo>>() {}.getType());
+                            if (page == 1) {
+                                itemList.clear();
+                                refreshLayout.setRefreshing(false);
+                            }
                             itemList.addAll(videos);
                             adapter.notifyDataSetChanged();
+                            if (adapter.getLoadMoreModule().isLoading())
+                                adapter.getLoadMoreModule().loadMoreComplete();
+                            adapter.getLoadMoreModule().setEnableLoadMore(videos.size() != 0);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
