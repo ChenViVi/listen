@@ -14,22 +14,12 @@ import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.DataObserver;
-import com.allen.library.observer.StringObserver;
 import com.allen.library.utils.ToastUtils;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.yellowzero.Dang.R;
-import com.yellowzero.Dang.TestFragment;
 import com.yellowzero.Dang.adapter.TabViewPagerAdapter;
-import com.yellowzero.Dang.model.BilibiliVideo;
 import com.yellowzero.Dang.model.MusicTag;
-import com.yellowzero.Dang.service.BilibiliService;
 import com.yellowzero.Dang.service.MusicService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
