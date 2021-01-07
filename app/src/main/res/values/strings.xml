@@ -3,4 +3,6 @@
     <string name="tv_music">音乐</string>
     <string name="tv_bilibili">B站</string>
     <string name="tv_image">图片</string>
+
+    <string name="ts_http_error">加载失败</string>
 </resources>

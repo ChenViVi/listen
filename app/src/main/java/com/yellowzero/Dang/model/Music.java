@@ -2,19 +2,10 @@ package com.yellowzero.Dang.model;
 
 public class Music {
     private int id;
-    private int number;
     private String name;
-    private long duration;
-    private String urlMusic;
-    private String urlCover;
-    private String urlVideo;
-
-    public Music(int id, int number, String name, String urlVideo) {
-        this.id = id;
-        this.number = number;
-        this.name = name;
-        this.urlVideo = urlVideo;
-    }
+    private String url;
+    private String link;
+    private String cover;
 
     public int getId() {
         return id;
@@ -22,14 +13,6 @@ public class Music {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public String getName() {
@@ -40,35 +23,27 @@ public class Music {
         this.name = name;
     }
 
-    public long getDuration() {
-        return duration;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDuration(long duration) {
-        this.duration = duration;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getUrlMusic() {
-        return urlMusic;
+    public String getLink() {
+        return link;
     }
 
-    public void setUrlMusic(String urlMusic) {
-        this.urlMusic = urlMusic;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public String getUrlCover() {
-        return urlCover;
+    public String getCover() {
+        return cover;
     }
 
-    public void setUrlCover(String urlCover) {
-        this.urlCover = urlCover;
-    }
-
-    public String getUrlVideo() {
-        return urlVideo;
-    }
-
-    public void setUrlVideo(String urlVideo) {
-        this.urlVideo = urlVideo;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 }

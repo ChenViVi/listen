@@ -11,14 +11,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.allen.library.RxHttpUtils;
+import com.allen.library.bean.BaseData;
+import com.allen.library.interceptor.Transformer;
+import com.allen.library.observer.DataObserver;
+import com.allen.library.utils.ToastUtils;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
+import com.yellowzero.Dang.model.MusicTag;
+import com.yellowzero.Dang.service.MusicService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicListFragment extends Fragment {
+
+    private static final String KEY_TAG_ID = "tagId";
+    private int tagId;
     private RecyclerView rvList;
     private List<Music> itemList = new ArrayList<>();
     private MusicAdapter adapter;
@@ -36,15 +46,31 @@ public class MusicListFragment extends Fragment {
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MusicAdapter(getContext(), itemList);
         rvList.setAdapter(adapter);
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            tagId = bundle.getInt(KEY_TAG_ID);
+        RxHttpUtils.createApi(MusicService.class)
+                .list(tagId)
+                .compose(Transformer.<BaseData<List<Music>>>switchSchedulers())
+                .subscribe(new DataObserver<List<Music>>() {
+                    @Override
+                    protected void onError(String errorMsg) {
+                        ToastUtils.showToast(getResources().getString(R.string.ts_http_error));
+                    }
 
-        itemList.add(new Music(1, 1, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(2, 2, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(3, 3, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(4, 4, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(5, 5, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(6, 6, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(7, 7, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        itemList.add(new Music(8, 8, "我们都不应该孤单", "https://www.bilibili.com/video/BV1Xi4y1V7rp"));
-        adapter.notifyDataSetChanged();
+                    @Override
+                    protected void onSuccess(List<Music> data) {
+                        itemList.addAll(data);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    public static MusicListFragment createInstance(int tagId) {
+        MusicListFragment fragment = new MusicListFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_TAG_ID, tagId);
+        fragment.setArguments(args);
+        return fragment;
     }
 }
