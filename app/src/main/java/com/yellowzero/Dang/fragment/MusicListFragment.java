@@ -19,11 +19,12 @@ import com.allen.library.observer.DataObserver;
 import com.allen.library.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.kunminx.player.bean.DefaultAlbum;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
-import com.yellowzero.Dang.model.MusicTag;
 import com.yellowzero.Dang.service.MusicService;
+import com.yellowzero.Dang.util.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,12 @@ public class MusicListFragment extends Fragment {
 
     private static final String KEY_TAG_ID = "tagId";
     private int tagId;
-    private RecyclerView rvList;
+    private int selectMusicId = -1;
     private SwipeRefreshLayout refreshLayout;
     private List<Music> itemList = new ArrayList<>();
     private MusicAdapter adapter;
+    private DefaultAlbum album = new DefaultAlbum();
+    private RecyclerView rvList;
 
     @Nullable
     @Override
@@ -53,6 +56,9 @@ public class MusicListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                selectMusicId = itemList.get(position).getId();
+                PlayerManager.getInstance().loadAlbum(album);
+                PlayerManager.getInstance().playAudio(position);
                 for (Music music : itemList)
                     music.setSelected(false);
                 itemList.get(position).setSelected(true);
@@ -87,6 +93,19 @@ public class MusicListFragment extends Fragment {
                     protected void onSuccess(List<Music> data) {
                         itemList.clear();
                         itemList.addAll(data);
+                        List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
+                        for (Music musicData : itemList) {
+                            DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
+                            music.setMusicId(String.valueOf(musicData.getId()));
+                            music.setTitle(musicData.getName());
+                            music.setUrl(musicData.getUrl());
+                            music.setCoverImg(musicData.getCover());
+                            musics.add(music);
+                            if (musicData.getId() == selectMusicId) {
+                                musicData.setSelected(true);
+                            }
+                        }
+                        album.setMusics(musics);
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
                     }

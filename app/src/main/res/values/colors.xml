@@ -16,6 +16,7 @@
     <color name="colorAccent">#FFDE00</color>-->
 
     <color name="colorPrimary">#FFCC00</color>
+    <color name="colorPrimaryDark">#A59143</color>
     <color name="colorAccent">#8BC34A</color>
 
     <color name="tabGrey">#8a8a8a</color>
