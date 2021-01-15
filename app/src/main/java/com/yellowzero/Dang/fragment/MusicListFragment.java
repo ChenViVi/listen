@@ -17,10 +17,13 @@ import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.DataObserver;
 import com.allen.library.utils.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.kunminx.player.bean.DefaultAlbum;
 import com.yellowzero.Dang.R;
+import com.yellowzero.Dang.activity.MainActivity;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
 import com.yellowzero.Dang.service.MusicService;
@@ -28,10 +31,12 @@ import com.yellowzero.Dang.util.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MusicListFragment extends Fragment {
 
     private static final String KEY_TAG_ID = "tagId";
+    private static final String FORMAT_MUSIC_ID = "%d_%d";
     private int tagId;
     private int selectMusicId = -1;
     private SwipeRefreshLayout refreshLayout;
@@ -77,6 +82,20 @@ public class MusicListFragment extends Fragment {
             }
         });
         loadList();
+        PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
+            int position = -1;
+            for (int i = 0; i < itemList.size(); i++) {
+                Music music = itemList.get(i);
+                if (String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tagId, music.getId()).equals(changeMusic.getMusicId())) {
+                    position = music.getId();
+                    music.setSelected(true);
+                } else {
+                    music.setSelected(false);
+                }
+            }
+            selectMusicId = position;
+            adapter.notifyDataSetChanged();
+        });
     }
 
     public void loadList() {
@@ -96,12 +115,12 @@ public class MusicListFragment extends Fragment {
                         List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
                         for (Music musicData : itemList) {
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
-                            music.setMusicId(String.valueOf(musicData.getId()));
+                            music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tagId, musicData.getId()));
                             music.setTitle(musicData.getName());
                             music.setUrl(musicData.getUrl());
                             music.setCoverImg(musicData.getCover());
                             musics.add(music);
-                            if (musicData.getId() == selectMusicId) {
+                            if (musicData.getId() == selectMusicId && selectMusicId != -1) {
                                 musicData.setSelected(true);
                             }
                         }

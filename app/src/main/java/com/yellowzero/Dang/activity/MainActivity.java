@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView ivCover;
     private TextView tvName;
     private ImageView ivPlay;
+    private View llMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         ivCover = findViewById(R.id.ivCover);
         tvName = findViewById(R.id.tvName);
         ivPlay = findViewById(R.id.ivPlay);
+        llMusic = findViewById(R.id.llMusic);
         findViewById(R.id.llMusic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,10 +72,14 @@ public class MainActivity extends AppCompatActivity {
             tvName.setText(changeMusic.getTitle());
         });
         PlayerManager.getInstance().getPauseLiveData().observe(this, isPlaying -> {
-            if (isPlaying)
+            if (isPlaying) {
                 ivPlay.setImageResource(R.drawable.ic_play);
-            else
+                llMusic.setVisibility(View.GONE);
+            }
+            else {
                 ivPlay.setImageResource(R.drawable.ic_play_stop);
+                llMusic.setVisibility(View.VISIBLE);
+            }
         });
         /*new CustomTabsIntent.Builder()
                 .build()
