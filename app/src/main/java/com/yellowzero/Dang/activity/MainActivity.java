@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(MainActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
             tvName.setText(changeMusic.getTitle());
         });
-        PlayerManager.getInstance().getPauseLiveData().observe(this, isPlaying -> {
-            if (isPlaying) {
+        PlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
+            if (isPaused) {
                 ivPlay.setImageResource(R.drawable.ic_play);
                 llMusic.setVisibility(View.GONE);
             }
