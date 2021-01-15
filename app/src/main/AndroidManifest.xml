@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MusicActivity"/>
+        <activity android:name=".activity.SettingActivity"/>
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
