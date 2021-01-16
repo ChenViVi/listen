@@ -2,6 +2,14 @@ plugins {
     id 'com.android.application'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+def keystorePSW = properties.getProperty("keystore.password")
+def keystoreAlias = properties.getProperty("keystore.alias")
+def keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+def keystoreFile = properties.getProperty("keystore.file")
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -14,10 +22,29 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+            storePassword keystorePSW
+            storeFile file(keystoreFile)
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
+        debug {
+            minifyEnabled false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
