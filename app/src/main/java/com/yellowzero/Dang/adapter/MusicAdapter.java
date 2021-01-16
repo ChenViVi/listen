@@ -25,7 +25,7 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
 
     @Override
     protected void convert(BaseViewHolder viewHolder, Music item) {
-        viewHolder.setText(R.id.tvNumber, String.valueOf(item.getId()))
+        viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
                 .setText(R.id.tvName, item.getName());
         if (item.isSelected())
             viewHolder.setTextColorRes(R.id.tvName, R.color.colorPrimary)

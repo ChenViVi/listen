@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
     <TextView
         android:id="@+id/tvNumber"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:text="13"
-        android:textSize="18sp"
-        android:layout_margin="14dp" />
+        android:textSize="18sp"/>
     <ImageView
         android:id="@+id/ivPlaying"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/ic_playing"
-        android:layout_margin="14dp"
+        android:padding="21dp"
         android:visibility="gone"/>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -35,7 +34,7 @@
         <ImageView
             android:id="@+id/ivVideo"
             android:layout_width="28dp"
-            android:layout_height="wrap_content"
+            android:layout_height="28dp"
             android:src="@drawable/ic_video"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"

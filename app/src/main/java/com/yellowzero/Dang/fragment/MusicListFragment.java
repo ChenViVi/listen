@@ -113,7 +113,9 @@ public class MusicListFragment extends Fragment {
                         itemList.clear();
                         itemList.addAll(data);
                         List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
-                        for (Music musicData : itemList) {
+                        for (int i = 0; i < itemList.size(); i++) {
+                            Music musicData = itemList.get(i);
+                            musicData.setNumber(i + 1);
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                             music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tagId, musicData.getId()));
                             music.setTitle(musicData.getName());
