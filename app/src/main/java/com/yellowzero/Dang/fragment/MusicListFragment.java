@@ -1,5 +1,6 @@
 package com.yellowzero.Dang.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.bean.DefaultAlbum;
 import com.yellowzero.Dang.App;
+import com.yellowzero.Dang.AppData;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
@@ -36,6 +39,7 @@ import java.util.Locale;
 
 public class MusicListFragment extends Fragment {
 
+    private boolean isFirstResume = true;
     private static final String KEY_TAG_ID = "tagId";
     private static final String FORMAT_MUSIC_ID = "%d_%d";
     private int tagId;
@@ -63,13 +67,28 @@ public class MusicListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                selectMusicId = itemList.get(position).getId();
-                PlayerManager.getInstance().loadAlbum(album);
-                PlayerManager.getInstance().playAudio(position);
-                for (Music music : itemList)
-                    music.setSelected(false);
-                itemList.get(position).setSelected(true);
-                adapter.notifyDataSetChanged();
+                if (itemList.get(position).isAvailable()) {
+                    setPlayMusic(position);
+                    adapter.notifyDataSetChanged();
+                } else if (NetworkUtil.getConnectedState(getContext()) == NetworkUtil.STATE_MOBILE && !AppData.ENABLE_MUSIC_MOBILE){
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(android.R.string.dialog_alert_title)
+                            .setMessage(R.string.tt_enable_music_mobile)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    AppData.ENABLE_MUSIC_MOBILE = true;
+                                    AppData.saveData(getContext());
+                                    setMusicsAvailable();
+                                    setPlayMusic(position);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .setCancelable(true)
+                            .create()
+                            .show();
+                }
             }
         });
         rvList.setAdapter(adapter);
@@ -114,13 +133,42 @@ public class MusicListFragment extends Fragment {
             public void onChangeState(int state) {
                 for (Music music : itemList) {
                     music.setCached(proxy.isCached(music.getUrl()));
-                    //TODO: 允许使用流量播放未缓存音乐
-                    music.setAvailable(state == NetworkUtil.STATE_WIFI || music.isCached());
+                    setMusicsAvailable();
                 }
                 adapter.notifyDataSetChanged();
             }
         });
         loadList();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isFirstResume) {
+            isFirstResume = false;
+            return;
+        }
+        setMusicsAvailable();
+        adapter.notifyDataSetChanged();
+    }
+
+    private void setMusicsAvailable() {
+        int state = NetworkUtil.getConnectedState(getContext());
+        for (Music music : itemList) {
+            if (AppData.ENABLE_MUSIC_MOBILE)
+                music.setAvailable(state != NetworkUtil.STATE_OFFLINE || music.isCached());
+            else
+                music.setAvailable(state == NetworkUtil.STATE_WIFI || music.isCached());
+        }
+    }
+
+    private void setPlayMusic(int position) {
+        selectMusicId = itemList.get(position).getId();
+        PlayerManager.getInstance().loadAlbum(album);
+        PlayerManager.getInstance().playAudio(position);
+        for (Music music : itemList)
+            music.setSelected(false);
+        itemList.get(position).setSelected(true);
     }
 
     public void loadList() {
@@ -142,9 +190,7 @@ public class MusicListFragment extends Fragment {
                             Music musicData = itemList.get(i);
                             musicData.setNumber(i + 1);
                             musicData.setCached(proxy.isCached(musicData.getUrl()));
-                            //TODO: 允许使用流量播放未缓存音乐
-                            musicData.setAvailable(NetworkUtil.getConnectedState(getContext()) == NetworkUtil.STATE_WIFI ||
-                                    musicData.isCached());
+                            setMusicsAvailable();
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                             music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tagId, musicData.getId()));
                             music.setTitle(musicData.getName());

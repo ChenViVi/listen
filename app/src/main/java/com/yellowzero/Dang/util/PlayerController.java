@@ -32,6 +32,7 @@ import com.kunminx.player.contract.IServiceNotifier;
 import com.kunminx.player.helper.MediaPlayerHelper;
 import com.kunminx.player.helper.PlayerFileNameGenerator;
 import com.kunminx.player.utils.NetworkUtils;
+import com.yellowzero.Dang.AppData;
 import com.yellowzero.Dang.R;
 
 import java.util.List;
@@ -134,7 +135,9 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         } else {
             if ((url.contains("http:") || url.contains("ftp:") || url.contains("https:"))) {
                 int networkState = NetworkUtil.getConnectedState(context);
-                if (networkState == NetworkUtil.STATE_WIFI || (proxy.isCached(url))) {
+                if (networkState == NetworkUtil.STATE_WIFI ||
+                        (proxy.isCached(url)) ||
+                        (networkState == NetworkUtil.STATE_MOBILE && AppData.ENABLE_MUSIC_MOBILE)) {
                     MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
                     afterPlay(context);
                 } else {
@@ -142,9 +145,11 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                         if (networkState == NetworkUtil.STATE_OFFLINE) {
                             Toast.makeText(context, R.string.ts_pause_music_offline, Toast.LENGTH_SHORT).show();
                             pauseAudio();
-                        } else {
-                            //TODO: 允许使用流量播放未缓存音乐
+                        } else if (networkState == NetworkUtil.STATE_MOBILE && !AppData.ENABLE_MUSIC_MOBILE){
                             Toast.makeText(context, R.string.ts_pause_music_mobile, Toast.LENGTH_SHORT).show();
+                            pauseAudio();
+                        } else {
+                            Toast.makeText(context, R.string.ts_pause_music_offline, Toast.LENGTH_SHORT).show();
                             pauseAudio();
                         }
                     }
