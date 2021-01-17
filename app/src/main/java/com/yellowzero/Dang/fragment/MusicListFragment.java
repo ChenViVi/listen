@@ -1,7 +1,6 @@
 package com.yellowzero.Dang.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,12 @@ import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.DataObserver;
 import com.allen.library.utils.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.bean.DefaultAlbum;
 import com.yellowzero.Dang.App;
 import com.yellowzero.Dang.R;
-import com.yellowzero.Dang.activity.MainActivity;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
 import com.yellowzero.Dang.service.MusicService;
@@ -67,8 +63,6 @@ public class MusicListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Music m = itemList.get(position);
-                Log.e("fuck", "m.isCached()=" + m.isCached() + " m.isAvailable()=" + m.isAvailable());
                 selectMusicId = itemList.get(position).getId();
                 PlayerManager.getInstance().loadAlbum(album);
                 PlayerManager.getInstance().playAudio(position);
