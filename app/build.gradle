@@ -68,6 +68,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //权限请求
     implementation 'com.hjq:xxpermissions:9.6'
+    //播放控制
+    implementation 'com.kunminx.player:player:1.1.6'
+    //文件缓存
     implementation 'com.danikula:videocache:2.7.1'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
@@ -75,5 +78,5 @@ dependencies {
     // https://mvnrepository.com/artifact/com.hiczp/bilibili-api
     //implementation group: 'com.hiczp', name: 'bilibili-api', version: '0.2.0'
 
-    implementation 'com.kunminx.player:player:1.1.6'
+
 }
