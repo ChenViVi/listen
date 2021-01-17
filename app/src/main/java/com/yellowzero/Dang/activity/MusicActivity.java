@@ -65,18 +65,19 @@ public class MusicActivity extends AppCompatActivity {
             else
                 ivPlay.setImageResource(R.drawable.ic_play_stop);
         });
-        PlayerManager.getInstance().getPlayModeLiveData().observe(this, anEnum -> {
-            if (anEnum == PlayingInfoManager.RepeatMode.LIST_LOOP) {
-                Log.e("fuck","LIST_LOOP");
-                ivMode.setImageResource(R.drawable.ic_mode_loop);
-            } else if (anEnum == PlayingInfoManager.RepeatMode.ONE_LOOP) {
-                Log.e("fuck","ONE_LOOP");
-                ivMode.setImageResource(R.drawable.ic_mode_single);
-            } else if (anEnum == PlayingInfoManager.RepeatMode.RANDOM) {
-                Log.e("fuck","RANDOM");
-                ivMode.setImageResource(R.drawable.ic_mode_random);
-            }
-        });
+        setModeImageView(PlayerManager.getInstance().getRepeatMode());
+        PlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
+
+    }
+
+    private void setModeImageView(Enum mode) {
+        if (mode == PlayingInfoManager.RepeatMode.LIST_LOOP) {
+            ivMode.setImageResource(R.drawable.ic_mode_loop);
+        } else if (mode == PlayingInfoManager.RepeatMode.ONE_LOOP) {
+            ivMode.setImageResource(R.drawable.ic_mode_single);
+        } else if (mode == PlayingInfoManager.RepeatMode.RANDOM) {
+            ivMode.setImageResource(R.drawable.ic_mode_random);
+        }
     }
 
     public void onClickLast(View view) {

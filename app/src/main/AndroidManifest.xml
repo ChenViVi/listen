@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.yellowzero.Dang">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -22,11 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MusicActivity"/>
-        <activity android:name=".activity.SettingActivity"/>
+        <activity
+            android:label="@string/tt_setting"
+            android:name=".activity.SettingActivity"/>
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
 </manifest>

@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">龄听</string>
+
+    <string name="tt_setting">设置</string>
+
     <string name="tv_music">音乐</string>
     <string name="tv_bilibili">B站</string>
     <string name="tv_image">图片</string>
 
     <string name="ts_http_error">加载失败</string>
+    <string name="ts_pause_music_offline">网络未连接，停止播放</string>
+    <string name="ts_pause_music_mobile">正在使用流量，停止播放</string>
 </resources>

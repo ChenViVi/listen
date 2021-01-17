@@ -1,6 +1,7 @@
 package com.yellowzero.Dang.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.kunminx.player.bean.DefaultAlbum;
+import com.yellowzero.Dang.App;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.activity.MainActivity;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
 import com.yellowzero.Dang.service.MusicService;
+import com.yellowzero.Dang.util.NetworkChangeReceiver;
+import com.yellowzero.Dang.util.NetworkUtil;
 import com.yellowzero.Dang.util.PlayerManager;
 
 import java.util.ArrayList;
@@ -41,8 +46,9 @@ public class MusicListFragment extends Fragment {
     private int selectMusicId = -1;
     private SwipeRefreshLayout refreshLayout;
     private List<Music> itemList = new ArrayList<>();
-    private MusicAdapter adapter;
     private DefaultAlbum album = new DefaultAlbum();
+    private HttpProxyCacheServer proxy;
+    private MusicAdapter adapter;
     private RecyclerView rvList;
 
     @Nullable
@@ -61,6 +67,8 @@ public class MusicListFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                Music m = itemList.get(position);
+                Log.e("fuck", "m.isCached()=" + m.isCached() + " m.isAvailable()=" + m.isAvailable());
                 selectMusicId = itemList.get(position).getId();
                 PlayerManager.getInstance().loadAlbum(album);
                 PlayerManager.getInstance().playAudio(position);
@@ -78,10 +86,12 @@ public class MusicListFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadList();
+                if (NetworkUtil.getConnectedState(getContext()) != NetworkUtil.STATE_OFFLINE)
+                    loadList();
+                else
+                    refreshLayout.setRefreshing(false);
             }
         });
-        loadList();
         PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             int position = -1;
             for (int i = 0; i < itemList.size(); i++) {
@@ -96,6 +106,27 @@ public class MusicListFragment extends Fragment {
             selectMusicId = position;
             adapter.notifyDataSetChanged();
         });
+        PlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
+            if (isPaused) {
+                selectMusicId = -1;
+                for (Music music : itemList)
+                    music.setSelected(false);
+            }
+        });
+        App app = ((App)getActivity().getApplication());
+        proxy = app.getProxy(getContext());
+        app.addNetworkListener(new NetworkChangeReceiver.NetworkListener() {
+            @Override
+            public void onChangeState(int state) {
+                for (Music music : itemList) {
+                    music.setCached(proxy.isCached(music.getUrl()));
+                    //TODO: 允许使用流量播放未缓存音乐
+                    music.setAvailable(state == NetworkUtil.STATE_WIFI || music.isCached());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        loadList();
     }
 
     public void loadList() {
@@ -116,6 +147,10 @@ public class MusicListFragment extends Fragment {
                         for (int i = 0; i < itemList.size(); i++) {
                             Music musicData = itemList.get(i);
                             musicData.setNumber(i + 1);
+                            musicData.setCached(proxy.isCached(musicData.getUrl()));
+                            //TODO: 允许使用流量播放未缓存音乐
+                            musicData.setAvailable(NetworkUtil.getConnectedState(getContext()) == NetworkUtil.STATE_WIFI ||
+                                    musicData.isCached());
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                             music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tagId, musicData.getId()));
                             music.setTitle(musicData.getName());

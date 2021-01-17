@@ -27,14 +27,18 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
     protected void convert(BaseViewHolder viewHolder, Music item) {
         viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
                 .setText(R.id.tvName, item.getName());
-        if (item.isSelected())
-            viewHolder.setTextColorRes(R.id.tvName, R.color.colorPrimary)
-                    .setGone(R.id.tvNumber, true)
-                    .setGone(R.id.ivPlaying, false);
-        else
-            viewHolder.setTextColorRes(R.id.tvName, R.color.black)
-                    .setGone(R.id.tvNumber, false)
-                    .setGone(R.id.ivPlaying, true);
+        if (!item.isAvailable())
+            viewHolder.setTextColorRes(R.id.tvName, R.color.tvNameDisable);
+        else {
+            if (item.isSelected())
+                viewHolder.setTextColorRes(R.id.tvName, R.color.colorPrimary)
+                        .setGone(R.id.tvNumber, true)
+                        .setGone(R.id.ivPlaying, false);
+            else
+                viewHolder.setTextColorRes(R.id.tvName, R.color.black)
+                        .setGone(R.id.tvNumber, false)
+                        .setGone(R.id.ivPlaying, true);
+        }
         viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

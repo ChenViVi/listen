@@ -5,12 +5,20 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.allen.library.RxHttpUtils;
+import com.allen.library.download.DownloadObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.fragment.BilibiliFragment;
 import com.yellowzero.Dang.fragment.ImageFragment;
@@ -19,6 +27,8 @@ import com.yellowzero.Dang.util.PlayerManager;
 import com.yellowzero.Dang.view.AndTabManager;
 import com.yellowzero.Dang.view.FragmentTabCheckListener;
 import com.yellowzero.Dang.view.Tab;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,9 +91,37 @@ public class MainActivity extends AppCompatActivity {
                 llMusic.setVisibility(View.VISIBLE);
             }
         });
+/*        XXPermissions.with(this)
+                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                .request(new OnPermissionCallback() {
+
+                    @Override
+                    public void onGranted(List<String> permissions, boolean all) {
+
+                    }
+
+                    @Override
+                    public void onDenied(List<String> permissions, boolean never) {
+
+                    }
+                });*/
         /*new CustomTabsIntent.Builder()
                 .build()
                 .launchUrl(this, Uri.parse("https://www.bilibili.com/video/BV1Xi4y1V7rp"));*/
+        /*XXPermissions.with(this)
+                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                .request(new OnPermissionCallback() {
+
+                    @Override
+                    public void onGranted(List<String> permissions, boolean all) {
+
+                    }
+
+                    @Override
+                    public void onDenied(List<String> permissions, boolean never) {
+
+                    }
+                });*/
     }
 
     public void onPlay(View view) {
@@ -92,5 +130,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNext(View view) {
         PlayerManager.getInstance().playNext();
+    }
+
+/*    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_setting);
+        item.setIcon(R.drawable.ic_pause);
+        return super.onPrepareOptionsMenu(menu);
+    }*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        if (item.getItemId() == R.id.action_setting) {
+            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
     }
 }

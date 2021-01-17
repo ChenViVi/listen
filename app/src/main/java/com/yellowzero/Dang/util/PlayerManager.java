@@ -20,7 +20,6 @@ import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.kunminx.player.PlayerController;
 import com.kunminx.player.bean.DefaultAlbum;
 import com.kunminx.player.bean.dto.ChangeMusic;
 import com.kunminx.player.bean.dto.PlayingMusic;
