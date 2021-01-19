@@ -6,11 +6,11 @@ import android.content.IntentFilter;
 
 import com.allen.library.RxHttpUtils;
 import com.danikula.videocache.HttpProxyCacheServer;
-import com.kunminx.player.contract.IServiceNotifier;
-import com.kunminx.player.helper.PlayerFileNameGenerator;
+import com.yellowzero.Dang.player.DefaultPlayerManager;
+import com.yellowzero.Dang.player.contract.IServiceNotifier;
+import com.yellowzero.Dang.player.helper.PlayerFileNameGenerator;
 import com.yellowzero.Dang.util.NetworkChangeReceiver;
 
-import com.yellowzero.Dang.util.PlayerManager;
 
 public class App extends Application {
 
@@ -26,7 +26,7 @@ public class App extends Application {
                 .init(this)
                 .config()
                 .setBaseUrl("http://api.yellowzero.wblnb.com/");
-        PlayerManager.getInstance().init(this, new IServiceNotifier() {
+        DefaultPlayerManager.getInstance().init(this, new IServiceNotifier() {
             @Override
             public void notifyService(boolean startOrStop) {
 

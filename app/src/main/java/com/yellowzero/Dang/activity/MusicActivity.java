@@ -11,9 +11,10 @@ import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.kunminx.player.PlayingInfoManager;
 import com.yellowzero.Dang.R;
-import com.yellowzero.Dang.util.PlayerManager;
+import com.yellowzero.Dang.player.DefaultPlayerManager;
+import com.yellowzero.Dang.player.PlayingInfoManager;
+
 
 public class MusicActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class MusicActivity extends AppCompatActivity {
         sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                //PlayerManager.getInstance().setSeek(i);
+
             }
 
             @Override
@@ -47,51 +48,51 @@ public class MusicActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                PlayerManager.getInstance().setSeek(seekBar.getProgress());
+                DefaultPlayerManager.getInstance().setSeek(seekBar.getProgress());
             }
         });
-        PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
+        DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             setTitle(changeMusic.getTitle());
             Glide.with(MusicActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
         });
-        PlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
+        DefaultPlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
             sbProgress.setMax(playingMusic.getDuration());
             sbProgress.setProgress(playingMusic.getPlayerPosition());
         });
-        PlayerManager.getInstance().getPauseLiveData().observe(this, isPlaying -> {
+        DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPlaying -> {
             if (isPlaying)
                 ivPlay.setImageResource(R.drawable.ic_play);
             else
                 ivPlay.setImageResource(R.drawable.ic_play_stop);
         });
-        setModeImageView(PlayerManager.getInstance().getRepeatMode());
-        PlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
+        setModeImageView(DefaultPlayerManager.getInstance().getRepeatMode());
 
+        DefaultPlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
     }
 
-    private void setModeImageView(Enum mode) {
-        if (mode == PlayingInfoManager.RepeatMode.LIST_LOOP) {
+    private void setModeImageView(int mode) {
+        if (mode == PlayingInfoManager.MODE_LIST_CYCLE) {
             ivMode.setImageResource(R.drawable.ic_mode_loop);
-        } else if (mode == PlayingInfoManager.RepeatMode.ONE_LOOP) {
+        } else if (mode == PlayingInfoManager.MODE_SINGLE_CYCLE) {
             ivMode.setImageResource(R.drawable.ic_mode_single);
-        } else if (mode == PlayingInfoManager.RepeatMode.RANDOM) {
+        } else if (mode == PlayingInfoManager.MODE_RANDOM) {
             ivMode.setImageResource(R.drawable.ic_mode_random);
         }
     }
 
     public void onClickLast(View view) {
-        PlayerManager.getInstance().playPrevious();
+        DefaultPlayerManager.getInstance().playPrevious();
     }
 
     public void onClickPlay(View view) {
-        PlayerManager.getInstance().togglePlay();
+        DefaultPlayerManager.getInstance().togglePlay();
     }
 
     public void onClickNext(View view) {
-        PlayerManager.getInstance().playNext();
+        DefaultPlayerManager.getInstance().playNext();
     }
 
     public void onClickMode(View view) {
-        PlayerManager.getInstance().changeMode();
+        DefaultPlayerManager.getInstance().changeMode();
     }
 }

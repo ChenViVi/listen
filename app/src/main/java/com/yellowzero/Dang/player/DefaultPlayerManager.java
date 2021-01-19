@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package com.yellowzero.Dang.util;
+package com.yellowzero.Dang.player;
 
 import android.content.Context;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.kunminx.player.bean.DefaultAlbum;
-import com.kunminx.player.bean.dto.ChangeMusic;
-import com.kunminx.player.bean.dto.PlayingMusic;
-import com.kunminx.player.contract.IPlayController;
-import com.kunminx.player.contract.IServiceNotifier;
+import com.yellowzero.Dang.player.bean.DefaultAlbum;
+import com.yellowzero.Dang.player.bean.dto.ChangeMusic;
+import com.yellowzero.Dang.player.bean.dto.PlayingMusic;
+import com.yellowzero.Dang.player.contract.IPlayController;
+import com.yellowzero.Dang.player.contract.IServiceNotifier;
 
 import java.util.List;
+
+import androidx.lifecycle.LiveData;
 
 /**
  * Create by KunMinX at 19/10/31
  */
-public class PlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum.DefaultMusic> {
+public class DefaultPlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum.DefaultMusic> {
 
-    private static PlayerManager sManager = new PlayerManager();
+    private static DefaultPlayerManager sManager = new DefaultPlayerManager();
 
     private PlayerController<DefaultAlbum, DefaultAlbum.DefaultMusic> mController;
 
     private Context mContext;
 
-    private PlayerManager() {
+    private DefaultPlayerManager() {
         mController = new PlayerController<>();
     }
 
-    public static PlayerManager getInstance() {
+    public static DefaultPlayerManager getInstance() {
         return sManager;
     }
 
@@ -55,37 +55,37 @@ public class PlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum
 
     @Override
     public void loadAlbum(DefaultAlbum musicAlbum) {
-        mController.loadAlbum(mContext, musicAlbum);
+        mController.loadAlbum(musicAlbum);
     }
 
     @Override
     public void loadAlbum(DefaultAlbum musicAlbum, int playIndex) {
-        mController.loadAlbum(mContext, musicAlbum, playIndex);
+        mController.loadAlbum(musicAlbum, playIndex);
     }
 
     @Override
     public void playAudio() {
-        mController.playAudio(mContext);
+        mController.playAudio();
     }
 
     @Override
     public void playAudio(int albumIndex) {
-        mController.playAudio(mContext, albumIndex);
+        mController.playAudio(albumIndex);
     }
 
     @Override
     public void playNext() {
-        mController.playNext(mContext);
+        mController.playNext();
     }
 
     @Override
     public void playPrevious() {
-        mController.playPrevious(mContext);
+        mController.playPrevious();
     }
 
     @Override
     public void playAgain() {
-        mController.playAgain(mContext);
+        mController.playAgain();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum
 
     @Override
     public void clear() {
-        mController.clear(mContext);
+        mController.clear();
     }
 
     @Override
@@ -119,8 +119,8 @@ public class PlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum
     }
 
     @Override
-    public boolean isInited() {
-        return mController.isInited();
+    public boolean isInit() {
+        return mController.isInit();
     }
 
     @Override
@@ -150,7 +150,7 @@ public class PlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum
 
     @Override
     public void setChangingPlayingMusic(boolean changingPlayingMusic) {
-        mController.setChangingPlayingMusic(mContext, changingPlayingMusic);
+        mController.setChangingPlayingMusic(changingPlayingMusic);
     }
 
     @Override
@@ -158,32 +158,32 @@ public class PlayerManager implements IPlayController<DefaultAlbum, DefaultAlbum
         return mController.getAlbumIndex();
     }
 
-    public MutableLiveData<ChangeMusic> getChangeMusicLiveData() {
+    public LiveData<ChangeMusic> getChangeMusicLiveData() {
         return mController.getChangeMusicLiveData();
     }
 
-    public MutableLiveData<PlayingMusic> getPlayingMusicLiveData() {
+    public LiveData<PlayingMusic> getPlayingMusicLiveData() {
         return mController.getPlayingMusicLiveData();
     }
 
-    public MutableLiveData<Boolean> getPauseLiveData() {
+    public LiveData<Boolean> getPauseLiveData() {
         return mController.getPauseLiveData();
     }
 
 
     @Override
-    public MutableLiveData<Enum> getPlayModeLiveData() {
+    public LiveData<Integer> getPlayModeLiveData() {
         return mController.getPlayModeLiveData();
     }
 
     @Override
-    public Enum getRepeatMode() {
+    public int getRepeatMode() {
         return mController.getRepeatMode();
     }
 
     @Override
     public void togglePlay() {
-        mController.togglePlay(mContext);
+        mController.togglePlay();
     }
 
     @Override

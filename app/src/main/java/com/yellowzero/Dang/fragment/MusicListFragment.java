@@ -22,16 +22,16 @@ import com.allen.library.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.danikula.videocache.HttpProxyCacheServer;
-import com.kunminx.player.bean.DefaultAlbum;
 import com.yellowzero.Dang.App;
 import com.yellowzero.Dang.AppData;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.adapter.MusicAdapter;
 import com.yellowzero.Dang.model.Music;
+import com.yellowzero.Dang.player.DefaultPlayerManager;
+import com.yellowzero.Dang.player.bean.DefaultAlbum;
 import com.yellowzero.Dang.service.MusicService;
 import com.yellowzero.Dang.util.NetworkChangeReceiver;
 import com.yellowzero.Dang.util.NetworkUtil;
-import com.yellowzero.Dang.util.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class MusicListFragment extends Fragment {
                     refreshLayout.setRefreshing(false);
             }
         });
-        PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
+        DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             int position = -1;
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
@@ -119,7 +119,7 @@ public class MusicListFragment extends Fragment {
             selectMusicId = position;
             adapter.notifyDataSetChanged();
         });
-        PlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
+        DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
             if (isPaused) {
                 selectMusicId = -1;
                 for (Music music : itemList)
@@ -164,8 +164,8 @@ public class MusicListFragment extends Fragment {
 
     private void setPlayMusic(int position) {
         selectMusicId = itemList.get(position).getId();
-        PlayerManager.getInstance().loadAlbum(album);
-        PlayerManager.getInstance().playAudio(position);
+        DefaultPlayerManager.getInstance().loadAlbum(album);
+        DefaultPlayerManager.getInstance().playAudio(position);
         for (Music music : itemList)
             music.setSelected(false);
         itemList.get(position).setSelected(true);

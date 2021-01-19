@@ -12,23 +12,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.allen.library.RxHttpUtils;
-import com.allen.library.download.DownloadObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.hjq.permissions.OnPermissionCallback;
-import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
+import com.yellowzero.Dang.AppData;
 import com.yellowzero.Dang.R;
 import com.yellowzero.Dang.fragment.BilibiliFragment;
 import com.yellowzero.Dang.fragment.ImageFragment;
 import com.yellowzero.Dang.fragment.MusicFragment;
-import com.yellowzero.Dang.util.PlayerManager;
+import com.yellowzero.Dang.player.DefaultPlayerManager;
 import com.yellowzero.Dang.view.AndTabManager;
 import com.yellowzero.Dang.view.FragmentTabCheckListener;
 import com.yellowzero.Dang.view.Tab;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
                         new ImageFragment()
                 }));
         andTabManager.setCurrentItem(0);
-        PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
+        DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             Glide.with(MainActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
             tvName.setText(changeMusic.getTitle());
         });
-        PlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
+        DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
             if (isPaused) {
                 ivPlay.setImageResource(R.drawable.ic_play);
                 llMusic.setVisibility(View.GONE);
@@ -125,11 +119,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onPlay(View view) {
-        PlayerManager.getInstance().togglePlay();
+        DefaultPlayerManager.getInstance().togglePlay();
     }
 
     public void onNext(View view) {
-        PlayerManager.getInstance().playNext();
+        DefaultPlayerManager.getInstance().playNext();
     }
 
 /*    @Override
@@ -155,5 +149,11 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppData.saveData(this);
     }
 }
