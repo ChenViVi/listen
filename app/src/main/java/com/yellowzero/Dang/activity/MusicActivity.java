@@ -5,7 +5,6 @@ import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -38,7 +37,7 @@ public class MusicActivity extends AppCompatActivity {
         sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                PlayerManager.getInstance().setSeek(i);
+                //PlayerManager.getInstance().setSeek(i);
             }
 
             @Override
@@ -48,7 +47,7 @@ public class MusicActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                PlayerManager.getInstance().setSeek(seekBar.getProgress());
             }
         });
         PlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
