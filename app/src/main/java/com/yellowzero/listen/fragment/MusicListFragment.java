@@ -124,6 +124,7 @@ public class MusicListFragment extends Fragment {
                 selectMusicId = -1;
                 for (Music music : itemList)
                     music.setSelected(false);
+                adapter.notifyDataSetChanged();
             }
         });
         proxy = App.getProxy(getContext());

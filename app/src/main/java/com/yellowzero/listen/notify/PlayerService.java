@@ -25,6 +25,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -94,6 +95,7 @@ public class PlayerService extends Service {
     }
 
     private void createNotification(DefaultAlbum.DefaultMusic testMusic) {
+        Log.e("fuck", " createNotification");
         try {
             String title = testMusic.getTitle();
             DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();

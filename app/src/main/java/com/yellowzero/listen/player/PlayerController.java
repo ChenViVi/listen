@@ -246,7 +246,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         mIsPaused = true;
         pauseLiveData.setValue(true);
         if (mIServiceNotifier != null) {
-            mIServiceNotifier.notifyService(true);
+            mIServiceNotifier.notifyService(false);
         }
     }
 
