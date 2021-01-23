@@ -130,14 +130,13 @@ public class PlayerService extends Service {
 
             setListeners(expandedView);
 
-            notification.contentView.setViewVisibility(R.id.player_next, View.VISIBLE);
-            notification.contentView.setViewVisibility(R.id.player_previous, View.VISIBLE);
+            notification.contentView.setViewVisibility(R.id.ivNext, View.VISIBLE);
+            notification.contentView.setViewVisibility(R.id.ivPrevious, View.VISIBLE);
 
             boolean isPaused = DefaultPlayerManager.getInstance().isPaused();
-            notification.contentView.setImageViewResource(R.id.player_pause, isPaused ? R.drawable.ic_play : R.drawable.ic_pause);
+            notification.contentView.setImageViewResource(R.id.ivPlay, isPaused ? R.drawable.ic_play : R.drawable.ic_pause);
 
-            notification.contentView.setTextViewText(R.id.player_song_name, title);
-            notification.contentView.setTextViewText(R.id.player_author_name, summary);
+            notification.contentView.setTextViewText(R.id.tvName, title);
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
             notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_pause);
@@ -166,19 +165,19 @@ public class PlayerService extends Service {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     0, new Intent(NOTIFY_PREVIOUS).setPackage(getPackageName()),
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            view.setOnClickPendingIntent(R.id.player_previous, pendingIntent);
+            view.setOnClickPendingIntent(R.id.ivPrevious, pendingIntent);
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     0, new Intent(NOTIFY_CLOSE).setPackage(getPackageName()),
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            view.setOnClickPendingIntent(R.id.player_close, pendingIntent);
+            view.setOnClickPendingIntent(R.id.ivClose, pendingIntent);
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    0, new Intent(NOTIFY_PAUSE).setPackage(getPackageName()),
+                    0, new Intent(NOTIFY_CLOSE).setPackage(getPackageName()),
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            view.setOnClickPendingIntent(R.id.player_pause, pendingIntent);
+            view.setOnClickPendingIntent(R.id.ivPlay, pendingIntent);
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                     0, new Intent(NOTIFY_NEXT).setPackage(getPackageName()),
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            view.setOnClickPendingIntent(R.id.player_next, pendingIntent);
+            view.setOnClickPendingIntent(R.id.ivNext, pendingIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }

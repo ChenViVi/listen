@@ -33,11 +33,11 @@
             android:name=".notify.PlayerReceiver"
             tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="pure_music.kunminx.close" />
-                <action android:name="pure_music.kunminx.pause" />
-                <action android:name="pure_music.kunminx.next" />
-                <action android:name="pure_music.kunminx.play" />
-                <action android:name="pure_music.kunminx.previous" />
+                <action android:name="com.yellowzero.listen.close" />
+                <action android:name="com.yellowzero.listen.pause" />
+                <action android:name="com.yellowzero.listen.next" />
+                <action android:name="com.yellowzero.listen.play" />
+                <action android:name="com.yellowzero.listen.previous" />
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>

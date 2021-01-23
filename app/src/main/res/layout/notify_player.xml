@@ -2,68 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="128dp"
+    android:layout_height="96dp"
     android:background="#999"
     android:baselineAligned="false"
     android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/ivCover"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:scaleType="fitXY"
+        tools:ignore="ContentDescription" />
     <RelativeLayout
-        android:layout_width="128dp"
-        android:layout_height="128dp">
-        <ImageView
-            android:id="@+id/ivCover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            tools:ignore="ContentDescription" />
-    </RelativeLayout>
-    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="44dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/player_song_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="4dp"
-                android:gravity="top|start"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="#ffffffff"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/player_author_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="1dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/player_albumname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="1dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-        </LinearLayout>
         <ImageView
-            android:id="@+id/player_close"
+            android:id="@+id/ivClose"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_gravity="end"
+            android:padding="8dp"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/ic_close"
             tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_toStartOf="@id/ivClose"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -75,36 +47,30 @@
             android:layout_height="48dp"
             android:layout_gravity="bottom"
             android:gravity="center"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
             <ImageView
-                android:id="@+id/player_previous"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:scaleType="center"
+                android:id="@+id/ivPrevious"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:src="@drawable/ic_last_song"
                 tools:ignore="ContentDescription" />
             <ImageView
-                android:id="@+id/player_pause"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_pause"
-                tools:ignore="ContentDescription" />
+                android:id="@+id/ivPlay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_play_stop"
+                tools:ignore="ContentDescription"/>
             <ImageView
-                android:id="@+id/player_next"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:scaleType="center"
+                android:id="@+id/ivNext"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:src="@drawable/ic_next_song"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
-    </FrameLayout>
+    </RelativeLayout>
 
 </LinearLayout>
