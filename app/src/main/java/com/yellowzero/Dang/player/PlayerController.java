@@ -20,6 +20,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.yellowzero.Dang.App;
 import com.yellowzero.Dang.AppData;
 import com.yellowzero.Dang.player.bean.base.BaseAlbumItem;
 import com.yellowzero.Dang.player.bean.base.BaseMusicItem;
@@ -57,11 +58,12 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     private ChangeMusic mChangeMusic = new ChangeMusic();
 
     public void init(Context context, List<String> extraFormatList, IServiceNotifier iServiceNotifier) {
-
+        proxy = App.getProxy(context);
         proxy = new HttpProxyCacheServer.Builder(context.getApplicationContext())
                 .fileNameGenerator(new PlayerFileNameGenerator())
                 .maxCacheSize(2147483648L) // 2GB
                 .build();
+
 
         mIServiceNotifier = iServiceNotifier;
 
@@ -333,6 +335,4 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     public M getCurrentPlayingMusic() {
         return mPlayingInfoManager.getCurrentPlayingMusic();
     }
-
-
 }

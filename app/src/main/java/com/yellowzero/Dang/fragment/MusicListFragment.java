@@ -126,8 +126,8 @@ public class MusicListFragment extends Fragment {
                     music.setSelected(false);
             }
         });
+        proxy = App.getProxy(getContext());
         App app = ((App)getActivity().getApplication());
-        proxy = app.getProxy(getContext());
         app.addNetworkListener(new NetworkChangeReceiver.NetworkListener() {
             @Override
             public void onChangeState(int state) {
