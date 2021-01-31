@@ -66,14 +66,10 @@ public class BilibiliFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshList();
+                page = 1;
+                loadList();
             }
         });
-        loadList();
-    }
-
-    public void refreshList() {
-        page = 1;
         loadList();
     }
 
