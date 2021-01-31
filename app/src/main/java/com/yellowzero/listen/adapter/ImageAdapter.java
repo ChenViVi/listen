@@ -32,7 +32,7 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
             tvName.setText(Html.fromHtml(item.getUserName()));
         }*/
         Glide.with(context)
-                .load(item.getUrl())
+                .load(item.getUrlSmall())
                 .into((ImageView) viewHolder.getView(R.id.ivImage));
         Glide.with(context)
                 .load(item.getUser().getAvatar())
