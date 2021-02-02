@@ -1,10 +1,12 @@
 package com.yellowzero.listen.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Image {
+public class Image implements Serializable {
     private int id;
-    private String weiboId;
+    private String pid;
+    private long weiboId;
     private String urlSmall;
     private String urlLarge;
     private UserWeibo user;
@@ -19,11 +21,19 @@ public class Image {
         this.id = id;
     }
 
-    public String getWeiboId() {
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public long getWeiboId() {
         return weiboId;
     }
 
-    public void setWeiboId(String weiboId) {
+    public void setWeiboId(long weiboId) {
         this.weiboId = weiboId;
     }
 

@@ -1,6 +1,8 @@
 package com.yellowzero.listen.model;
 
-public class UserWeibo {
+import java.io.Serializable;
+
+public class UserWeibo implements Serializable {
     private int id;
     private String name;
     private String avatar;

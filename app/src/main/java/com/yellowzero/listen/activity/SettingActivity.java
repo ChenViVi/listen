@@ -3,6 +3,7 @@ package com.yellowzero.listen.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -36,5 +37,15 @@ public class SettingActivity extends AppCompatActivity {
     private void enableMusicMobile(boolean enable) {
         AppData.ENABLE_MUSIC_MOBILE = enable;
         AppData.saveData(SettingActivity.this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

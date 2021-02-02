@@ -1,6 +1,8 @@
 package com.yellowzero.listen.model;
 
-public class ImageTag {
+import java.io.Serializable;
+
+public class ImageTag implements Serializable {
     private int id;
     private String name;
 
