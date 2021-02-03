@@ -74,7 +74,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        image = (Image) getIntent().getSerializableExtra("image");
+        image = (Image) getIntent().getSerializableExtra(KEY_IMAGE);
         if (image == null)
             return;
         filePath = getExternalFilesDir(null) + File.separator + image.getImageName();
@@ -88,7 +88,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
             viewTag.setOnTagClickListener(new TagCloudView.OnTagClickListener() {
                 @Override
                 public void onTagClick(int position) {
-
+                    ImageActivity.start(ImagedDetailActivity.this, image.getTags().get(position));
                 }
             });
         }
