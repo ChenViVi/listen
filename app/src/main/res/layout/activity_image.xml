@@ -50,12 +50,6 @@
                 tools:ignore="RelativeOverlap" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
-    <ProgressBar
-        android:id="@+id/pbLoad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        style="@style/Widget.AppCompat.ProgressBar"/>
     <LinearLayout
         android:id="@+id/llBottomMenu"
         android:layout_width="match_parent"
@@ -158,6 +152,12 @@
         android:layout_above="@id/llBottomMenu"
         android:layout_below="@id/toolbar"
         android:background="@color/black"/>
+    <ProgressBar
+        android:id="@+id/pbLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        style="@style/Widget.AppCompat.ProgressBar"/>
     <TextView
         android:id="@+id/tvText"
         android:layout_width="match_parent"
