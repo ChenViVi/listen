@@ -60,8 +60,6 @@ public class DataObserver<T> extends BaseObserver<BaseData<T>> {
 
     @Override
     public void doOnNext(BaseData<T> data) {
-        onSuccess(data.getData());
-        //可以根据需求对code统一处理
         if (data.getCode() == 200)
             onSuccess(data.getData());
         else
