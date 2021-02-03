@@ -17,8 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
-import com.allen.library.observer.DataObserver;
-import com.allen.library.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -27,6 +25,7 @@ import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.adapter.MusicAdapter;
 import com.yellowzero.listen.model.Music;
+import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.service.MusicService;
@@ -177,11 +176,6 @@ public class MusicListFragment extends Fragment {
                 .list(tagId)
                 .compose(Transformer.<BaseData<List<Music>>>switchSchedulers())
                 .subscribe(new DataObserver<List<Music>>() {
-                    @Override
-                    protected void onError(String errorMsg) {
-                        ToastUtils.showToast(getResources().getString(R.string.ts_http_error));
-                    }
-
                     @Override
                     protected void onSuccess(List<Music> data) {
                         itemList.clear();

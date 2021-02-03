@@ -16,8 +16,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
-import com.allen.library.observer.DataObserver;
-import com.allen.library.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
@@ -25,6 +23,7 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.ImageActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
+import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
 
 import java.util.ArrayList;
@@ -85,10 +84,6 @@ public class ImageFragment extends Fragment {
                 .list(page,PAGE_SIZE)
                 .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
                 .subscribe(new DataObserver<List<Image>>() {
-                    @Override
-                    protected void onError(String errorMsg) {
-                        ToastUtils.showToast(getResources().getString(R.string.ts_http_error));
-                    }
 
                     @Override
                     protected void onSuccess(List<Image> data) {
