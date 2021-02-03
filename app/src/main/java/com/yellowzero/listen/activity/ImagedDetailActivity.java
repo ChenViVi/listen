@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,7 +16,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,7 +30,9 @@ import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.R;
@@ -44,7 +46,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ImageActivity extends AppCompatActivity {
+public class ImagedDetailActivity extends AppCompatActivity {
+
+    private static final String KEY_IMAGE= "image";
 
     private int mXOld, mYOld;
     private boolean isDownloadClicked = false;
@@ -52,29 +56,28 @@ public class ImageActivity extends AppCompatActivity {
     private Image image;
     private ImageView ivImage;
     private ScrollView svDetail;
-    private TagCloudView viewTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image);
-        StatusBarUtil.setColor(ImageActivity.this, Color.BLACK);
+        setContentView(R.layout.activity_image_detail);
+        StatusBarUtil.setColor(ImagedDetailActivity.this, Color.BLACK);
         Toolbar toolbar = findViewById(R.id.toolbar);
         ProgressBar pbLoad = findViewById(R.id.pbLoad);
         TextView tvName = findViewById(R.id.tvName);
         TextView tvViewCount = findViewById(R.id.tvViewCount);
         TextView tvText = findViewById(R.id.tvText);
         ImageView ivAvatar = findViewById(R.id.ivAvatar);
+        TagCloudView viewTag = findViewById(R.id.viewTag);
         ivImage = findViewById(R.id.ivImage);
         svDetail = findViewById(R.id.svDetail);
-        viewTag = findViewById(R.id.viewTag);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         image = (Image) getIntent().getSerializableExtra("image");
         if (image == null)
             return;
-        filePath = getExternalFilesDir(null) + File.separator + image.getPid() + ".jpg";
+        filePath = getExternalFilesDir(null) + File.separator + image.getImageName();
         tvName.setText(image.getUser().getName());
         tvViewCount.setText(String.valueOf(image.getViewCount() + 1));
         tvText.setText(Html.fromHtml(image.getText()));
@@ -85,36 +88,53 @@ public class ImageActivity extends AppCompatActivity {
             viewTag.setOnTagClickListener(new TagCloudView.OnTagClickListener() {
                 @Override
                 public void onTagClick(int position) {
-                    Log.e("xxxxx", "position=" + position);
+
                 }
             });
         }
         Glide.with(this).load(image.getUser().getAvatar()).transform(new CircleCrop()).into(ivAvatar);
-        Glide.with(this)
-                .asBitmap()
-                .load(image.getUrlLarge())
-                .error(R.drawable.ic_holder)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        ivImage.setImageBitmap(resource);
-                        pbLoad.setVisibility(View.GONE);
-                        try {
-                            File file = new File(filePath);
-                            FileOutputStream out = new FileOutputStream(file);
-                            resource.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                            out.flush();
-                            out.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        String suffix = image.getSuffix();
+        if (image.isGif())
+            Glide.with(this)
+                    .asGif()
+                    .load(image.getUrlLarge())
+                    .error(R.drawable.ic_holder)
+                    .into(new ImageViewTarget<GifDrawable>(ivImage) {
+                        @Override
+                        protected void setResource(@Nullable GifDrawable resource) {
+                            pbLoad.setVisibility(View.GONE);
+                            ivImage.setImageDrawable(resource);
                         }
-                    }
+                    });
+        else
+            Glide.with(this)
+                    .asBitmap()
+                    .load(image.getUrlLarge())
+                    .error(R.drawable.ic_holder)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            pbLoad.setVisibility(View.GONE);
+                            ivImage.setImageBitmap(resource);
+                            try {
+                                Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
+                                if (suffix.equals("png"))
+                                    format = Bitmap.CompressFormat.PNG;
+                                File file = new File(filePath);
+                                FileOutputStream out = new FileOutputStream(file);
+                                resource.compress(format, 100, out);
+                                out.flush();
+                                out.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                    }
-                });
+                        }
+                    });
         RxHttpUtils.createApi(ImageService.class)
                 .view(image.getId())
                 .compose(Transformer.<String>switchSchedulers())
@@ -158,6 +178,12 @@ public class ImageActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public static void start(Context context, @NonNull Image image) {
+        Intent intent = new Intent(context, ImagedDetailActivity.class);
+        intent.putExtra(KEY_IMAGE, image);
+        context.startActivity(intent);
     }
 
     public void onClickSource(View view) {
@@ -215,10 +241,9 @@ public class ImageActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

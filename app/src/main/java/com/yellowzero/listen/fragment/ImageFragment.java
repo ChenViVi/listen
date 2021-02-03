@@ -1,6 +1,5 @@
 package com.yellowzero.listen.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.yellowzero.listen.R;
-import com.yellowzero.listen.activity.ImageActivity;
+import com.yellowzero.listen.activity.ImagedDetailActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.observer.DataObserver;
@@ -54,10 +53,7 @@ public class ImageFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Image image = itemList.get(position);
-                Intent intent = new Intent(getContext(), ImageActivity.class);
-                intent.putExtra("image", image);
-                startActivity(intent);
+                ImagedDetailActivity.start(getContext(), itemList.get(position));
             }
         });
         adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {

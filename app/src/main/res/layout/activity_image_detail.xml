@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".activity.ImageActivity">
+    tools:context=".activity.ImagedDetailActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -179,8 +179,7 @@
                 android:layout_marginTop="30dp"
                 app:tcvBorder="6dp"
                 app:tcvItemBorderVertical="6dp"
-                app:tcvCanTagClick="true"
-                android:visibility="gone"/>
+                app:tcvCanTagClick="true" />
             <TextView
                 android:id="@+id/tvText"
                 android:layout_width="match_parent"

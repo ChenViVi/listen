@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.yellowzero.listen">
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -28,9 +23,18 @@
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/tt_setting" />
-        <activity android:name=".activity.ImageActivity"/>
+        <activity android:name=".activity.ImagedDetailActivity" />
 
-        <service android:name=".notify.PlayerService" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.yellowzero.listen.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_share_img" />
+        </provider>
+
         <receiver
             android:name=".notify.PlayerReceiver"
             tools:ignore="ExportedReceiver">
@@ -44,15 +48,12 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.yellowzero.listen.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths_share_img" />
-        </provider>
+
+        <service android:name=".notify.PlayerService" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

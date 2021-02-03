@@ -25,12 +25,6 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
     @Override
     protected void convert(BaseViewHolder viewHolder, Image item) {
         viewHolder.setText(R.id.tvName, item.getUser().getName());
-/*        TextView tvName = viewHolder.getView(R.id.tvName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tvName.setText(Html.fromHtml(item.getUserName(), Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            tvName.setText(Html.fromHtml(item.getUserName()));
-        }*/
         Glide.with(context)
                 .load(item.getUrlSmall())
                 .into((ImageView) viewHolder.getView(R.id.ivImage));

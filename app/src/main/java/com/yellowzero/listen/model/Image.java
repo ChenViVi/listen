@@ -95,4 +95,28 @@ public class Image implements Serializable {
             tagList.add(imageTag.getName());
         return tagList;
     }
+
+    public String getImageName() {
+        String suffix = getSuffix();
+        if (suffix == null)
+            return null;
+        return pid + "." + suffix;
+    }
+
+    public String getSuffix() {
+        if (urlLarge == null)
+            return null;
+        int index = urlLarge.lastIndexOf(".");
+        if (index == -1) {
+            return null;
+        } else
+            return urlLarge.substring(index + 1).toLowerCase();
+    }
+
+    public boolean isGif() {
+        String suffix = getSuffix();
+        if (suffix == null)
+            return false;
+        return suffix.equals("gif");
+    }
 }
