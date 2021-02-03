@@ -16,4 +16,7 @@ public interface ImageService {
 
     @GET("image/list")
     Observable<BaseData<List<Image>>> list(@Query("page") int page, @Query("size") int size);
+
+    @GET("image/view")
+    Observable<String> view(@Query("image_id") int imageId);
 }

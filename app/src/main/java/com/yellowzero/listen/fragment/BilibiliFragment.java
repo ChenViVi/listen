@@ -101,11 +101,12 @@ public class BilibiliFragment extends Fragment {
                                 itemList.clear();
                                 refreshLayout.setRefreshing(false);
                             }
-                            itemList.addAll(videos);
+                            if (videos != null)
+                                itemList.addAll(videos);
                             adapter.notifyDataSetChanged();
                             if (adapter.getLoadMoreModule().isLoading())
                                 adapter.getLoadMoreModule().loadMoreComplete();
-                            adapter.getLoadMoreModule().setEnableLoadMore(videos.size() != 0);
+                            adapter.getLoadMoreModule().setEnableLoadMore(videos != null && videos.size() != 0);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

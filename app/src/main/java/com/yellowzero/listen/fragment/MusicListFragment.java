@@ -185,7 +185,8 @@ public class MusicListFragment extends Fragment {
                     @Override
                     protected void onSuccess(List<Music> data) {
                         itemList.clear();
-                        itemList.addAll(data);
+                        if (data != null)
+                            itemList.addAll(data);
                         List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
                         for (int i = 0; i < itemList.size(); i++) {
                             Music musicData = itemList.get(i);

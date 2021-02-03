@@ -21,6 +21,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allen.library.RxHttpUtils;
+import com.allen.library.interceptor.Transformer;
+import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -28,6 +31,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
+import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
 
 import java.io.File;
@@ -92,6 +96,21 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                 });
         ivImage.setOnClickListener(this);
         tvText.setOnClickListener(this);
+        RxHttpUtils.createApi(ImageService.class)
+                .view(image.getId())
+                .compose(Transformer.<String>switchSchedulers())
+                .subscribe(new StringObserver() {
+
+                    @Override
+                    protected void onError(String errorMsg) {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(String data) {
+
+                    }
+                });
     }
 
     @Override

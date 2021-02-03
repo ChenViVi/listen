@@ -96,11 +96,12 @@ public class ImageFragment extends Fragment {
                             itemList.clear();
                             refreshLayout.setRefreshing(false);
                         }
-                        itemList.addAll(data);
+                        if (data != null)
+                            itemList.addAll(data);
                         adapter.notifyDataSetChanged();
                         if (adapter.getLoadMoreModule().isLoading())
                             adapter.getLoadMoreModule().loadMoreComplete();
-                        adapter.getLoadMoreModule().setEnableLoadMore(data.size() != 0);
+                        adapter.getLoadMoreModule().setEnableLoadMore(data != null && data.size() != 0);
                     }
                 });
     }
