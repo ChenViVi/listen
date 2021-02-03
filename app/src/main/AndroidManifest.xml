@@ -17,7 +17,6 @@
         android:theme="@style/Theme.Dang"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activity.ImageActivity"></activity>
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,9 +28,9 @@
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/tt_setting" />
+        <activity android:name=".activity.ImageActivity"/>
 
         <service android:name=".notify.PlayerService" />
-
         <receiver
             android:name=".notify.PlayerReceiver"
             tools:ignore="ExportedReceiver">
@@ -45,6 +44,15 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.yellowzero.listen.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_share_img" />
+        </provider>
     </application>
 
 </manifest>

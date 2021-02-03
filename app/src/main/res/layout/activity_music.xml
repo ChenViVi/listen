@@ -19,7 +19,8 @@
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar"
+        tools:ignore="ContentDescription" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,27 +43,31 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_last_song"
-                android:onClick="onClickLast"/>
+                android:onClick="onClickLast"
+                tools:ignore="ContentDescription" />
             <ImageView
                 android:id="@+id/ivPlay"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_play"
-                android:onClick="onClickPlay"/>
+                android:onClick="onClickPlay"
+                tools:ignore="ContentDescription" />
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_next_song"
-                android:onClick="onClickNext"/>
+                android:onClick="onClickNext"
+                tools:ignore="ContentDescription" />
             <ImageView
                 android:id="@+id/ivMode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_mode_loop"
-                android:onClick="onClickMode"/>
+                android:onClick="onClickMode"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

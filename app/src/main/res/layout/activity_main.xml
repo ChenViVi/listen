@@ -38,7 +38,8 @@
                 android:id="@+id/ivCover"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                tools:ignore="ContentDescription" />
             <ImageView
                 android:id="@+id/ivNext"
                 android:layout_width="60dp"
@@ -46,7 +47,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_next_song"
-                android:onClick="onNext"/>
+                android:onClick="onNext"
+                tools:ignore="ContentDescription" />
             <ImageView
                 android:id="@+id/ivPlay"
                 android:layout_width="60dp"
@@ -54,7 +56,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/ivNext"
                 android:src="@drawable/ic_play_stop"
-                android:onClick="onPlay"/>
+                android:onClick="onPlay"
+                tools:ignore="ContentDescription" />
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="match_parent"
@@ -67,8 +70,7 @@
                 android:textSize="18sp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/white"
-                android:text="在一起就不孤独？"/>
+                android:textColor="@color/white" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
     <FrameLayout

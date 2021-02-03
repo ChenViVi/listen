@@ -12,6 +12,7 @@ public class Image implements Serializable {
     private UserWeibo user;
     private List<ImageTag> tags;
     private String text;
+    private int viewCount;
 
     public int getId() {
         return id;
@@ -75,5 +76,13 @@ public class Image implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 }

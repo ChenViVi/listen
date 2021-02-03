@@ -2,7 +2,6 @@ package com.yellowzero.listen.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,14 +25,10 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.ImageActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
-import com.yellowzero.listen.model.Music;
-import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.service.ImageService;
-import com.yellowzero.listen.service.MusicService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ImageFragment extends Fragment {
 
@@ -98,12 +92,6 @@ public class ImageFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(List<Image> data) {
-                        Log.e("xxxxxx", "data.size()=" + data.size());
-                        for (int i = 0; i < data.size(); i++) {
-                            Log.e("xxxxx", "i=" + i);
-                            Log.e("xxxxxx", "weiboId=" + data.get(i).getWeiboId());
-                        }
-
                         if (page == 0) {
                             itemList.clear();
                             refreshLayout.setRefreshing(false);
