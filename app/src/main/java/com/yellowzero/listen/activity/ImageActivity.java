@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,10 +15,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,18 +37,22 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
+import com.yellowzero.listen.view.TagCloudView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class ImageActivity extends AppCompatActivity implements View.OnClickListener {
+public class ImageActivity extends AppCompatActivity {
 
+    private int mXOld, mYOld;
     private boolean isDownloadClicked = false;
     private String filePath;
     private Image image;
     private ImageView ivImage;
-    private TextView tvText;
+    private ScrollView svDetail;
+    private TagCloudView viewTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +63,11 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         ProgressBar pbLoad = findViewById(R.id.pbLoad);
         TextView tvName = findViewById(R.id.tvName);
         TextView tvViewCount = findViewById(R.id.tvViewCount);
-        tvText = findViewById(R.id.tvText);
+        TextView tvText = findViewById(R.id.tvText);
         ImageView ivAvatar = findViewById(R.id.ivAvatar);
         ivImage = findViewById(R.id.ivImage);
+        svDetail = findViewById(R.id.svDetail);
+        viewTag = findViewById(R.id.viewTag);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -68,6 +78,17 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         tvName.setText(image.getUser().getName());
         tvViewCount.setText(String.valueOf(image.getViewCount() + 1));
         tvText.setText(Html.fromHtml(image.getText()));
+        ArrayList<String> tagList = image.getTagList();
+        if (tagList != null && tagList.size() != 0) {
+            viewTag.setVisibility(View.VISIBLE);
+            viewTag.setTags(tagList);
+            viewTag.setOnTagClickListener(new TagCloudView.OnTagClickListener() {
+                @Override
+                public void onTagClick(int position) {
+                    Log.e("xxxxx", "position=" + position);
+                }
+            });
+        }
         Glide.with(this).load(image.getUser().getAvatar()).transform(new CircleCrop()).into(ivAvatar);
         Glide.with(this)
                 .asBitmap()
@@ -94,8 +115,6 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
-        ivImage.setOnClickListener(this);
-        tvText.setOnClickListener(this);
         RxHttpUtils.createApi(ImageService.class)
                 .view(image.getId())
                 .compose(Transformer.<String>switchSchedulers())
@@ -111,19 +130,34 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.ivImage || v.getId() == R.id.tvText) {
-            if (ivImage.getVisibility() == View.VISIBLE) {
+        ivImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 ivImage.setVisibility(View.GONE);
-                tvText.setVisibility(View.VISIBLE);
-            } else {
-                ivImage.setVisibility(View.VISIBLE);
-                tvText.setVisibility(View.GONE);
+                svDetail.setVisibility(View.VISIBLE);
             }
-        }
+        });
+        svDetail.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mXOld = x;
+                    mYOld = y;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (x == mXOld || y == mYOld) {
+                        if (ivImage.getVisibility() != View.VISIBLE) {
+                            ivImage.setVisibility(View.VISIBLE);
+                            svDetail.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     public void onClickSource(View view) {

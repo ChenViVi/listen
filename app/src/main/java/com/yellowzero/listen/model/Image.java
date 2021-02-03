@@ -1,6 +1,7 @@
 package com.yellowzero.listen.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Image implements Serializable {
@@ -84,5 +85,14 @@ public class Image implements Serializable {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public ArrayList<String> getTagList() {
+        if (tags == null)
+            return null;
+        ArrayList<String> tagList = new ArrayList<>();
+        for (ImageTag imageTag : tags)
+            tagList.add(imageTag.getName());
+        return tagList;
     }
 }

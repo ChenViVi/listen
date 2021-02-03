@@ -71,6 +71,7 @@ dependencies {
     implementation 'com.hjq:xxpermissions:9.6'
     //文件缓存
     implementation 'com.danikula:videocache:2.7.1'
+    //状态栏
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
