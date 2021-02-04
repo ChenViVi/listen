@@ -8,12 +8,18 @@ import androidx.multidex.MultiDexApplication;
 
 import com.allen.library.RxHttpUtils;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.listener.RequestListener;
+import com.facebook.imagepipeline.listener.RequestLoggingListener;
 import com.yellowzero.listen.notify.PlayerService;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.contract.IServiceNotifier;
 import com.yellowzero.listen.player.helper.PlayerFileNameGenerator;
 import com.yellowzero.listen.util.NetworkChangeReceiver;
+
+import java.util.HashSet;
 
 public class App extends MultiDexApplication {
 
@@ -24,7 +30,13 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         AppData.loadData(this);
-        Fresco.initialize(this);
+        HashSet<RequestListener> requestListeners = new HashSet<>();
+        requestListeners.add(new RequestLoggingListener());
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+                .setRequestListeners(requestListeners)
+                .build();
+        Fresco.initialize(this, config);
+        FLog.setMinimumLoggingLevel(FLog.ERROR);
         RxHttpUtils
                 .getInstance()
                 .init(this)

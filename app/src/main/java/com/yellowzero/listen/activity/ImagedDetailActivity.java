@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,18 +28,25 @@ import com.allen.library.RxHttpUtils;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.bumptech.glide.request.transition.Transition;
+import com.facebook.common.executors.UiThreadImmediateExecutorService;
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.request.ImageRequest;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
 import com.yellowzero.listen.view.TagCloudView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -107,35 +113,43 @@ public class ImagedDetailActivity extends AppCompatActivity {
                             ivImage.setImageDrawable(resource);
                         }
                     });
-        else
-            Glide.with(this)
-                    .asBitmap()
-                    .load(image.getImageInfoLarge().getUrl())
-                    .error(R.drawable.ic_holder)
-                    .into(new CustomTarget<Bitmap>() {
+        else {
+            ImageRequest imageRequest = ImageRequest.fromUri(image.getImageInfoLarge().getUrl());
+            ImagePipeline imagePipeline = Fresco.getImagePipeline();
+            final DataSource<CloseableReference<CloseableImage>>
+                    dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
+            dataSource.subscribe(
+                    new BaseBitmapDataSubscriber() {
                         @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        protected void onNewResultImpl(Bitmap bitmap) {
                             pbLoad.setVisibility(View.GONE);
-                            ivImage.setImageBitmap(resource);
+                            ivImage.setImageBitmap(bitmap);
                             try {
                                 Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
                                 if (suffix.equals("png"))
                                     format = Bitmap.CompressFormat.PNG;
                                 File file = new File(filePath);
                                 FileOutputStream out = new FileOutputStream(file);
-                                resource.compress(format, 100, out);
+                                bitmap.compress(format, 100, out);
                                 out.flush();
                                 out.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
+                            } finally {
+                                dataSource.close();
                             }
                         }
 
                         @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-
+                        protected void onFailureImpl(@NotNull DataSource<CloseableReference<CloseableImage>> dataSource) {
+                            pbLoad.setVisibility(View.GONE);
+                            ivImage.setImageResource(R.drawable.ic_holder);
+                            if (dataSource != null) {
+                                dataSource.close();
+                            }
                         }
-                    });
+                    }, UiThreadImmediateExecutorService.getInstance());
+        }
         RxHttpUtils.createApi(ImageService.class)
                 .view(image.getId())
                 .compose(Transformer.<String>switchSchedulers())

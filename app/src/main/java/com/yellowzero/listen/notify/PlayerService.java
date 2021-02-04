@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
@@ -31,10 +32,24 @@ import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.NotificationTarget;
+import com.facebook.common.executors.UiThreadImmediateExecutorService;
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.request.ImageRequest;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MainActivity;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -94,10 +109,9 @@ public class PlayerService extends Service {
         return START_NOT_STICKY;
     }
 
-    private void createNotification(DefaultAlbum.DefaultMusic testMusic) {
-        Log.e("fuck", " createNotification");
+    private void createNotification(DefaultAlbum.DefaultMusic music) {
         try {
-            String title = testMusic.getTitle();
+            String title = music.getTitle();
             DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();
             String summary = album.getSummary();
             RemoteViews expandedView;
@@ -141,8 +155,7 @@ public class PlayerService extends Service {
             notification.contentView.setTextViewText(R.id.tvName, title);
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
-            notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_pause);
-            Glide.with(getApplicationContext()) // safer!
+            /*Glide.with(getApplicationContext()) // safer!
                     .asBitmap()
                     .load(testMusic.getCoverImg())
                     .into(new NotificationTarget(
@@ -150,7 +163,27 @@ public class PlayerService extends Service {
                             R.id.ivCover,
                             notification.contentView,
                             notification,
-                            NOTIFICATION_ID));
+                            NOTIFICATION_ID));*/
+            ImageRequest imageRequest = ImageRequest.fromUri(music.getCoverImg());
+            ImagePipeline imagePipeline = Fresco.getImagePipeline();
+            final DataSource<CloseableReference<CloseableImage>>
+                    dataSource = imagePipeline.fetchDecodedImage(imageRequest, null);
+            dataSource.subscribe(
+                    new BaseBitmapDataSubscriber() {
+                        @Override
+                        protected void onNewResultImpl(Bitmap bitmap) {
+                            notification.contentView.setImageViewBitmap(R.id.ivCover, bitmap);
+                            dataSource.close();
+                        }
+
+                        @Override
+                        protected void onFailureImpl(@NotNull DataSource<CloseableReference<CloseableImage>> dataSource) {
+                            notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_holder);
+                            if (dataSource != null) {
+                                dataSource.close();
+                            }
+                        }
+                    }, UiThreadImmediateExecutorService.getInstance());
 
             startForeground(NOTIFICATION_ID, notification);
 

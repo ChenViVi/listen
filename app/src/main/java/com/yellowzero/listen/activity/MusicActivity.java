@@ -4,13 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.appcompat.widget.Toolbar;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.PlayingInfoManager;
@@ -19,7 +19,6 @@ import com.yellowzero.listen.player.PlayingInfoManager;
 public class MusicActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ImageView ivCover;
     private AppCompatSeekBar sbProgress;
     private ImageView ivPlay;
     private ImageView ivMode;
@@ -29,7 +28,7 @@ public class MusicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
         toolbar = findViewById(R.id.toolbar);
-        ivCover = findViewById(R.id.ivCover);
+        SimpleDraweeView ivCover = findViewById(R.id.ivCover);
         sbProgress = findViewById(R.id.sbProgress);
         ivPlay = findViewById(R.id.ivPlay);
         ivMode = findViewById(R.id.ivMode);
@@ -53,7 +52,7 @@ public class MusicActivity extends AppCompatActivity {
         });
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             setTitle(changeMusic.getTitle());
-            Glide.with(MusicActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
+            ivCover.setImageURI(Uri.parse(changeMusic.getImg()));
         });
         DefaultPlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
             sbProgress.setMax(playingMusic.getDuration());
