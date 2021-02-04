@@ -34,6 +34,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
@@ -67,7 +68,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
         TextView tvName = findViewById(R.id.tvName);
         TextView tvViewCount = findViewById(R.id.tvViewCount);
         TextView tvText = findViewById(R.id.tvText);
-        ImageView ivAvatar = findViewById(R.id.ivAvatar);
+        SimpleDraweeView ivAvatar = findViewById(R.id.ivAvatar);
         TagCloudView viewTag = findViewById(R.id.viewTag);
         ivImage = findViewById(R.id.ivImage);
         svDetail = findViewById(R.id.svDetail);
@@ -92,12 +93,12 @@ public class ImagedDetailActivity extends AppCompatActivity {
                 }
             });
         }
-        Glide.with(this).load(image.getUser().getAvatar()).transform(new CircleCrop()).into(ivAvatar);
+        ivAvatar.setImageURI(Uri.parse(image.getUser().getAvatar()));
         String suffix = image.getSuffix();
         if (image.isGif())
             Glide.with(this)
                     .asGif()
-                    .load(image.getUrlLarge())
+                    .load(image.getImageInfoLarge().getUrl())
                     .error(R.drawable.ic_holder)
                     .into(new ImageViewTarget<GifDrawable>(ivImage) {
                         @Override
@@ -109,7 +110,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
         else
             Glide.with(this)
                     .asBitmap()
-                    .load(image.getUrlLarge())
+                    .load(image.getImageInfoLarge().getUrl())
                     .error(R.drawable.ic_holder)
                     .into(new CustomTarget<Bitmap>() {
                         @Override

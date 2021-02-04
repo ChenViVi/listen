@@ -53,7 +53,7 @@ public class BilibiliFragment extends Fragment {
         rvList = view.findViewById(R.id.rvList);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BilibiliVideoAdapter(getContext(), itemList);
+        adapter = new BilibiliVideoAdapter(itemList);
         rvList.setAdapter(adapter);
         adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override

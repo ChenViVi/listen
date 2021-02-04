@@ -20,6 +20,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -79,5 +80,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.hiczp/bilibili-api
     //implementation group: 'com.hiczp', name: 'bilibili-api', version: '0.2.0'
 
-
+    implementation 'com.facebook.fresco:fresco:2.4.0'
+    // For animated GIF support
+    implementation 'com.facebook.fresco:animated-gif:2.4.0'
 }

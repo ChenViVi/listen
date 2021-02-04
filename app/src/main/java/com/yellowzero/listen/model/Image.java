@@ -8,8 +8,8 @@ public class Image implements Serializable {
     private int id;
     private String pid;
     private long weiboId;
-    private String urlSmall;
-    private String urlLarge;
+    private ImageInfo imageInfoSmall;
+    private ImageInfo imageInfoLarge;
     private UserWeibo user;
     private List<ImageTag> tags;
     private String text;
@@ -39,20 +39,20 @@ public class Image implements Serializable {
         this.weiboId = weiboId;
     }
 
-    public String getUrlSmall() {
-        return urlSmall;
+    public ImageInfo getImageInfoSmall() {
+        return imageInfoSmall;
     }
 
-    public void setUrlSmall(String urlSmall) {
-        this.urlSmall = urlSmall;
+    public void setImageInfoSmall(ImageInfo imageInfoSmall) {
+        this.imageInfoSmall = imageInfoSmall;
     }
 
-    public String getUrlLarge() {
-        return urlLarge;
+    public ImageInfo getImageInfoLarge() {
+        return imageInfoLarge;
     }
 
-    public void setUrlLarge(String urlLarge) {
-        this.urlLarge = urlLarge;
+    public void setImageInfoLarge(ImageInfo imageInfoLarge) {
+        this.imageInfoLarge = imageInfoLarge;
     }
 
     public UserWeibo getUser() {
@@ -104,13 +104,13 @@ public class Image implements Serializable {
     }
 
     public String getSuffix() {
-        if (urlLarge == null)
+        if (imageInfoSmall == null || imageInfoSmall.getUrl() == null)
             return null;
-        int index = urlLarge.lastIndexOf(".");
+        int index = imageInfoSmall.getUrl().lastIndexOf(".");
         if (index == -1) {
             return null;
         } else
-            return urlLarge.substring(index + 1).toLowerCase();
+            return imageInfoSmall.getUrl().substring(index + 1).toLowerCase();
     }
 
     public boolean isGif() {

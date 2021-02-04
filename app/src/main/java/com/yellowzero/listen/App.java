@@ -1,19 +1,21 @@
 package com.yellowzero.listen;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.allen.library.RxHttpUtils;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.yellowzero.listen.notify.PlayerService;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.contract.IServiceNotifier;
 import com.yellowzero.listen.player.helper.PlayerFileNameGenerator;
 import com.yellowzero.listen.util.NetworkChangeReceiver;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private NetworkChangeReceiver networkChangeReceiver;
     private HttpProxyCacheServer proxy;
@@ -22,6 +24,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         AppData.loadData(this);
+        Fresco.initialize(this);
         RxHttpUtils
                 .getInstance()
                 .init(this)
