@@ -32,6 +32,7 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
                 .load(item.getUser().getAvatar())
                 .transform(new CircleCrop())
                 .placeholder(R.drawable.ic_holder)
+                .error(R.drawable.ic_holder)
                 .into((ImageView) viewHolder.getView(R.id.ivAvatar));
     }
 }
