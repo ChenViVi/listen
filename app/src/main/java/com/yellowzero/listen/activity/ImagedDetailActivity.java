@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,20 +26,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allen.library.RxHttpUtils;
+import com.allen.library.download.DownloadObserver;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.facebook.common.executors.UiThreadImmediateExecutorService;
-import com.facebook.common.references.CloseableReference;
-import com.facebook.datasource.DataSource;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.core.ImagePipeline;
-import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
-import com.facebook.imagepipeline.image.CloseableImage;
-import com.facebook.imagepipeline.request.ImageRequest;
+import com.bumptech.glide.request.transition.Transition;
+import com.bumptech.glide.util.ByteBufferUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
@@ -46,11 +43,11 @@ import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
 import com.yellowzero.listen.view.TagCloudView;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class ImagedDetailActivity extends AppCompatActivity {
@@ -59,7 +56,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
 
     private int mXOld, mYOld;
     private boolean isDownloadClicked = false;
-    private String filePath;
+    private File file;
     private Image image;
     private ImageView ivImage;
     private ScrollView svDetail;
@@ -74,7 +71,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
         TextView tvName = findViewById(R.id.tvName);
         TextView tvViewCount = findViewById(R.id.tvViewCount);
         TextView tvText = findViewById(R.id.tvText);
-        SimpleDraweeView ivAvatar = findViewById(R.id.ivAvatar);
+        ImageView ivAvatar = findViewById(R.id.ivAvatar);
         TagCloudView viewTag = findViewById(R.id.viewTag);
         ivImage = findViewById(R.id.ivImage);
         svDetail = findViewById(R.id.svDetail);
@@ -84,7 +81,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
         image = (Image) getIntent().getSerializableExtra(KEY_IMAGE);
         if (image == null)
             return;
-        filePath = getExternalFilesDir(null) + File.separator + image.getImageName();
+        file = new File(getExternalFilesDir(null) + File.separator + image.getImageName());
         tvName.setText(image.getUser().getName());
         tvViewCount.setText(String.valueOf(image.getViewCount() + 1));
         tvText.setText(Html.fromHtml(image.getText()));
@@ -99,7 +96,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
                 }
             });
         }
-        ivAvatar.setImageURI(Uri.parse(image.getUser().getAvatar()));
+        Glide.with(this).load(image.getUser().getAvatar()).transform(new CircleCrop()).into(ivAvatar);
         String suffix = image.getSuffix();
         if (image.isGif())
             Glide.with(this)
@@ -113,43 +110,34 @@ public class ImagedDetailActivity extends AppCompatActivity {
                             ivImage.setImageDrawable(resource);
                         }
                     });
-        else {
-            ImageRequest imageRequest = ImageRequest.fromUri(image.getImageInfoLarge().getUrl());
-            ImagePipeline imagePipeline = Fresco.getImagePipeline();
-            final DataSource<CloseableReference<CloseableImage>>
-                    dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
-            dataSource.subscribe(
-                    new BaseBitmapDataSubscriber() {
+        else
+            Glide.with(this)
+                    .asBitmap()
+                    .load(image.getImageInfoLarge().getUrl())
+                    .error(R.drawable.ic_holder)
+                    .into(new CustomTarget<Bitmap>() {
                         @Override
-                        protected void onNewResultImpl(Bitmap bitmap) {
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             pbLoad.setVisibility(View.GONE);
-                            ivImage.setImageBitmap(bitmap);
+                            ivImage.setImageBitmap(resource);
                             try {
                                 Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
                                 if (suffix.equals("png"))
                                     format = Bitmap.CompressFormat.PNG;
-                                File file = new File(filePath);
                                 FileOutputStream out = new FileOutputStream(file);
-                                bitmap.compress(format, 100, out);
+                                resource.compress(format, 100, out);
                                 out.flush();
                                 out.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
-                            } finally {
-                                dataSource.close();
                             }
                         }
 
                         @Override
-                        protected void onFailureImpl(@NotNull DataSource<CloseableReference<CloseableImage>> dataSource) {
-                            pbLoad.setVisibility(View.GONE);
-                            ivImage.setImageResource(R.drawable.ic_holder);
-                            if (dataSource != null) {
-                                dataSource.close();
-                            }
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
                         }
-                    }, UiThreadImmediateExecutorService.getInstance());
-        }
+                    });
         RxHttpUtils.createApi(ImageService.class)
                 .view(image.getId())
                 .compose(Transformer.<String>switchSchedulers())
@@ -193,6 +181,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
                 return false;
             }
         });
+        downloadImage();
     }
 
     public static void start(Context context, @NonNull Image image) {
@@ -219,15 +208,15 @@ public class ImagedDetailActivity extends AppCompatActivity {
 
     public void onClickDownload(View view) {
         isDownloadClicked = true;
-        if (new File(filePath).exists()) {
-            Toast.makeText(this, String.format(getResources().getString(R.string.ts_download_success), filePath), Toast.LENGTH_SHORT).show();
+        if (file.exists()) {
+            Toast.makeText(this, String.format(getResources().getString(R.string.ts_download_success), file.getPath()), Toast.LENGTH_SHORT).show();
         } else {
+            downloadImage();
             Toast.makeText(this, R.string.ts_download_error, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void onClickShare(View view) {
-        File file = new File(filePath);
         if (file.exists()) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -240,14 +229,15 @@ public class ImagedDetailActivity extends AppCompatActivity {
             intent.setType("image/png");
             startActivity(intent);
         } else {
-            Toast.makeText(this, R.string.ts_download_error, Toast.LENGTH_SHORT).show();
+            downloadImage();
+            Toast.makeText(this, R.string.ts_download_process, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onDestroy() {
+        RxHttpUtils.cancel("download");
         if (!isDownloadClicked) {
-            File file = new File(filePath);
             if (file.exists())
                 file.delete();
         }
@@ -261,5 +251,25 @@ public class ImagedDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void downloadImage() {
+        if (!file.exists())
+            RxHttpUtils
+                    .downloadFile(image.getImageInfoLarge().getUrl())
+                    .subscribe(new DownloadObserver(image.getImageName()) {
+                        @Override
+                        protected String setTag() {
+                            return "download";
+                        }
+
+                        @Override
+                        protected void onError(String errorMsg) {
+                        }
+
+                        @Override
+                        protected void onSuccess(long bytesRead, long contentLength, float progress, boolean done, String filePath) {
+                        }
+                    });
     }
 }

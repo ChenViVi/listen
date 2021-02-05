@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
@@ -26,6 +26,7 @@ import com.yellowzero.listen.view.Tab;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ImageView ivCover;
     private TextView tvName;
     private ImageView ivPlay;
     private View llMusic;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(findViewById(R.id.toolbar));
-        SimpleDraweeView ivCover = findViewById(R.id.ivCover);
+        ivCover = findViewById(R.id.ivCover);
         tvName = findViewById(R.id.tvName);
         ivPlay = findViewById(R.id.ivPlay);
         llMusic = findViewById(R.id.llMusic);
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 }));
         andTabManager.setCurrentItem(0);
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            ivCover.setImageURI(Uri.parse(changeMusic.getImg()));
+            Glide.with(MainActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
             tvName.setText(changeMusic.getTitle());
         });
         DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
