@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/refreshLayout">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvList"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="5dp"
-        android:background="@color/bgGrey"/>
+        android:layout_height="match_parent">
+        <com.yellowzero.listen.view.TagCloudView
+            android:id="@+id/viewTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tcvBorder="6dp"
+            app:tcvItemBorderVertical="6dp"
+            app:tcvCanTagClick="true"
+            app:tcvSingleLine="true"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/viewTag"
+            android:paddingStart="5dp"
+            android:background="@color/bgGrey"/>
+    </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

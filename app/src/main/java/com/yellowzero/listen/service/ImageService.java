@@ -12,7 +12,9 @@ import retrofit2.http.Query;
 
 public interface ImageService {
     @GET("image/tags")
-    Observable<BaseData<List<ImageTag>>> tags(@Query("image_id") Integer imageId);
+    Observable<BaseData<List<ImageTag>>> tags();
+    @GET("image/tags")
+    Observable<BaseData<List<ImageTag>>> tags(@Query("image_id") int imageId);
 
     @GET("image/list")
     Observable<BaseData<List<Image>>> list(@Query("page") int page, @Query("size") int size);

@@ -22,8 +22,10 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.ImagedDetailActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
+import com.yellowzero.listen.model.ImageTag;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
+import com.yellowzero.listen.view.TagCloudView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ public class ImageFragment extends Fragment {
     private int page = 0;
     private List<Image> itemList = new ArrayList<>();
     private ImageAdapter adapter;
-    private RecyclerView rvList;
+    private TagCloudView viewTag;
     private SwipeRefreshLayout refreshLayout;
 
     @Nullable
@@ -46,7 +48,8 @@ public class ImageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvList = view.findViewById(R.id.rvList);
+        RecyclerView rvList = view.findViewById(R.id.rvList);
+        viewTag = view.findViewById(R.id.viewTag);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         adapter = new ImageAdapter(getContext(), itemList);
@@ -70,9 +73,11 @@ public class ImageFragment extends Fragment {
             public void onRefresh() {
                 page = 0;
                 loadList();
+                loadTags();
             }
         });
         loadList();
+        loadTags();
     }
 
     private void loadList() {
@@ -93,6 +98,22 @@ public class ImageFragment extends Fragment {
                         if (adapter.getLoadMoreModule().isLoading())
                             adapter.getLoadMoreModule().loadMoreComplete();
                         adapter.getLoadMoreModule().setEnableLoadMore(data != null && data.size() != 0);
+                    }
+                });
+    }
+
+    private void loadTags() {
+        RxHttpUtils.createApi(ImageService.class)
+                .tags()
+                .compose(Transformer.<BaseData<List<ImageTag>>>switchSchedulers())
+                .subscribe(new DataObserver<List<ImageTag>>() {
+
+                    @Override
+                    protected void onSuccess(List<ImageTag> data) {
+                        ArrayList<String> tags = new ArrayList<>();
+                        for (ImageTag tag: data)
+                            tags.add(tag.getName());
+                        viewTag.setTags(tags);
                     }
                 });
     }
