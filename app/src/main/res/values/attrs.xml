@@ -16,6 +16,7 @@
         <attr name="tcvEndText" format="string"/>
         <attr name="tcvRightResId" format="reference"/>
         <attr name="tcvCanTagClick" format="boolean"/>
+        <attr name="tcvEnableSelect" format="boolean"/>
 
         <attr name="tcvTagResId" format="reference"/>
     </declare-styleable>

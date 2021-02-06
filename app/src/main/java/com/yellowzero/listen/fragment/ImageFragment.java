@@ -1,9 +1,11 @@
 package com.yellowzero.listen.fragment;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import razerdp.basepopup.BasePopupWindow;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
@@ -26,6 +29,7 @@ import com.yellowzero.listen.model.ImageTag;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.view.TagCloudView;
+import com.yellowzero.listen.view.TagsPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,7 @@ public class ImageFragment extends Fragment {
     private int page = 0;
     private List<Image> itemList = new ArrayList<>();
     private ImageAdapter adapter;
-    private TagCloudView viewTag;
+    private TagsPopup tagsPopup;
     private SwipeRefreshLayout refreshLayout;
 
     @Nullable
@@ -49,8 +53,8 @@ public class ImageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView rvList = view.findViewById(R.id.rvList);
-        viewTag = view.findViewById(R.id.viewTag);
         refreshLayout = view.findViewById(R.id.refreshLayout);
+        ImageView ivMore = view.findViewById(R.id.ivMore);
         rvList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         adapter = new ImageAdapter(getContext(), itemList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -74,6 +78,32 @@ public class ImageFragment extends Fragment {
                 page = 0;
                 loadList();
                 loadTags();
+            }
+        });
+        tagsPopup = new TagsPopup(getContext());
+        tagsPopup.setOnDismissListener(new BasePopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                ivMore.setImageResource(R.drawable.ic_arrow_right);
+            }
+        });
+        tagsPopup.setOnTagClickListener(new TagCloudView.OnTagClickListener() {
+            @Override
+            public void onTagClick(int position) {
+
+            }
+        });
+        view.findViewById(R.id.llTag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tagsPopup.isShowing()) {
+                    ivMore.setImageResource(R.drawable.ic_arrow_right);
+                    tagsPopup.dismiss();
+                }
+                else {
+                    ivMore.setImageResource(R.drawable.ic_arrow_down);
+                    tagsPopup.setPopupGravity(Gravity.BOTTOM).setAlignBackground(true).showPopupWindow(view);
+                }
             }
         });
         loadList();
@@ -110,10 +140,7 @@ public class ImageFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(List<ImageTag> data) {
-                        ArrayList<String> tags = new ArrayList<>();
-                        for (ImageTag tag: data)
-                            tags.add(tag.getName());
-                        viewTag.setTags(tags);
+                        tagsPopup.setTags(data);
                     }
                 });
     }

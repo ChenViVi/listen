@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 
 import com.yellowzero.listen.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +25,7 @@ public class TagCloudView extends ViewGroup{
     private static final String TAG = TagCloudView.class.getSimpleName();
     private static final int TYPE_TEXT_NORMAL = 1;
     private List<String> tags;
+    private List<Integer> selectedTagPosition = new ArrayList<>();
 
     private LayoutInflater mInflater;
     private OnTagClickListener onTagClickListener;
@@ -45,6 +46,7 @@ public class TagCloudView extends ViewGroup{
     private boolean mShowRightImage;
     private boolean mShowEndText;
     private boolean mCanTagClick;
+    private boolean mEnableSelect;
     private String endTextString;
 
     private int imageWidth;
@@ -57,7 +59,7 @@ public class TagCloudView extends ViewGroup{
 
     private static final int DEFAULT_TEXT_COLOR = Color.WHITE;
     private static final int DEFAULT_TEXT_SIZE = 14;
-    private static final int DEFAULT_TEXT_BACKGROUND = R.drawable.btn_tag;
+    private static final int DEFAULT_TEXT_BACKGROUND = R.drawable.btn_tag_default;
     private static final int DEFAULT_VIEW_BORDER = 6;
     private static final int DEFAULT_TEXT_BORDER_HORIZONTAL = 8;
     private static final int DEFAULT_TEXT_BORDER_VERTICAL = 5;
@@ -182,11 +184,8 @@ public class TagCloudView extends ViewGroup{
 
         if (mShowEndText) {
             endText = (TextView) mInflater.inflate(mTagResId, null);
-            if (mTagResId == DEFAULT_TAG_RESID) {
-                endText.setBackgroundResource(mBackground);
-                //endText.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTagSize);
-                endText.setTextColor(mTagColor);
-            }
+            endText.setBackgroundResource(mBackground);
+            endText.setTextColor(mTagColor);
             @SuppressLint("DrawAllocation")
             LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             endText.setLayoutParams(layoutParams);
@@ -350,6 +349,7 @@ public class TagCloudView extends ViewGroup{
                 tagView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        handleClick(tagView, finalI);
                         if (onTagClickListener != null) {
                             onTagClickListener.onTagClick(finalI);
                         }
@@ -359,6 +359,30 @@ public class TagCloudView extends ViewGroup{
             }
         }
         postInvalidate();
+    }
+
+    private void handleClick(TextView tagView, int position) {
+        if (!mEnableSelect)
+            return;
+        tagView.setSelected(!tagView.isSelected());
+        if (tagView.isSelected())
+            tagView.setTextColor(Color.WHITE);
+        else
+            tagView.setTextColor(mTagColor);
+        if (position < 0 || position >= tags.size())
+            return;
+        if (!tagView.isSelected() && selectedTagPosition.contains(position))
+            selectedTagPosition.remove(Integer.valueOf(position));
+        else if (tagView.isSelected() && !selectedTagPosition.contains(position))
+            selectedTagPosition.add(position);
+    }
+
+    public void setEnableSelect(boolean enable) {
+        this.mEnableSelect = enable;
+    }
+
+    public List<Integer> getSelectedTagPosition() {
+        return selectedTagPosition;
     }
 
     public void singleLine(boolean mSingleLine) {

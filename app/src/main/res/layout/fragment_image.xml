@@ -7,20 +7,43 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.yellowzero.listen.view.TagCloudView
-            android:id="@+id/viewTag"
+        <RelativeLayout
+            android:id="@+id/llTag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tcvBorder="6dp"
-            app:tcvItemBorderVertical="6dp"
-            app:tcvCanTagClick="true"
-            app:tcvSingleLine="true"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="4dp">
+            <ImageView
+                android:id="@+id/ivTag"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_tag" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/ivTag"
+                android:padding="4dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:text="标签"/>
+            <ImageView
+                android:id="@+id/ivMore"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_arrow_right" />
+        </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/viewTag"
+            android:layout_below="@id/llTag"
+            android:paddingTop="5dp"
             android:paddingStart="5dp"
-            android:background="@color/bgGrey"/>
+            android:background="@color/bgGrey" />
     </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -179,7 +179,8 @@
                 android:layout_marginTop="30dp"
                 app:tcvBorder="6dp"
                 app:tcvItemBorderVertical="6dp"
-                app:tcvCanTagClick="true" />
+                app:tcvCanTagClick="true"
+                app:tcvTextColor="@color/white"/>
             <TextView
                 android:id="@+id/tvText"
                 android:layout_width="match_parent"

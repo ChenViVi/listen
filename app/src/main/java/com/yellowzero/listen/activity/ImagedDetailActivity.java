@@ -106,8 +106,8 @@ public class ImagedDetailActivity extends AppCompatActivity {
                     .into(new ImageViewTarget<GifDrawable>(ivImage) {
                         @Override
                         protected void setResource(@Nullable GifDrawable resource) {
-                            pbLoad.setVisibility(View.GONE);
                             ivImage.setImageDrawable(resource);
+                            pbLoad.setVisibility(View.GONE);
                         }
                     });
         else
@@ -118,19 +118,24 @@ public class ImagedDetailActivity extends AppCompatActivity {
                     .into(new CustomTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            pbLoad.setVisibility(View.GONE);
                             ivImage.setImageBitmap(resource);
-                            try {
-                                Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
-                                if (suffix.equals("png"))
-                                    format = Bitmap.CompressFormat.PNG;
-                                FileOutputStream out = new FileOutputStream(file);
-                                resource.compress(format, 100, out);
-                                out.flush();
-                                out.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            pbLoad.setVisibility(View.GONE);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
+                                        if (suffix.equals("png"))
+                                            format = Bitmap.CompressFormat.PNG;
+                                        FileOutputStream out = new FileOutputStream(file);
+                                        resource.compress(format, 100, out);
+                                        out.flush();
+                                        out.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                         }
 
                         @Override
