@@ -37,8 +37,12 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.util.ByteBufferUtil;
 import com.jaeger.library.StatusBarUtil;
+import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
+import com.yellowzero.listen.model.entity.DaoSession;
+import com.yellowzero.listen.model.entity.ImageLike;
+import com.yellowzero.listen.model.entity.ImageLikeDao;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
 import com.yellowzero.listen.view.TagCloudView;
@@ -56,10 +60,13 @@ public class ImagedDetailActivity extends AppCompatActivity {
 
     private int mXOld, mYOld;
     private boolean isDownloadClicked = false;
+    private boolean isLike = false;
     private File file;
     private Image image;
     private ImageView ivImage;
+    private ImageView ivLike;
     private ScrollView svDetail;
+    private ImageLikeDao imageLikeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +80,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
         TextView tvText = findViewById(R.id.tvText);
         ImageView ivAvatar = findViewById(R.id.ivAvatar);
         TagCloudView viewTag = findViewById(R.id.viewTag);
+        ivLike = findViewById(R.id.ivLike);
         ivImage = findViewById(R.id.ivImage);
         svDetail = findViewById(R.id.svDetail);
         setSupportActionBar(toolbar);
@@ -96,6 +104,13 @@ public class ImagedDetailActivity extends AppCompatActivity {
                 }
             });
         }
+        imageLikeDao = ((App) getApplication()).getDaoSession().getImageLikeDao();
+        ImageLike imageLike = imageLikeDao.load(image.getId());
+        isLike = (imageLike != null);
+        if (isLike)
+            ivLike.setImageResource(R.drawable.ic_star_enable);
+        else
+            ivLike.setImageResource(R.drawable.ic_star);
         Glide.with(this).load(image.getUser().getAvatar()).transform(new CircleCrop()).into(ivAvatar);
         String suffix = image.getSuffix();
         if (image.isGif())
@@ -208,7 +223,14 @@ public class ImagedDetailActivity extends AppCompatActivity {
     }
 
     public void onClickLike(View view) {
-
+        isLike = !isLike;
+        if (isLike) {
+            imageLikeDao.insert(new ImageLike(image.getId()));
+            ivLike.setImageResource(R.drawable.ic_star_enable);
+        } else {
+            imageLikeDao.delete(new ImageLike(image.getId()));
+            ivLike.setImageResource(R.drawable.ic_star);
+        }
     }
 
     public void onClickDownload(View view) {

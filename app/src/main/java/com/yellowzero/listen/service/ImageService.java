@@ -14,11 +14,11 @@ public interface ImageService {
     @GET("image/tags")
     Observable<BaseData<List<ImageTag>>> tags();
     @GET("image/tags")
-    Observable<BaseData<List<ImageTag>>> tags(@Query("image_id") int imageId);
+    Observable<BaseData<List<ImageTag>>> tags(@Query("image_id") long imageId);
 
     @GET("image/list")
     Observable<BaseData<List<Image>>> list(@Query("tag_id") Integer tagId, @Query("page") int page, @Query("size") int size);
 
     @GET("image/view")
-    Observable<String> view(@Query("image_id") int imageId);
+    Observable<String> view(@Query("image_id") long imageId);
 }

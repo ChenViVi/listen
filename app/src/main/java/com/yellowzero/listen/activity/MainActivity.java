@@ -52,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
                 .setIconNormalResId(R.drawable.tab_music_inactive)
                 .setIconPressedResId(R.drawable.tab_music_active));
-        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_bilibili).toString())
+        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_video).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
-                .setIconNormalResId(R.drawable.tab_bilibili_inactive)
-                .setIconPressedResId(R.drawable.tab_bilibili_active));
+                .setIconNormalResId(R.drawable.tab_video_inactive)
+                .setIconPressedResId(R.drawable.tab_video_active));
         andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_image).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))

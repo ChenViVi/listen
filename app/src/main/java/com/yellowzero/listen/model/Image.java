@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Image implements Serializable {
-    private int id;
+    private long id;
     private String pid;
     private long weiboId;
     private ImageInfo imageInfoSmall;
@@ -15,11 +15,11 @@ public class Image implements Serializable {
     private String text;
     private int viewCount;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

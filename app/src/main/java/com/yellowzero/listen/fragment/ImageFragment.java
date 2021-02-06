@@ -117,25 +117,26 @@ public class ImageFragment extends Fragment {
     }
 
     private void loadList() {
-        RxHttpUtils.createApi(ImageService.class)
-                .list(tagId, page, PAGE_SIZE)
-                .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
-                .subscribe(new DataObserver<List<Image>>() {
+        if (tagId == null || tagId != -1)
+            RxHttpUtils.createApi(ImageService.class)
+                    .list(tagId, page, PAGE_SIZE)
+                    .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
+                    .subscribe(new DataObserver<List<Image>>() {
 
-                    @Override
-                    protected void onSuccess(List<Image> data) {
-                        if (page == 0) {
-                            itemList.clear();
-                            refreshLayout.setRefreshing(false);
+                        @Override
+                        protected void onSuccess(List<Image> data) {
+                            if (page == 0) {
+                                itemList.clear();
+                                refreshLayout.setRefreshing(false);
+                            }
+                            if (data != null)
+                                itemList.addAll(data);
+                            adapter.notifyDataSetChanged();
+                            if (adapter.getLoadMoreModule().isLoading())
+                                adapter.getLoadMoreModule().loadMoreComplete();
+                            adapter.getLoadMoreModule().setEnableLoadMore(data != null && data.size() != 0);
                         }
-                        if (data != null)
-                            itemList.addAll(data);
-                        adapter.notifyDataSetChanged();
-                        if (adapter.getLoadMoreModule().isLoading())
-                            adapter.getLoadMoreModule().loadMoreComplete();
-                        adapter.getLoadMoreModule().setEnableLoadMore(data != null && data.size() != 0);
-                    }
-                });
+                    });
     }
 
     private void loadTags() {
@@ -147,10 +148,14 @@ public class ImageFragment extends Fragment {
                     @Override
                     protected void onSuccess(List<ImageTag> data) {
                         tagList.clear();
-                        ImageTag tag = new ImageTag();
-                        tag.setId(null);
-                        tag.setName(getString(R.string.tv_tag_all));
-                        tagList.add(tag);
+                        ImageTag tagAll = new ImageTag();
+                        tagAll.setId(null);
+                        tagAll.setName(getString(R.string.tv_tag_all));
+                        tagList.add(tagAll);
+                        ImageTag tagLike = new ImageTag();
+                        tagLike.setId(-1);
+                        tagLike.setName(getString(R.string.tv_tag_like));
+                        tagList.add(tagLike);
                         tagList.addAll(data);
                         tagsPopup.setTags(tagList);
                     }

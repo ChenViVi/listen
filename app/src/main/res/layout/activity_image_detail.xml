@@ -88,6 +88,7 @@
             tools:ignore="UseCompoundDrawables"
             android:onClick="onClickLike">
             <ImageView
+                android:id="@+id/ivLike"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_star"

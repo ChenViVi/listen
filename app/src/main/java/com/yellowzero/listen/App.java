@@ -7,14 +7,19 @@ import android.content.IntentFilter;
 
 import com.allen.library.RxHttpUtils;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.yellowzero.listen.model.entity.DaoMaster;
+import com.yellowzero.listen.model.entity.DaoSession;
 import com.yellowzero.listen.notify.PlayerService;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.contract.IServiceNotifier;
 import com.yellowzero.listen.player.helper.PlayerFileNameGenerator;
 import com.yellowzero.listen.util.NetworkChangeReceiver;
 
+import org.greenrobot.greendao.database.Database;
+
 public class App extends Application {
 
+    private DaoSession daoSession;
     private NetworkChangeReceiver networkChangeReceiver;
     private HttpProxyCacheServer proxy;
 
@@ -22,6 +27,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         AppData.loadData(this);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "yellowzero");
+        Database db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
         RxHttpUtils
                 .getInstance()
                 .init(this)
@@ -48,6 +56,10 @@ public class App extends Application {
     public void onTerminate() {
         unregisterReceiver(networkChangeReceiver);
         super.onTerminate();
+    }
+
+    public DaoSession getDaoSession() {
+        return daoSession;
     }
 
     public void addNetworkListener(NetworkChangeReceiver.NetworkListener listener) {
