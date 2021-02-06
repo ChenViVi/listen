@@ -343,6 +343,10 @@ public class TagCloudView extends ViewGroup{
                     //tagView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTagSize);
                     tagView.setTextColor(mTagColor);
                 }
+                if (mEnableSelect && i == 0) {
+                    tagView.setSelected(true);
+                    tagView.setTextColor(Color.WHITE);
+                }
                 LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                 tagView.setLayoutParams(layoutParams);
                 tagView.setText(tags.get(i));
@@ -375,15 +379,6 @@ public class TagCloudView extends ViewGroup{
         }
         tagView.setTextColor(Color.WHITE);
         tagView.setSelected(true);
-        /*tagView.setSelected(!tagView.isSelected());
-        if (tagView.isSelected())
-            tagView.setTextColor(Color.WHITE);
-        else
-            tagView.setTextColor(mTagColor);
-        if (!tagView.isSelected() && selectedTagPosition.contains(position))
-            selectedTagPosition.remove(Integer.valueOf(position));
-        else if (tagView.isSelected() && !selectedTagPosition.contains(position))
-            selectedTagPosition.add(position);*/
     }
 
     public void setEnableSelect(boolean enable) {

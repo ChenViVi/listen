@@ -11,4 +11,4 @@
     app:tcvCanTagClick="true"
     app:tcvEnableSelect="true"
     app:tcvBackground="@drawable/btn_tag"
-    app:tcvTextColor="@color/colorAccent"/>
+    app:tcvTextColor="@color/colorAccent" />

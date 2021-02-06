@@ -12,6 +12,7 @@
     <string name="tv_download">下载</string>
     <string name="tv_share">分享</string>
     <string name="tv_tag">标签</string>
+    <string name="tv_tag_all">全部标签</string>
 
     <string name="ts_http_error">加载失败</string>
     <string name="ts_download_error">下载失败</string>

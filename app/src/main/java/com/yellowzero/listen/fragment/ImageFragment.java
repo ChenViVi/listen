@@ -147,8 +147,12 @@ public class ImageFragment extends Fragment {
                     @Override
                     protected void onSuccess(List<ImageTag> data) {
                         tagList.clear();
+                        ImageTag tag = new ImageTag();
+                        tag.setId(null);
+                        tag.setName(getString(R.string.tv_tag_all));
+                        tagList.add(tag);
                         tagList.addAll(data);
-                        tagsPopup.setTags(data);
+                        tagsPopup.setTags(tagList);
                     }
                 });
     }
