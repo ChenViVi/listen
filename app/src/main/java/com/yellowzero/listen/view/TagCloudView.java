@@ -25,7 +25,6 @@ public class TagCloudView extends ViewGroup{
     private static final String TAG = TagCloudView.class.getSimpleName();
     private static final int TYPE_TEXT_NORMAL = 1;
     private List<String> tags;
-    private List<Integer> selectedTagPosition = new ArrayList<>();
 
     private LayoutInflater mInflater;
     private OnTagClickListener onTagClickListener;
@@ -71,6 +70,8 @@ public class TagCloudView extends ViewGroup{
     private static final boolean DEFAULT_SHOW_END_TEXT = true;
     private static final String DEFAULT_END_TEXT_STRING = " … ";
     private static final boolean DEFAULT_CAN_TAG_CLICK = true;
+
+    private List<TextView> tagTextViewList = new ArrayList<>();
 
     public TagCloudView(Context context) {
         this(context, null);
@@ -332,6 +333,7 @@ public class TagCloudView extends ViewGroup{
 
     public void setTags(List<String> tagList) {
         this.tags = tagList;
+        tagTextViewList.clear();
         this.removeAllViews();
         if (tags != null && tags.size() > 0) {
             for (int i = 0; i < tags.size(); i++) {
@@ -356,6 +358,7 @@ public class TagCloudView extends ViewGroup{
                     }
                 });
                 addView(tagView);
+                tagTextViewList.add(tagView);
             }
         }
         postInvalidate();
@@ -364,26 +367,32 @@ public class TagCloudView extends ViewGroup{
     private void handleClick(TextView tagView, int position) {
         if (!mEnableSelect)
             return;
-        tagView.setSelected(!tagView.isSelected());
+        if (position < 0 || position >= tagTextViewList.size())
+            return;
+        for (TextView textView : tagTextViewList) {
+            textView.setTextColor(mTagColor);
+            textView.setSelected(false);
+        }
+        tagView.setTextColor(Color.WHITE);
+        tagView.setSelected(true);
+        /*tagView.setSelected(!tagView.isSelected());
         if (tagView.isSelected())
             tagView.setTextColor(Color.WHITE);
         else
             tagView.setTextColor(mTagColor);
-        if (position < 0 || position >= tags.size())
-            return;
         if (!tagView.isSelected() && selectedTagPosition.contains(position))
             selectedTagPosition.remove(Integer.valueOf(position));
         else if (tagView.isSelected() && !selectedTagPosition.contains(position))
-            selectedTagPosition.add(position);
+            selectedTagPosition.add(position);*/
     }
 
     public void setEnableSelect(boolean enable) {
         this.mEnableSelect = enable;
     }
 
-    public List<Integer> getSelectedTagPosition() {
+    /*public List<Integer> getSelectedTagPosition() {
         return selectedTagPosition;
-    }
+    }*/
 
     public void singleLine(boolean mSingleLine) {
         this.mSingleLine = mSingleLine;

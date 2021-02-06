@@ -36,9 +36,11 @@ import java.util.List;
 
 public class ImageFragment extends Fragment {
 
+    private Integer tagId = null;
     private static final int PAGE_SIZE = 20;
     private int page = 0;
     private List<Image> itemList = new ArrayList<>();
+    private List<ImageTag> tagList = new ArrayList<>();
     private ImageAdapter adapter;
     private TagsPopup tagsPopup;
     private SwipeRefreshLayout refreshLayout;
@@ -90,7 +92,11 @@ public class ImageFragment extends Fragment {
         tagsPopup.setOnTagClickListener(new TagCloudView.OnTagClickListener() {
             @Override
             public void onTagClick(int position) {
-
+                if (position < 0 || position >= tagList.size())
+                    return;
+                page = 0;
+                tagId = tagList.get(position).getId();
+                loadList();
             }
         });
         view.findViewById(R.id.llTag).setOnClickListener(new View.OnClickListener() {
@@ -112,7 +118,7 @@ public class ImageFragment extends Fragment {
 
     private void loadList() {
         RxHttpUtils.createApi(ImageService.class)
-                .list(page,PAGE_SIZE)
+                .list(tagId, page, PAGE_SIZE)
                 .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
                 .subscribe(new DataObserver<List<Image>>() {
 
@@ -140,6 +146,8 @@ public class ImageFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(List<ImageTag> data) {
+                        tagList.clear();
+                        tagList.addAll(data);
                         tagsPopup.setTags(data);
                     }
                 });

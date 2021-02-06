@@ -14,22 +14,16 @@ import razerdp.basepopup.BasePopupWindow;
 public class TagsPopup extends BasePopupWindow {
 
     private TagCloudView viewTag;
-    private List<ImageTag> tagList;
 
     public TagsPopup(Context context) {
         super(context);
     }
 
     public void setTags(List<ImageTag> tagList) {
-        this.tagList = tagList;
         ArrayList<String> tags = new ArrayList<>();
         for (ImageTag tag: tagList)
             tags.add(tag.getName());
         viewTag.setTags(tags);
-    }
-
-    public List<Integer> getSelectTags() {
-        return viewTag.getSelectedTagPosition();
     }
 
     public void setOnTagClickListener(TagCloudView.OnTagClickListener onTagClickListener) {
