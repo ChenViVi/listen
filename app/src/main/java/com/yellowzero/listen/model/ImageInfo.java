@@ -8,6 +8,12 @@ public class ImageInfo implements Serializable {
     private int width;
     private int height;
 
+    public ImageInfo(String url, int width, int height) {
+        this.url = url;
+        this.width = width;
+        this.height = height;
+    }
+
     public int getId() {
         return id;
     }

@@ -7,6 +7,11 @@ public class UserWeibo implements Serializable {
     private String name;
     private String avatar;
 
+    public UserWeibo(String name, String avatar) {
+        this.name = name;
+        this.avatar = avatar;
+    }
+
     public int getId() {
         return id;
     }

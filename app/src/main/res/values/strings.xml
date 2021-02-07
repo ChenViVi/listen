@@ -16,6 +16,7 @@
     <string name="tv_tag_like">我的收藏</string>
 
     <string name="ts_http_error">加载失败</string>
+    <string name="ts_http_loading">加载中，请稍后再试</string>
     <string name="ts_download_error">下载失败</string>
     <string name="ts_download_process">图片下载中，请稍后</string>
     <string name="ts_download_success">图片已保存到：%s</string>

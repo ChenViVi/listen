@@ -21,11 +21,14 @@ import com.allen.library.interceptor.Transformer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
+import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.ImagedDetailActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.model.ImageTag;
+import com.yellowzero.listen.model.entity.ImageLike;
+import com.yellowzero.listen.model.entity.ImageLikeDao;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.view.TagCloudView;
@@ -44,6 +47,7 @@ public class ImageFragment extends Fragment {
     private ImageAdapter adapter;
     private TagsPopup tagsPopup;
     private SwipeRefreshLayout refreshLayout;
+    private ImageLikeDao imageLikeDao;
 
     @Nullable
     @Override
@@ -54,6 +58,7 @@ public class ImageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        imageLikeDao = ((App) getActivity().getApplication()).getDaoSession().getImageLikeDao();
         RecyclerView rvList = view.findViewById(R.id.rvList);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         ImageView ivMore = view.findViewById(R.id.ivMore);
@@ -137,6 +142,17 @@ public class ImageFragment extends Fragment {
                             adapter.getLoadMoreModule().setEnableLoadMore(data != null && data.size() != 0);
                         }
                     });
+        else {
+            itemList.clear();
+            List<ImageLike> imageLikeList = imageLikeDao.loadAll();
+            for (ImageLike imageLike : imageLikeList)
+                itemList.add(new Image(imageLike));
+            adapter.notifyDataSetChanged();
+            refreshLayout.setRefreshing(false);
+            if (adapter.getLoadMoreModule().isLoading())
+                adapter.getLoadMoreModule().loadMoreComplete();
+            adapter.getLoadMoreModule().setEnableLoadMore(false);
+        }
     }
 
     private void loadTags() {

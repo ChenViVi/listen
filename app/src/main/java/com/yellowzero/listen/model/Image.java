@@ -1,5 +1,7 @@
 package com.yellowzero.listen.model;
 
+import com.yellowzero.listen.model.entity.ImageLike;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,15 @@ public class Image implements Serializable {
     private List<ImageTag> tags;
     private String text;
     private int viewCount;
+    private int likeCount;
+    private boolean isLoadFromDb;
+
+    public Image(ImageLike imageLike) {
+        this.id = imageLike.getId();
+        this.imageInfoSmall = this.imageInfoLarge = new ImageInfo(imageLike.getUrlSmall(), imageLike.getImageWidth(), imageLike.getImageHeight());
+        this.user = new UserWeibo(imageLike.getUserName(), imageLike.getUrlAvatar());
+        this.isLoadFromDb = true;
+    }
 
     public long getId() {
         return id;
@@ -85,6 +96,22 @@ public class Image implements Serializable {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public boolean isLoadFromDb() {
+        return isLoadFromDb;
+    }
+
+    public void setLoadFromDb(boolean loadFromDb) {
+        isLoadFromDb = loadFromDb;
     }
 
     public ArrayList<String> getTagList() {
