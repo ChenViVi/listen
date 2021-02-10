@@ -7,6 +7,11 @@ import android.preference.PreferenceManager;
 public class AppData {
     public static boolean ENABLE_MUSIC_MOBILE = false;
     public static int MUSIC_REPEAT_MODE = 0;
+    public static final String MUSIC_NETEASE_PATH = "sdcard/netease/cloudmusic/music";
+    public static final String MUSIC_QQ_PATH = "sdcard/qqmusic/song";
+    public static final String MUSIC_MOO_PATH = "sdcard/blackkey/download";
+    public static final String MUSIC_KUGOU_PATH = "sdcard/kgmusic/download";
+
 
     public static void loadData(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

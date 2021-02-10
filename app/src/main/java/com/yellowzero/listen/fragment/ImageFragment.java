@@ -163,6 +163,7 @@ public class ImageFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(List<ImageTag> data) {
+
                         tagList.clear();
                         ImageTag tagAll = new ImageTag();
                         tagAll.setId(null);
@@ -173,7 +174,14 @@ public class ImageFragment extends Fragment {
                         tagLike.setName(getString(R.string.tv_tag_like));
                         tagList.add(tagLike);
                         tagList.addAll(data);
-                        tagsPopup.setTags(tagList);
+                        ArrayList<String> tags = new ArrayList<>();
+                        tags.add(tagAll.getName());
+                        tags.add(tagLike.getName());
+                        for (ImageTag tag: data)
+                            tags.add(String.format(getContext().getString(R.string.tv_image_tag_count),
+                                    tag.getName(),
+                                    tag.getCount()));
+                        tagsPopup.setTags(tags);
                     }
                 });
     }

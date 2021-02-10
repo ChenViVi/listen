@@ -19,10 +19,7 @@ public class TagsPopup extends BasePopupWindow {
         super(context);
     }
 
-    public void setTags(List<ImageTag> tagList) {
-        ArrayList<String> tags = new ArrayList<>();
-        for (ImageTag tag: tagList)
-            tags.add(tag.getName());
+    public void setTags(List<String> tags) {
         viewTag.setTags(tags);
     }
 

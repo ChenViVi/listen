@@ -37,7 +37,7 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
         ImageView ivImage = viewHolder.getView(R.id.ivImage);
         ImageInfo imageInfo = item.getImageInfoSmall();
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ivImage.getLayoutParams();
-        lp.width = (ScreenUtil.getAppScreenWidth(context) - ScreenUtil.dp2px(10)) / 2;
+        lp.width = ScreenUtil.getAppScreenWidth(context)/2 - ScreenUtil.dp2px(5);
         lp.height = lp.width * imageInfo.getHeight() / imageInfo.getWidth();
         ivImage.setLayoutParams(lp);
         if (item.isGif())

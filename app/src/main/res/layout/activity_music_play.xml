@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MusicActivity"
+    tools:context=".activity.MusicPlayActivity"
     android:background="@drawable/bg_music">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

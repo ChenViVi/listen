@@ -19,6 +19,7 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicFragment;
+import com.yellowzero.listen.fragment.MusicTagFragment;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.view.AndTabManager;
 import com.yellowzero.listen.view.FragmentTabCheckListener;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.llMusic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MusicActivity.class));
+                startActivity(new Intent(MainActivity.this, MusicPlayActivity.class));
             }
         });
         AndTabManager andTabManager = new AndTabManager(this, findViewById(R.id.llTab));
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager(),
                 R.id.llFragment,
                 new Fragment[] {
-                        new MusicFragment(),
+                        new MusicTagFragment(),
                         new BilibiliFragment(),
                         new ImageFragment()
                 }));

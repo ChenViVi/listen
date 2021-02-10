@@ -1,8 +1,12 @@
 package com.yellowzero.listen.model;
 
-public class MusicTag {
+import java.io.Serializable;
+
+public class MusicTag implements Serializable {
     private int id;
     private String name;
+    private String cover;
+    private long count;
 
     public int getId() {
         return id;
@@ -18,5 +22,21 @@ public class MusicTag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
     }
 }

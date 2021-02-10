@@ -16,7 +16,7 @@ import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.PlayingInfoManager;
 
 
-public class MusicActivity extends AppCompatActivity {
+public class MusicPlayActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ImageView ivCover;
@@ -27,7 +27,7 @@ public class MusicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music);
+        setContentView(R.layout.activity_music_play);
         toolbar = findViewById(R.id.toolbar);
         ivCover = findViewById(R.id.ivCover);
         sbProgress = findViewById(R.id.sbProgress);
@@ -53,7 +53,7 @@ public class MusicActivity extends AppCompatActivity {
         });
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             setTitle(changeMusic.getTitle());
-            Glide.with(MusicActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
+            Glide.with(MusicPlayActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
         });
         DefaultPlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
             sbProgress.setMax(playingMusic.getDuration());
