@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -44,7 +45,6 @@ public class MusicListActivity extends AppCompatActivity {
     private static final String KEY_TAG = "tag";
     private static final String FORMAT_MUSIC_ID = "%d_%d";
     private MusicTag tag;
-    private int selectMusicId = -1;
     private SwipeRefreshLayout refreshLayout;
     private List<Music> itemList = new ArrayList<>();
     private DefaultAlbum album = new DefaultAlbum();
@@ -116,12 +116,10 @@ public class MusicListActivity extends AppCompatActivity {
                     music.setSelected(false);
                 }
             }
-            selectMusicId = position;
             adapter.notifyDataSetChanged();
         });
         DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
             if (isPaused) {
-                selectMusicId = -1;
                 for (Music music : itemList)
                     music.setSelected(false);
                 adapter.notifyDataSetChanged();
@@ -173,7 +171,6 @@ public class MusicListActivity extends AppCompatActivity {
     }
 
     private void setPlayMusic(int position) {
-        selectMusicId = itemList.get(position).getId();
         DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
         for (Music music : itemList)
@@ -203,7 +200,8 @@ public class MusicListActivity extends AppCompatActivity {
                             music.setUrl(musicData.getUrl());
                             music.setCoverImg(musicData.getCover());
                             musics.add(music);
-                            if (musicData.getId() == selectMusicId && selectMusicId != -1) {
+                            if (DefaultPlayerManager.getInstance().isPlaying() &&
+                                    music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {
                                 musicData.setSelected(true);
                             }
                         }

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -68,6 +69,15 @@ public class MusicPlayActivity extends AppCompatActivity {
         setModeImageView(DefaultPlayerManager.getInstance().getRepeatMode());
 
         DefaultPlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setModeImageView(int mode) {
