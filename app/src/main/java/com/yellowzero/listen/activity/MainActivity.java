@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
@@ -24,6 +27,8 @@ import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.view.AndTabManager;
 import com.yellowzero.listen.view.FragmentTabCheckListener;
 import com.yellowzero.listen.view.Tab;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,37 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 llMusic.setVisibility(View.VISIBLE);
             }
         });
-/*        XXPermissions.with(this)
-                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
-                .request(new OnPermissionCallback() {
-
-                    @Override
-                    public void onGranted(List<String> permissions, boolean all) {
-
-                    }
-
-                    @Override
-                    public void onDenied(List<String> permissions, boolean never) {
-
-                    }
-                });*/
         /*new CustomTabsIntent.Builder()
                 .build()
                 .launchUrl(this, Uri.parse("https://www.bilibili.com/video/BV1Xi4y1V7rp"));*/
-        /*XXPermissions.with(this)
-                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
-                .request(new OnPermissionCallback() {
-
-                    @Override
-                    public void onGranted(List<String> permissions, boolean all) {
-
-                    }
-
-                    @Override
-                    public void onDenied(List<String> permissions, boolean never) {
-
-                    }
-                });*/
     }
 
     public void onPlay(View view) {

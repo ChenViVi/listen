@@ -50,7 +50,6 @@ public class MusicListActivity extends AppCompatActivity {
     private DefaultAlbum album = new DefaultAlbum();
     private HttpProxyCacheServer proxy;
     private MusicAdapter adapter;
-    private RecyclerView rvList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,7 @@ public class MusicListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(tag.getName());
-        rvList = findViewById(R.id.rvList);
+        RecyclerView rvList = findViewById(R.id.rvList);
         refreshLayout = findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MusicAdapter(this, itemList);
@@ -96,6 +95,7 @@ public class MusicListActivity extends AppCompatActivity {
         });
         rvList.setAdapter(adapter);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        refreshLayout.setRefreshing(true);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,15 +106,9 @@ public class MusicListActivity extends AppCompatActivity {
             }
         });
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            int position = -1;
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
-                if (String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getId()).equals(changeMusic.getMusicId())) {
-                    position = music.getId();
-                    music.setSelected(true);
-                } else {
-                    music.setSelected(false);
-                }
+                music.setSelected(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getId()).equals(changeMusic.getMusicId()));
             }
             adapter.notifyDataSetChanged();
         });
@@ -207,6 +201,12 @@ public class MusicListActivity extends AppCompatActivity {
                         }
                         album.setMusics(musics);
                         adapter.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    protected void onError(String errorMsg) {
+                        super.onError(errorMsg);
                         refreshLayout.setRefreshing(false);
                     }
                 });

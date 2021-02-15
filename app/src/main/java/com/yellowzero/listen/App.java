@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.allen.library.RxHttpUtils;
+import com.allen.library.config.OkHttpConfig;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.yellowzero.listen.model.entity.DaoMaster;
 import com.yellowzero.listen.model.entity.DaoSession;
@@ -16,6 +17,8 @@ import com.yellowzero.listen.player.helper.PlayerFileNameGenerator;
 import com.yellowzero.listen.util.NetworkChangeReceiver;
 
 import org.greenrobot.greendao.database.Database;
+
+import okhttp3.OkHttpClient;
 
 public class App extends Application {
 
@@ -30,10 +33,15 @@ public class App extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "yellowzero");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+        OkHttpClient okHttpClient = new OkHttpConfig
+                .Builder(this)
+                .setDebug(false)
+                .build();
         RxHttpUtils
                 .getInstance()
                 .init(this)
                 .config()
+                .setOkClient(okHttpClient)
                 .setBaseUrl("http://api.yellowzero.wblnb.com/");
         DefaultPlayerManager.getInstance().init(this, new IServiceNotifier() {
             @Override

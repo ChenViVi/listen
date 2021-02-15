@@ -6,6 +6,7 @@ public class MusicTag implements Serializable {
     private int id;
     private String name;
     private String cover;
+    private int coverRes;
     private long count;
 
     public int getId() {
@@ -30,6 +31,14 @@ public class MusicTag implements Serializable {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public int getCoverRes() {
+        return coverRes;
+    }
+
+    public void setCoverRes(int coverRes) {
+        this.coverRes = coverRes;
     }
 
     public long getCount() {

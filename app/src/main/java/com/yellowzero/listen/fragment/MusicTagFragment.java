@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
@@ -11,8 +12,12 @@ import com.allen.library.interceptor.Transformer;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MusicListActivity;
+import com.yellowzero.listen.activity.MusicListLocalActivity;
 import com.yellowzero.listen.adapter.MusicTagAdapter;
 import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.observer.DataObserver;
@@ -25,16 +30,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MusicTagFragment extends Fragment {
+public class MusicTagFragment extends Fragment implements OnPermissionCallback{
 
     private RecyclerView rvList;
     private SwipeRefreshLayout refreshLayout;
     private List<MusicTag> itemList = new ArrayList<>();
     private MusicTagAdapter adapter;
+    private MusicTag tag;
 
     @Nullable
     @Override
@@ -54,7 +59,19 @@ public class MusicTagFragment extends Fragment {
 
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                MusicListActivity.start(getContext(), itemList.get(position));
+                tag = itemList.get(position);
+                if (tag.getId() == -2) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R)
+                        XXPermissions.with(getContext())
+                                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                                .request(MusicTagFragment.this);
+                    else
+                        XXPermissions.with(getContext())
+                                .permission(Permission.READ_EXTERNAL_STORAGE)
+                                .request(MusicTagFragment.this);
+                }
+                else
+                    MusicListActivity.start(getContext(), tag);
             }
         });
         rvList.setAdapter(adapter);
@@ -77,6 +94,16 @@ public class MusicTagFragment extends Fragment {
                     @Override
                     protected void onSuccess(List<MusicTag> data) {
                         itemList.clear();
+                        /*MusicTag likeTag = new MusicTag();
+                        likeTag.setName(getString(R.string.tv_music_like));
+                        likeTag.setId(-1);
+                        likeTag.setCoverRes(R.drawable.ic_music_like);
+                        itemList.add(likeTag);*/
+                        MusicTag localTag = new MusicTag();
+                        localTag.setName(getString(R.string.tv_music_local));
+                        localTag.setId(-2);
+                        localTag.setCoverRes(R.drawable.ic_music_local);
+                        itemList.add(localTag);
                         refreshLayout.setRefreshing(false);
                         if (data != null)
                             itemList.addAll(data);
@@ -86,5 +113,15 @@ public class MusicTagFragment extends Fragment {
                         adapter.getLoadMoreModule().setEnableLoadMore(data != null && data.size() != 0);
                     }
                 });
+    }
+
+    @Override
+    public void onGranted(List<String> permissions, boolean all) {
+        MusicListLocalActivity.start(getContext(), tag);
+    }
+
+    @Override
+    public void onDenied(List<String> permissions, boolean never) {
+        Toast.makeText(getContext(), R.string.ts_permission_storage, Toast.LENGTH_SHORT).show();
     }
 }

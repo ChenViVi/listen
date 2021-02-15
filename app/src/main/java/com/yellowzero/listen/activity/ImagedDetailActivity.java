@@ -324,7 +324,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                 }
-                            });
+                            }).start();
                         }
 
                         @Override

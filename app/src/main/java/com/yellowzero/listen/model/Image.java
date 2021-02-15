@@ -1,6 +1,7 @@
 package com.yellowzero.listen.model;
 
 import com.yellowzero.listen.model.entity.ImageLike;
+import com.yellowzero.listen.util.FileUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -131,13 +132,9 @@ public class Image implements Serializable {
     }
 
     public String getSuffix() {
-        if (imageInfoSmall == null || imageInfoSmall.getUrl() == null)
+        if (imageInfoSmall == null)
             return null;
-        int index = imageInfoSmall.getUrl().lastIndexOf(".");
-        if (index == -1) {
-            return null;
-        } else
-            return imageInfoSmall.getUrl().substring(index + 1).toLowerCase();
+        return FileUtil.getSuffix(imageInfoSmall.getUrl().toLowerCase());
     }
 
     public boolean isGif() {

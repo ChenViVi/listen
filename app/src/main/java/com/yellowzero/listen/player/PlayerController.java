@@ -129,7 +129,6 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         M freeMusic = null;
         freeMusic = mPlayingInfoManager.getCurrentPlayingMusic();
         url = freeMusic.getUrl();
-
         if (TextUtils.isEmpty(url)) {
             pauseAudio();
         } else {
@@ -146,13 +145,17 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                     else
                         playNext();
                 }
-            } else if (url.contains("storage")) {
+            } else {
+                MediaPlayerHelper.getInstance().play(url);
+                afterPlay();
+            }
+            /*else if (url.contains("storage") || url.contains("sdcard")) {
                 MediaPlayerHelper.getInstance().play(url);
                 afterPlay();
             } else {
                 MediaPlayerHelper.getInstance().playAsset(url);
                 afterPlay();
-            }
+            }*/
         }
     }
 

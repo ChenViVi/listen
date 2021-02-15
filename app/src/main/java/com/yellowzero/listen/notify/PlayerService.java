@@ -114,7 +114,7 @@ public class PlayerService extends Service {
                 notificationManager.createNotificationChannelGroup(playGroup);
 
                 NotificationChannel playChannel = new NotificationChannel(CHANNEL_ID,
-                        getString(R.string.notify_of_play), NotificationManager.IMPORTANCE_DEFAULT);
+                        getString(R.string.notify_of_play), NotificationManager.IMPORTANCE_LOW);
                 playChannel.setGroup(GROUP_ID);
                 notificationManager.createNotificationChannel(playChannel);
             }
@@ -124,6 +124,7 @@ public class PlayerService extends Service {
                     .setSmallIcon(R.drawable.ic_play)
                     .setContentIntent(contentIntent)
                     .setOnlyAlertOnce(true)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentTitle(title).build();
 
             notification.contentView = expandedView;

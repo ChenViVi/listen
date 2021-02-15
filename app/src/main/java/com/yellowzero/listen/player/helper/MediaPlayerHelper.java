@@ -44,12 +44,12 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
     private String[] ext = {
             ".m4a",
             ".3gp",
-            ".mp4",
             ".mp3",
             ".wma",
             ".ogg",
             ".wav",
-            ".mid"
+            ".mid",
+            ".flac"
     };
 
     private List<String> formatList = new ArrayList<>();

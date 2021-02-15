@@ -32,9 +32,15 @@ public class MusicTagAdapter extends BaseQuickAdapter<MusicTag, BaseViewHolder> 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) ivCover.getLayoutParams();
         lp.width = lp.height = ScreenUtil.getScreenWidth(context)/2 - ScreenUtil.dp2px(5);
         ivCover.setLayoutParams(lp);
-        Glide.with(context)
-                .load(item.getCover())
-                .transform(new RoundedCorners(10))
-                .into(ivCover);
+        if (item.getCoverRes() == 0)
+            Glide.with(context)
+                    .load(item.getCover())
+                    .transform(new RoundedCorners(10))
+                    .into(ivCover);
+        else
+            Glide.with(context)
+                    .load(item.getCoverRes())
+                    .transform(new RoundedCorners(10))
+                    .into(ivCover);
     }
 }
