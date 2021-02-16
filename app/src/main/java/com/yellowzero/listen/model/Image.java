@@ -1,6 +1,6 @@
 package com.yellowzero.listen.model;
 
-import com.yellowzero.listen.model.entity.ImageLike;
+import com.yellowzero.listen.model.entity.ImageEntity;
 import com.yellowzero.listen.util.FileUtil;
 
 import java.io.Serializable;
@@ -20,10 +20,10 @@ public class Image implements Serializable {
     private int likeCount;
     private boolean isLoadFromDb;
 
-    public Image(ImageLike imageLike) {
-        this.id = imageLike.getId();
-        this.imageInfoSmall = this.imageInfoLarge = new ImageInfo(imageLike.getUrlSmall(), imageLike.getImageWidth(), imageLike.getImageHeight());
-        this.user = new UserWeibo(imageLike.getUserName(), imageLike.getUrlAvatar());
+    public Image(ImageEntity imageEntity) {
+        this.id = imageEntity.getId();
+        this.imageInfoSmall = this.imageInfoLarge = new ImageInfo(imageEntity.getUrlSmall(), imageEntity.getImageWidth(), imageEntity.getImageHeight());
+        this.user = new UserWeibo(imageEntity.getUserName(), imageEntity.getUrlAvatar());
         this.isLoadFromDb = true;
     }
 

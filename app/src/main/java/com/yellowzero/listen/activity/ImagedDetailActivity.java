@@ -36,13 +36,13 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.snackbar.Snackbar;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Image;
-import com.yellowzero.listen.model.ImageTag;
-import com.yellowzero.listen.model.entity.ImageLike;
-import com.yellowzero.listen.model.entity.ImageLikeDao;
+import com.yellowzero.listen.model.entity.ImageEntity;
+import com.yellowzero.listen.model.entity.ImageEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
@@ -52,18 +52,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ImagedDetailActivity extends AppCompatActivity {
 
     private static final String KEY_IMAGE= "image";
 
     private int mXOld, mYOld;
-    private boolean isDownloadClicked = false;
-    private boolean isLike = false;
     private File file;
     private Image image;
-    private ImageLikeDao imageLikeDao;
+    private ImageEntityDao imageEntityDao;
+    private ImageEntity imageEntity;
+    private boolean isNewEntity = false;
 
     private ProgressBar pbLoad;
     private TextView tvName;
@@ -74,6 +73,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
     private TagCloudView viewTag;
     private ImageView ivImage;
     private ImageView ivLike;
+    private ImageView ivDownload;
     private ScrollView svDetail;
 
     @Override
@@ -90,21 +90,36 @@ public class ImagedDetailActivity extends AppCompatActivity {
         ivAvatar = findViewById(R.id.ivAvatar);
         viewTag = findViewById(R.id.viewTag);
         ivLike = findViewById(R.id.ivLike);
+        ivDownload = findViewById(R.id.ivDownload);
         ivImage = findViewById(R.id.ivImage);
         svDetail = findViewById(R.id.svDetail);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         image = (Image) getIntent().getSerializableExtra(KEY_IMAGE);
-        imageLikeDao = ((App) getApplication()).getDaoSession().getImageLikeDao();
         if (image == null)
             return;
-        if (image.isLoadFromDb())
-            isLike = true;
-        else {
-            isLike = (imageLikeDao.load(image.getId()) != null);
+        imageEntityDao = ((App) getApplication()).getDaoSession().getImageEntityDao();
+        imageEntity = imageEntityDao.load(image.getId());
+        if (imageEntity == null) {
+            String urlSmall = image.getImageInfoSmall().getUrl();
+            int width = image.getImageInfoSmall().getWidth();
+            int height = image.getImageInfoSmall().getHeight();
+            if (image.isGif()) {
+                urlSmall = image.getImageInfoLarge().getUrl();
+                width = image.getImageInfoSmall().getWidth();
+                height = image.getImageInfoSmall().getHeight();
+            }
+            imageEntity = new ImageEntity(image.getId(),
+                    urlSmall,
+                    width, height,
+                    image.getUser().getName(),
+                    image.getUser().getAvatar(),
+                    false, false);
+            isNewEntity = true;
         }
-        ivLike.setImageResource(isLike ? R.drawable.ic_star_enable : R.drawable.ic_star);
+        ivLike.setImageResource(imageEntity.getLike() ? R.drawable.ic_star_enable : R.drawable.ic_star);
+        ivDownload.setImageResource(imageEntity.getDownload() ? R.drawable.ic_download_enable : R.drawable.ic_download);
         ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,26 +192,12 @@ public class ImagedDetailActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.ts_http_loading, Toast.LENGTH_SHORT).show();
             return;
         }
-        isLike = !isLike;
-        String urlSmall = image.getImageInfoSmall().getUrl();
-        int width = image.getImageInfoSmall().getWidth();
-        int height = image.getImageInfoSmall().getHeight();
-        if (image.isGif()) {
-            urlSmall = image.getImageInfoLarge().getUrl();
-            width = image.getImageInfoSmall().getWidth();
-            height = image.getImageInfoSmall().getHeight();
-        }
-        ImageLike imageLike = new ImageLike(image.getId(), urlSmall, width, height, image.getUser().getName(), image.getUser().getAvatar());
-        if (isLike) {
-            imageLikeDao.insert(imageLike);
-            ivLike.setImageResource(R.drawable.ic_star_enable);
-        } else {
-            imageLikeDao.delete(imageLike);
-            ivLike.setImageResource(R.drawable.ic_star);
-        }
-        tvLikeCount.setText(String.valueOf(isLike ? image.getLikeCount() + 1 : image.getLikeCount()));
+        imageEntity.setLike(!imageEntity.getLike());
+        saveImageEntity();
+        ivLike.setImageResource(imageEntity.getLike() ? R.drawable.ic_star_enable : R.drawable.ic_star);
+        tvLikeCount.setText(String.valueOf(imageEntity.getLike() ? image.getLikeCount() + 1 : image.getLikeCount()));
         RxHttpUtils.createApi(ImageService.class)
-                .like(image.getId(), isLike ? 1 : 0)
+                .like(image.getId(), imageEntity.getLike() ? 1 : 0)
                 .compose(Transformer.<String>switchSchedulers())
                 .subscribe(new StringObserver() {
 
@@ -217,9 +218,25 @@ public class ImagedDetailActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.ts_http_loading, Toast.LENGTH_SHORT).show();
             return;
         }
-        isDownloadClicked = true;
         if (file.exists()) {
-            Toast.makeText(this, String.format(getResources().getString(R.string.ts_download_success), file.getPath()), Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, R.string.ts_download_success, Snackbar.LENGTH_LONG).setAction(R.string.tv_open, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(android.content.Intent.ACTION_VIEW);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Uri contentUri = FileProvider.getUriForFile(ImagedDetailActivity.this, getPackageName()+".fileprovider", file);
+                        intent.setDataAndType(contentUri, "image/*");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } else {
+                        intent.setDataAndType(Uri.fromFile(file), "image/*");
+                    }
+                    startActivity(intent);
+                }
+            }).show();
+            imageEntity.setDownload(true);
+            ivDownload.setImageResource(R.drawable.ic_download_enable);
+            saveImageEntity();
         } else {
             downloadImage();
             Toast.makeText(this, R.string.ts_download_error, Toast.LENGTH_SHORT).show();
@@ -240,7 +257,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
             }else {
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             }
-            intent.setType("image/png");
+            intent.setType("image/*");
             startActivity(intent);
         } else {
             downloadImage();
@@ -251,10 +268,13 @@ public class ImagedDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         RxHttpUtils.cancel("download");
-        if (!isDownloadClicked) {
-            if (file.exists())
-                file.delete();
-        }
+        if (!imageEntity.getDownload() && file.exists())
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    file.delete();
+                }
+            }).start();
         super.onDestroy();
     }
 
@@ -368,5 +388,23 @@ public class ImagedDetailActivity extends AppCompatActivity {
                         protected void onSuccess(long bytesRead, long contentLength, float progress, boolean done, String filePath) {
                         }
                     });
+    }
+
+    private void saveImageEntity() {
+        if (isNewEntity) {
+            isNewEntity = false;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    imageEntityDao.insert(imageEntity);
+                }
+            }).start();
+        } else
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    imageEntityDao.update(imageEntity);
+                }
+            }).start();
     }
 }

@@ -27,8 +27,8 @@ import com.yellowzero.listen.activity.ImagedDetailActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.model.ImageTag;
-import com.yellowzero.listen.model.entity.ImageLike;
-import com.yellowzero.listen.model.entity.ImageLikeDao;
+import com.yellowzero.listen.model.entity.ImageEntity;
+import com.yellowzero.listen.model.entity.ImageEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.view.TagCloudView;
@@ -47,7 +47,7 @@ public class ImageFragment extends Fragment {
     private ImageAdapter adapter;
     private TagsPopup tagsPopup;
     private SwipeRefreshLayout refreshLayout;
-    private ImageLikeDao imageLikeDao;
+    private ImageEntityDao imageEntityDao;
 
     @Nullable
     @Override
@@ -58,7 +58,7 @@ public class ImageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        imageLikeDao = ((App) getActivity().getApplication()).getDaoSession().getImageLikeDao();
+        imageEntityDao = ((App) getActivity().getApplication()).getDaoSession().getImageEntityDao();
         RecyclerView rvList = view.findViewById(R.id.rvList);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         ImageView ivMore = view.findViewById(R.id.ivMore);
@@ -144,9 +144,9 @@ public class ImageFragment extends Fragment {
                     });
         else {
             itemList.clear();
-            List<ImageLike> imageLikeList = imageLikeDao.loadAll();
-            for (ImageLike imageLike : imageLikeList)
-                itemList.add(new Image(imageLike));
+            List<ImageEntity> imageEntityList = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Like.eq(true)).list();
+            for (ImageEntity imageEntity : imageEntityList)
+                itemList.add(new Image(imageEntity));
             adapter.notifyDataSetChanged();
             refreshLayout.setRefreshing(false);
             if (adapter.getLoadMoreModule().isLoading())

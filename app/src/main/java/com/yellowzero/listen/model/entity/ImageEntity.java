@@ -4,10 +4,8 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
-import java.io.Serializable;
-
 @Entity
-public class ImageLike {
+public class ImageEntity {
     @Id
     private long id;
     private String urlSmall;
@@ -15,18 +13,22 @@ public class ImageLike {
     private int imageHeight;
     private String userName;
     private String urlAvatar;
-    @Generated(hash = 1247885085)
-    public ImageLike(long id, String urlSmall, int imageWidth, int imageHeight,
-            String userName, String urlAvatar) {
+    private boolean like;
+    private boolean download;
+    @Generated(hash = 1609411885)
+    public ImageEntity(long id, String urlSmall, int imageWidth, int imageHeight,
+            String userName, String urlAvatar, boolean like, boolean download) {
         this.id = id;
         this.urlSmall = urlSmall;
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
         this.userName = userName;
         this.urlAvatar = urlAvatar;
+        this.like = like;
+        this.download = download;
     }
-    @Generated(hash = 897914664)
-    public ImageLike() {
+    @Generated(hash = 2080458212)
+    public ImageEntity() {
     }
     public long getId() {
         return this.id;
@@ -63,5 +65,17 @@ public class ImageLike {
     }
     public void setUrlAvatar(String urlAvatar) {
         this.urlAvatar = urlAvatar;
+    }
+    public boolean getLike() {
+        return this.like;
+    }
+    public void setLike(boolean like) {
+        this.like = like;
+    }
+    public boolean getDownload() {
+        return this.download;
+    }
+    public void setDownload(boolean download) {
+        this.download = download;
     }
 }
