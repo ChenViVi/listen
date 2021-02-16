@@ -14,21 +14,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.hjq.permissions.OnPermissionCallback;
-import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
-import com.yellowzero.listen.fragment.MusicFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.view.AndTabManager;
 import com.yellowzero.listen.view.FragmentTabCheckListener;
 import com.yellowzero.listen.view.Tab;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
