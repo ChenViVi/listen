@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.greenrobot.greendao'
+    id 'packer'
 }
 
 Properties properties = new Properties()
@@ -20,7 +21,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
 
     signingConfigs {
@@ -57,12 +58,20 @@ android {
     }
 }
 
+packer {
+    archiveNameFormat = '${appPkg}-${buildType}-v${versionName}-${channel}'
+    archiveOutput = new File(project.rootProject.buildDir, "${android.defaultConfig.applicationId}_v${android.defaultConfig.versionName}_${android.defaultConfig.versionCode}")
+    channelFile = project.rootProject.file("app/channels.txt")
+}
+
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
     implementation 'com.google.android.material:material:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    // 打包工具
+    implementation 'com.mcxiaoke.packer-ng:helper:2.0.1'
     //网络请求工具
     implementation 'com.github.lygttpod:RxHttpUtils:2.3.3'
     //RecyclerView

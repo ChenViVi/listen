@@ -19,6 +19,7 @@
     <color name="tabGrey">#8a8a8a</color>
     <color name="tabBackground">#FFFFFF</color>
     <color name="bgGrey">#F7F7F9</color>
+    <color name="btnGrey">#AFAFAF</color>
     <color name="bgMusicTag">#e0e0e0</color>
     <color name="tvNameDisable">#C3C3C3</color>
 </resources>

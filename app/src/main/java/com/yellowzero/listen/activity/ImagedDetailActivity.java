@@ -261,7 +261,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             downloadImage();
-            Toast.makeText(this, R.string.ts_download_process, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.ts_download_image_process, Toast.LENGTH_SHORT).show();
         }
     }
 

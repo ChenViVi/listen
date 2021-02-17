@@ -31,6 +31,7 @@
             android:src="@drawable/ic_arrow_right"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/llVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
@@ -48,8 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:text="1.0.0"/>
+            tools:text="1.0.0"/>
         <TextView
+            android:id="@+id/tvNewVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -58,7 +60,7 @@
             android:padding="6dp"
             android:background="@drawable/tv_new_version"
             android:textColor="@color/white"
-            android:text="有新版本"/>
+            tools:text="有新版本"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
