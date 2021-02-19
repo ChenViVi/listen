@@ -22,6 +22,7 @@
     <string name="tv_version_error">获取版本号错误</string>
     <string name="tv_version_has_new">有新版本</string>
     <string name="tv_version_is_new">已是最新版本</string>
+    <string name="tv_bilibili_main">本人投稿</string>
 
     <string name="ts_http_error">加载失败</string>
     <string name="ts_http_loading">加载中，请稍后再试</string>
