@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
+import com.yellowzero.listen.fragment.BilibiliListMainFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
 import com.yellowzero.listen.player.DefaultPlayerManager;

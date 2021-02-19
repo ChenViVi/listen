@@ -11,4 +11,8 @@ public interface BilibiliService {
                                  @Query("pn") int pageNumber,
                                  @Query("order") String order,
                                  @Query("jsonp") String jsonp);
+    @GET("x/v1/medialist/resource/list")
+    Observable<String> list(@Query("biz_id") long biz_id,
+                                 @Query("type") int type,
+                                 @Query("ps") int ps);
 }
