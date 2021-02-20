@@ -130,6 +130,10 @@ public class SettingActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public void onClickAbout(View view) {
+        startActivity(new Intent(this, AboutActivity.class));
+    }
+
     public void onClickMusicMobile(View view) {
         enableMusicMobile(checkBox.isChecked());
     }
