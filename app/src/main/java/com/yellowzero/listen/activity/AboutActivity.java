@@ -21,6 +21,7 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         WebView webView  = findViewById(R.id.webView);
         ProgressBar pbLoad  = findViewById(R.id.pbLoad);
+        webView.getSettings().setAppCacheEnabled(false);
         webView.loadUrl("http://chenvivi.gitee.io/yellowzero/index.html");
         webView.setWebViewClient(new WebViewClient(){
             @Override
