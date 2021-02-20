@@ -47,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         AndTabManager andTabManager = new AndTabManager(this, findViewById(R.id.llTab));
+        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_image).toString())
+                .setNormalColor(getResources().getColor(R.color.tabGrey))
+                .setSelectColor(getResources().getColor(R.color.colorPrimary))
+                .setIconNormalResId(R.drawable.tab_image_inactive)
+                .setIconPressedResId(R.drawable.tab_image_active));
         andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_music).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
@@ -57,18 +62,13 @@ public class MainActivity extends AppCompatActivity {
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
                 .setIconNormalResId(R.drawable.tab_video_inactive)
                 .setIconPressedResId(R.drawable.tab_video_active));
-        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_image).toString())
-                .setNormalColor(getResources().getColor(R.color.tabGrey))
-                .setSelectColor(getResources().getColor(R.color.colorPrimary))
-                .setIconNormalResId(R.drawable.tab_image_inactive)
-                .setIconPressedResId(R.drawable.tab_image_active));
         andTabManager.setOnTabCheckListener(new FragmentTabCheckListener(
                 getSupportFragmentManager(),
                 R.id.llFragment,
                 new Fragment[] {
+                        new ImageFragment(),
                         new MusicTagFragment(),
-                        new BilibiliFragment(),
-                        new ImageFragment()
+                        new BilibiliFragment()
                 }));
         andTabManager.setCurrentItem(0);
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {

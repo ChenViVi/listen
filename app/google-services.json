@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "150814186101",
+    "project_id": "listen-440fd",
+    "storage_bucket": "listen-440fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150814186101:android:202fa67aa2e53e6c4bb63c",
+        "android_client_info": {
+          "package_name": "com.yellowzero.listen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150814186101-k9mdbjrf0ms3maunfhsj38mh7vmnv234.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvsYEb_z8NRBREMipa94Rf2QfNo7AJAp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150814186101-k9mdbjrf0ms3maunfhsj38mh7vmnv234.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
