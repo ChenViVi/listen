@@ -2,6 +2,7 @@
     <string name="app_name">龄听</string>
 
     <string name="tt_setting">设置</string>
+    <string name="tt_about">关于龄听</string>
     <string name="tt_enable_music_mobile">允许使用流量播放吗？</string>
 
     <string name="tv_music">音乐</string>

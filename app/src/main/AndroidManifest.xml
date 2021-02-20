@@ -47,6 +47,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AboutActivity"
+            android:label="@string/tt_about"
             android:screenOrientation="portrait" />
         <provider
             android:name="androidx.core.content.FileProvider"
