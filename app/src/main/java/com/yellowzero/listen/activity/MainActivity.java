@@ -17,7 +17,6 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
-import com.yellowzero.listen.fragment.BilibiliListMainFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
 import com.yellowzero.listen.player.DefaultPlayerManager;
@@ -86,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 llMusic.setVisibility(View.VISIBLE);
             }
         });
-        /*new CustomTabsIntent.Builder()
-                .build()
-                .launchUrl(this, Uri.parse("https://www.bilibili.com/video/BV1Xi4y1V7rp"));*/
     }
 
     public void onPlay(View view) {
@@ -115,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         if (item.getItemId() == R.id.action_setting) {
             startActivity(new Intent(MainActivity.this, SettingActivity.class));
             return true;

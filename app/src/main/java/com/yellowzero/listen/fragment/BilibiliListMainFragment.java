@@ -1,5 +1,6 @@
 package com.yellowzero.listen.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,8 @@ import com.allen.library.RxHttpUtils;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.allen.library.utils.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -55,7 +59,6 @@ public class BilibiliListMainFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refreshLayout);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BilibiliVideoAdapter(getContext(), itemList);
-        rvList.setAdapter(adapter);
         adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -63,6 +66,15 @@ public class BilibiliListMainFragment extends Fragment {
                 loadList();
             }
         });
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                new CustomTabsIntent.Builder()
+                        .build()
+                        .launchUrl(getContext(), Uri.parse(itemList.get(position).getUrl()));
+            }
+        });
+        rvList.setAdapter(adapter);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
