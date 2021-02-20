@@ -4,36 +4,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginBottom="5dp">
     <ImageView
         android:id="@+id/ivCover"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.4"
-        android:scaleType="fitXY"
-        tools:ignore="ContentDescription" />
+        android:layout_weight="0.36"
+        android:layout_marginStart="6dp"
+        tools:ignore="ContentDescription"/>
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.6"
+        android:layout_weight="0.64"
         android:padding="4dp">
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
-        <TextView
-            android:id="@+id/tvPlayCount"
-            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="黄龄对狗狗弹唱 画画暖心超有爱 《我们都不应该孤单》《Remember me》"/>
+        <LinearLayout
+            android:id="@+id/llBottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"/>
-        <TextView
-            android:id="@+id/tvDanmkuCount"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_play_count"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvPlayCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_marginStart="4dp"
+                tools:text="102万"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_danmku_count"
+                android:layout_marginStart="24dp"
+                tools:ignore="ContentDescription"/>
+            <TextView
+                android:id="@+id/tvDanmkuCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_marginStart="4dp"
+                tools:text="5435"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/tvPlayCount"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="16dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_above="@id/llBottom"
+            android:layout_marginBottom="4dp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_marginStart="4dp"
+                tools:text="我是七颗糖的猪"/>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

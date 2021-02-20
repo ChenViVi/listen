@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.adapter.BilibiliVideoAdapter;
 import com.yellowzero.listen.model.BilibiliVideo;
+import com.yellowzero.listen.model.BilibiliUp;
 import com.yellowzero.listen.service.BilibiliService;
 
 import org.json.JSONArray;
@@ -83,6 +84,7 @@ public class BilibiliListMainFragment extends Fragment {
                     @Override
                     protected void onError(String errorMsg) {
                         ToastUtils.showToast("请求失败");
+                        refreshLayout.setRefreshing(false);
                     }
 
                     @Override
@@ -96,13 +98,14 @@ public class BilibiliListMainFragment extends Fragment {
                             }
                             JSONArray vlist = dataJson.getJSONObject("data").getJSONObject("list").getJSONArray("vlist");
                             Gson gson = new Gson();
-                            List<BilibiliVideo> videos = gson.fromJson(vlist.toString(), new TypeToken<List<BilibiliVideo>>() {}.getType());
+                            List<BilibiliUp> videos = gson.fromJson(vlist.toString(), new TypeToken<List<BilibiliUp>>() {}.getType());
                             if (page == 1) {
                                 itemList.clear();
                                 refreshLayout.setRefreshing(false);
                             }
                             if (videos != null)
-                                itemList.addAll(videos);
+                                for (BilibiliUp video : videos)
+                                    itemList.add(new BilibiliVideo(video));
                             adapter.notifyDataSetChanged();
                             if (adapter.getLoadMoreModule().isLoading())
                                 adapter.getLoadMoreModule().loadMoreComplete();

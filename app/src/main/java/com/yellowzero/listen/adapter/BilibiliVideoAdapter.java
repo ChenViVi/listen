@@ -4,6 +4,8 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -24,10 +26,21 @@ public class BilibiliVideoAdapter extends BaseQuickAdapter<BilibiliVideo, BaseVi
     @Override
     protected void convert(BaseViewHolder viewHolder, BilibiliVideo item) {
         viewHolder.setText(R.id.tvTitle, item.getTitle())
-                .setText(R.id.tvPlayCount, "播放量：" + item.getPlay())
-                .setText(R.id.tvDanmkuCount, "弹幕数：" + item.getVideoReview());
+                .setText(R.id.tvName, item.getName())
+                .setText(R.id.tvPlayCount, String.valueOf(item.getPlayCount()))
+                .setText(R.id.tvDanmkuCount, String.valueOf(item.getDanmkuCount()));
+        if (item.getAvatar() == null) {
+            viewHolder.setGone(R.id.tvName, true)
+                    .setGone(R.id.ivAvatar, true);
+        } else {
+            Glide.with(context)
+                    .load(item.getAvatar())
+                    .transform(new CircleCrop())
+                    .into((ImageView) viewHolder.getView(R.id.ivAvatar));
+        }
         Glide.with(context)
-                .load(item.getPic())
+                .load(item.getCover())
+                .transform(new RoundedCorners(10))
                 .into((ImageView) viewHolder.getView(R.id.ivCover));
     }
 }

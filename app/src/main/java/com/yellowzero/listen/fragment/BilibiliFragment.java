@@ -46,7 +46,7 @@ public class BilibiliFragment extends Fragment {
                     @Override
                     protected void onSuccess(List<VideoTag> tags) {
                         for (VideoTag tag : tags)
-                            adapterTab.addFragment(BilibiliListFavFragment.createInstance(tag.getId()), tag.getName());
+                            adapterTab.addFragment(BilibiliListFavFragment.createInstance(tag.getBizId()), tag.getName());
                         adapterTab.notifyDataSetChanged();
                     }
                 });
