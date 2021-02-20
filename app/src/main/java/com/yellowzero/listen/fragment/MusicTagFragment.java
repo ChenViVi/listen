@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MusicListActivity;
 import com.yellowzero.listen.activity.MusicListLocalActivity;
@@ -85,6 +86,15 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
         loadList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (itemList.size() > 0) {
+            itemList.get(0).setCount(AppData.MUSIC_LOCAL_COUNT);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public void loadList() {
         RxHttpUtils.createApi(MusicService.class)
                 .tags()
@@ -103,6 +113,7 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
                         localTag.setName(getString(R.string.tv_music_local));
                         localTag.setId(-2);
                         localTag.setCoverRes(R.drawable.ic_music_local);
+                        localTag.setCount(AppData.MUSIC_LOCAL_COUNT);
                         itemList.add(localTag);
                         refreshLayout.setRefreshing(false);
                         if (data != null)

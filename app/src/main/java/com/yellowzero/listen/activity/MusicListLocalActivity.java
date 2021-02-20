@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -108,6 +109,8 @@ public class MusicListLocalActivity extends AppCompatActivity {
                 loadMusic(AppData.MUSIC_KUGOU_PATH);
                 loadMusic(AppData.MUSIC_MOO_PATH);
                 album.setMusics(musics);
+                AppData.MUSIC_LOCAL_COUNT = musics.size();
+                AppData.saveData(MusicListLocalActivity.this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -178,5 +181,14 @@ public class MusicListLocalActivity extends AppCompatActivity {
         Intent intent = new Intent(context, MusicListLocalActivity.class);
         intent.putExtra(KEY_TAG, tag);
         context.startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
