@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -71,7 +70,6 @@ public class MusicListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 if (itemList.get(position).isAvailable()) {
-                    Log.e("xxx", "1");
                     setPlayMusic(position);
                     adapter.notifyDataSetChanged();
                 } else if (NetworkUtil.getConnectedState(MusicListActivity.this) == NetworkUtil.STATE_MOBILE && !AppData.ENABLE_MUSIC_MOBILE) {
@@ -92,7 +90,7 @@ public class MusicListActivity extends AppCompatActivity {
                             .setCancelable(true)
                             .create()
                             .show();
-                } else Log.e("xxx", "2");
+                }
             }
         });
         rvList.setAdapter(adapter);
