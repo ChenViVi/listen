@@ -58,6 +58,7 @@ public class MusicListActivity extends AppCompatActivity {
         tag = (MusicTag) getIntent().getSerializableExtra(KEY_TAG);
         if (tag == null)
             return;
+        album.setAlbumId(String.valueOf(tag.getId()));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,9 +71,10 @@ public class MusicListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 if (itemList.get(position).isAvailable()) {
+                    Log.e("xxx", "1");
                     setPlayMusic(position);
                     adapter.notifyDataSetChanged();
-                } else if (NetworkUtil.getConnectedState(MusicListActivity.this) == NetworkUtil.STATE_MOBILE && !AppData.ENABLE_MUSIC_MOBILE){
+                } else if (NetworkUtil.getConnectedState(MusicListActivity.this) == NetworkUtil.STATE_MOBILE && !AppData.ENABLE_MUSIC_MOBILE) {
                     new AlertDialog.Builder(MusicListActivity.this)
                             .setTitle(android.R.string.dialog_alert_title)
                             .setMessage(R.string.tt_enable_music_mobile)
@@ -90,7 +92,7 @@ public class MusicListActivity extends AppCompatActivity {
                             .setCancelable(true)
                             .create()
                             .show();
-                }
+                } else Log.e("xxx", "2");
             }
         });
         rvList.setAdapter(adapter);
@@ -165,7 +167,9 @@ public class MusicListActivity extends AppCompatActivity {
     }
 
     private void setPlayMusic(int position) {
-        DefaultPlayerManager.getInstance().loadAlbum(album);
+        if (DefaultPlayerManager.getInstance().getAlbum() == null ||
+                !DefaultPlayerManager.getInstance().getAlbum().getAlbumId().equals(album.getAlbumId()))
+            DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
         for (Music music : itemList)
             music.setSelected(false);

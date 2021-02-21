@@ -58,6 +58,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
         tag = (MusicTag) getIntent().getSerializableExtra(KEY_TAG);
         if (tag == null)
             return;
+        album.setAlbumId(String.valueOf(tag.getId()));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,7 +91,9 @@ public class MusicListLocalActivity extends AppCompatActivity {
     }
 
     private void setPlayMusic(int position) {
-        DefaultPlayerManager.getInstance().loadAlbum(album);
+        if (DefaultPlayerManager.getInstance().getAlbum() == null ||
+                !DefaultPlayerManager.getInstance().getAlbum().getAlbumId().equals(album.getAlbumId()))
+            DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
         for (MusicLocal music : itemList)
             music.setSelected(false);

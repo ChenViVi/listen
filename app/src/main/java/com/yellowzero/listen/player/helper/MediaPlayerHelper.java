@@ -43,6 +43,7 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
     //默认支持的文件格式
     private String[] ext = {
             ".m4a",
+            ".aac",
             ".3gp",
             ".mp3",
             ".wma",
