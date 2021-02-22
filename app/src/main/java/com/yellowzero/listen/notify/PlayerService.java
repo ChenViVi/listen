@@ -25,6 +25,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -34,6 +35,7 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MainActivity;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
+import com.yellowzero.listen.player.contract.IPlayController;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -94,6 +96,7 @@ public class PlayerService extends Service {
     }
 
     private void createNotification(DefaultAlbum.DefaultMusic testMusic) {
+        Log.e("xxx", "xxxx");
         try {
             String title = testMusic.getTitle();
             DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();
@@ -135,15 +138,16 @@ public class PlayerService extends Service {
             notification.contentView.setViewVisibility(R.id.ivPrevious, View.VISIBLE);
 
             boolean isPaused = DefaultPlayerManager.getInstance().isPaused();
-            notification.contentView.setImageViewResource(R.id.ivPlay, isPaused ? R.drawable.ic_play : R.drawable.ic_pause);
+            notification.contentView.setImageViewResource(R.id.ivPlay, isPaused ? R.drawable.ic_play : R.drawable.ic_play_pause);
 
             notification.contentView.setTextViewText(R.id.tvName, title);
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
-            notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_pause);
             Glide.with(getApplicationContext()) // safer!
                     .asBitmap()
                     .load(testMusic.getCoverImg())
+                    .placeholder(R.drawable.ic_holder)
+                    .error(R.drawable.ic_holder)
                     .into(new NotificationTarget(
                             this,
                             R.id.ivCover,
@@ -172,7 +176,7 @@ public class PlayerService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             view.setOnClickPendingIntent(R.id.ivClose, pendingIntent);
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    0, new Intent(NOTIFY_CLOSE).setPackage(getPackageName()),
+                    0, new Intent(NOTIFY_PAUSE).setPackage(getPackageName()),
                     PendingIntent.FLAG_UPDATE_CURRENT);
             view.setOnClickPendingIntent(R.id.ivPlay, pendingIntent);
             pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),

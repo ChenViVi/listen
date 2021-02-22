@@ -66,10 +66,10 @@ public class PlayerReceiver extends BroadcastReceiver {
             }
 
         } else {
-            if (Objects.requireNonNull(intent.getAction()).equals(PlayerService.NOTIFY_PLAY)) {
+            if (Objects.requireNonNull(intent.getAction()).equals(PlayerService.NOTIFY_PLAY)
+                    ||Objects.requireNonNull(intent.getAction()).equals(PlayerService.NOTIFY_PAUSE)) {
                 DefaultPlayerManager.getInstance().togglePlay();
-            } else if (intent.getAction().equals(PlayerService.NOTIFY_PAUSE)
-                    || intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+            } else if (intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
                 DefaultPlayerManager.getInstance().pauseAudio();
             } else if (intent.getAction().equals(PlayerService.NOTIFY_NEXT)) {
                 DefaultPlayerManager.getInstance().playNext();

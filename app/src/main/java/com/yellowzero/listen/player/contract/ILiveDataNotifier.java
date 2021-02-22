@@ -30,7 +30,7 @@ public interface ILiveDataNotifier {
 
     LiveData<PlayingMusic> getPlayingMusicLiveData();
 
-    LiveData<Boolean> getPauseLiveData();
+    LiveData<Integer> getStateLiveData();
 
     LiveData<Integer> getPlayModeLiveData();
 

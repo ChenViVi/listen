@@ -5,6 +5,8 @@ import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.PlayingInfoManager;
+import com.yellowzero.listen.player.contract.IPlayController;
 
 
 public class MusicPlayActivity extends AppCompatActivity {
@@ -60,15 +63,26 @@ public class MusicPlayActivity extends AppCompatActivity {
             sbProgress.setMax(playingMusic.getDuration());
             sbProgress.setProgress(playingMusic.getPlayerPosition());
         });
-        DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPlaying -> {
-            if (isPlaying)
-                ivPlay.setImageResource(R.drawable.ic_play);
-            else
-                ivPlay.setImageResource(R.drawable.ic_play_stop);
+        DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
+            switch (state) {
+                case IPlayController.STATE_STOP:
+                case IPlayController.STATE_PAUSE:
+                    ivPlay.setImageResource(R.drawable.ic_play);
+                    break;
+                case IPlayController.STATE_PLAY:
+                    ivPlay.setImageResource(R.drawable.ic_play_pause);
+                    break;
+            }
         });
         setModeImageView(DefaultPlayerManager.getInstance().getRepeatMode());
-
         DefaultPlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_music_play, menu);
+        return true;
     }
 
     @Override
@@ -76,16 +90,20 @@ public class MusicPlayActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
+        } else if (item.getItemId() == R.id.action_close) {
+            DefaultPlayerManager.getInstance().clear();
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void setModeImageView(int mode) {
-        if (mode == PlayingInfoManager.MODE_LIST_CYCLE) {
+        if (mode == IPlayController.MODE_LIST_CYCLE) {
             ivMode.setImageResource(R.drawable.ic_mode_loop);
-        } else if (mode == PlayingInfoManager.MODE_SINGLE_CYCLE) {
+        } else if (mode == IPlayController.MODE_SINGLE_CYCLE) {
             ivMode.setImageResource(R.drawable.ic_mode_single);
-        } else if (mode == PlayingInfoManager.MODE_RANDOM) {
+        } else if (mode == IPlayController.MODE_RANDOM) {
             ivMode.setImageResource(R.drawable.ic_mode_random);
         }
     }

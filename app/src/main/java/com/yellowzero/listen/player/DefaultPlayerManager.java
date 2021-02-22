@@ -124,11 +124,6 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     }
 
     @Override
-    public void requestLastPlayingInfo() {
-        mController.requestLastPlayingInfo();
-    }
-
-    @Override
     public void setSeek(int progress) {
         mController.setSeek(progress);
     }
@@ -166,8 +161,9 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
         return mController.getPlayingMusicLiveData();
     }
 
-    public LiveData<Boolean> getPauseLiveData() {
-        return mController.getPauseLiveData();
+    @Override
+    public LiveData<Integer> getStateLiveData() {
+        return mController.getStateLiveData();
     }
 
 

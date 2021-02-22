@@ -26,6 +26,7 @@ import com.yellowzero.listen.player.bean.base.BaseAlbumItem;
 import com.yellowzero.listen.player.bean.base.BaseMusicItem;
 import com.yellowzero.listen.player.bean.dto.ChangeMusic;
 import com.yellowzero.listen.player.bean.dto.PlayingMusic;
+import com.yellowzero.listen.player.contract.IPlayController;
 import com.yellowzero.listen.player.contract.IServiceNotifier;
 import com.yellowzero.listen.player.helper.MediaPlayerHelper;
 import com.yellowzero.listen.player.helper.PlayerFileNameGenerator;
@@ -42,14 +43,13 @@ import androidx.lifecycle.MutableLiveData;
 public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> {
 
     protected PlayingInfoManager<B, M> mPlayingInfoManager = new PlayingInfoManager<>();
-    protected boolean mIsPaused;
     protected boolean mIsChangingPlayingMusic;
 
     protected HttpProxyCacheServer proxy;
 
     private final MutableLiveData<ChangeMusic> changeMusicLiveData = new MutableLiveData<>();
     private final MutableLiveData<PlayingMusic> playingMusicLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> pauseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Integer> stateLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> playModeLiveData = new MutableLiveData<>();
 
     private IServiceNotifier mIServiceNotifier;
@@ -72,6 +72,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         if (extraFormatList != null) {
             MediaPlayerHelper.getInstance().getFormatList().addAll(extraFormatList);
         }
+        playModeLiveData.setValue(IPlayController.STATE_STOP);
     }
 
     public boolean isInit() {
@@ -98,7 +99,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     }
 
     public boolean isPaused() {
-        return mIsPaused;
+        return stateLiveData.getValue() != IPlayController.STATE_PLAY;
     }
 
     /**
@@ -119,7 +120,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         if (mIsChangingPlayingMusic) {
             MediaPlayerHelper.getInstance().getMediaPlayer().stop();
             getUrlAndPlay();
-        } else if (mIsPaused) {
+        } else if (isPaused()) {
             resumeAudio();
         }
     }
@@ -140,7 +141,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                     MediaPlayerHelper.getInstance().play(proxy.getProxyUrl(url));
                     afterPlay();
                 } else {
-                    if (getRepeatMode() == PlayingInfoManager.MODE_LIST_CYCLE)
+                    if (getRepeatMode() == IPlayController.MODE_LIST_CYCLE)
                         pauseAudio();
                     else
                         playNext();
@@ -162,8 +163,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     protected void afterPlay() {
         setChangingPlayingMusic(false);
         bindProgressListener();
-        mIsPaused = false;
-        pauseLiveData.setValue(false);
+        stateLiveData.setValue(IPlayController.STATE_PLAY);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(true);
         }
@@ -183,7 +183,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                         if (mCurrentPlay.getAllTime().equals(mCurrentPlay.getNowTime())
                                 //容许两秒内的误差，有的内容它就是会差那么 1 秒
                                 || duration / 1000 - position / 1000 < 2) {
-                            if (getRepeatMode() == PlayingInfoManager.MODE_SINGLE_CYCLE) {
+                            if (getRepeatMode() == IPlayController.MODE_SINGLE_CYCLE) {
                                 playAgain();
                             } else {
                                 playNext();
@@ -191,12 +191,6 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
                         }
                     }
                 });
-    }
-
-    public void requestLastPlayingInfo() {
-        playingMusicLiveData.setValue(mCurrentPlay);
-        changeMusicLiveData.setValue(mChangeMusic);
-        pauseLiveData.setValue(mIsPaused);
     }
 
     public void setSeek(int progress) {
@@ -246,18 +240,16 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
 
     public void pauseAudio() {
         MediaPlayerHelper.getInstance().getMediaPlayer().pause();
-        mIsPaused = true;
-        pauseLiveData.setValue(true);
+        stateLiveData.setValue(IPlayController.STATE_PAUSE);
         if (mIServiceNotifier != null) {
-            mIServiceNotifier.notifyService(false);
+            mIServiceNotifier.notifyService(true);
         }
     }
 
 
     public void resumeAudio() {
         MediaPlayerHelper.getInstance().getMediaPlayer().start();
-        mIsPaused = false;
-        pauseLiveData.setValue(false);
+        stateLiveData.setValue(IPlayController.STATE_PLAY);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(true);
         }
@@ -267,7 +259,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     public void clear() {
         MediaPlayerHelper.getInstance().getMediaPlayer().stop();
         MediaPlayerHelper.getInstance().getMediaPlayer().reset();
-        pauseLiveData.setValue(true);
+        stateLiveData.setValue(IPlayController.STATE_STOP);
         //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
         resetIsChangingPlayingChapter();
         MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
@@ -315,8 +307,8 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         return playingMusicLiveData;
     }
 
-    public LiveData<Boolean> getPauseLiveData() {
-        return pauseLiveData;
+    public MutableLiveData<Integer> getStateLiveData() {
+        return stateLiveData;
     }
 
     public LiveData<Integer> getPlayModeLiveData() {

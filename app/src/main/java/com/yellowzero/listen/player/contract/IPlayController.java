@@ -27,6 +27,14 @@ import com.yellowzero.listen.player.bean.base.BaseMusicItem;
 public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicItem>
         extends ILiveDataNotifier, IPlayInfoManager {
 
+    public static final int STATE_STOP = 0;
+    public static final int STATE_PAUSE = 1;
+    public static final int STATE_PLAY = 2;
+
+    public static final int MODE_LIST_CYCLE = 0;
+    public static final int MODE_SINGLE_CYCLE = 1;
+    public static final int MODE_RANDOM = 2;
+
     //程序启动时就初始化
     void init(Context context, IServiceNotifier iServiceNotifier);
 

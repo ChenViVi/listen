@@ -19,6 +19,7 @@ package com.yellowzero.listen.player;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.player.bean.base.BaseAlbumItem;
 import com.yellowzero.listen.player.bean.base.BaseMusicItem;
+import com.yellowzero.listen.player.contract.IPlayController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,10 +35,6 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
 
     //index of current playing which user see in the list
     private int mAlbumIndex = 0;
-
-    public static final int MODE_LIST_CYCLE = 0;
-    public static final int MODE_SINGLE_CYCLE = 1;
-    public static final int MODE_RANDOM = 2;
 
     //原始列表
     private List<M> mOriginPlayingList = new ArrayList<>();
@@ -59,12 +56,12 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     }
 
     public int changeMode() {
-        if (AppData.MUSIC_REPEAT_MODE == MODE_LIST_CYCLE) {
-            AppData.MUSIC_REPEAT_MODE = MODE_SINGLE_CYCLE;
-        } else if (AppData.MUSIC_REPEAT_MODE == MODE_SINGLE_CYCLE) {
-            AppData.MUSIC_REPEAT_MODE = MODE_RANDOM;
+        if (AppData.MUSIC_REPEAT_MODE == IPlayController.MODE_LIST_CYCLE) {
+            AppData.MUSIC_REPEAT_MODE = IPlayController.MODE_SINGLE_CYCLE;
+        } else if (AppData.MUSIC_REPEAT_MODE == IPlayController.MODE_SINGLE_CYCLE) {
+            AppData.MUSIC_REPEAT_MODE = IPlayController.MODE_RANDOM;
         } else {
-            AppData.MUSIC_REPEAT_MODE = MODE_LIST_CYCLE;
+            AppData.MUSIC_REPEAT_MODE = IPlayController.MODE_LIST_CYCLE;
         }
         return AppData.MUSIC_REPEAT_MODE;
     }
@@ -81,7 +78,7 @@ public class PlayingInfoManager<B extends BaseAlbumItem, M extends BaseMusicItem
     }
 
     public List<M> getPlayingList() {
-        if (AppData.MUSIC_REPEAT_MODE == MODE_RANDOM) {
+        if (AppData.MUSIC_REPEAT_MODE == IPlayController.MODE_RANDOM) {
             return mShufflePlayingList;
         } else {
             return mOriginPlayingList;

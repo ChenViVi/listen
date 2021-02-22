@@ -20,6 +20,7 @@ import com.yellowzero.listen.fragment.BilibiliFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
 import com.yellowzero.listen.player.DefaultPlayerManager;
+import com.yellowzero.listen.player.contract.IPlayController;
 import com.yellowzero.listen.view.AndTabManager;
 import com.yellowzero.listen.view.FragmentTabCheckListener;
 import com.yellowzero.listen.view.Tab;
@@ -75,14 +76,19 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(MainActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
             tvName.setText(changeMusic.getTitle());
         });
-        DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
-            if (isPaused) {
-                ivPlay.setImageResource(R.drawable.ic_play);
-                llMusic.setVisibility(View.GONE);
-            }
-            else {
-                ivPlay.setImageResource(R.drawable.ic_play_stop);
-                llMusic.setVisibility(View.VISIBLE);
+        DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
+            switch (state) {
+                case IPlayController.STATE_STOP:
+                    llMusic.setVisibility(View.GONE);
+                    break;
+                case IPlayController.STATE_PAUSE:
+                    ivPlay.setImageResource(R.drawable.ic_play);
+                    llMusic.setVisibility(View.VISIBLE);
+                    break;
+                case IPlayController.STATE_PLAY:
+                    ivPlay.setImageResource(R.drawable.ic_play_pause);
+                    llMusic.setVisibility(View.VISIBLE);
+                    break;
             }
         });
     }

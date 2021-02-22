@@ -37,6 +37,4 @@ public interface IPlayInfoManager<B extends BaseAlbumItem, M extends BaseMusicIt
     int getRepeatMode();
 
     M getCurrentPlayingMusic();
-
-    void requestLastPlayingInfo();
 }

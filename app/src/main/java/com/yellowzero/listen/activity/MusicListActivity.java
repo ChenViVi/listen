@@ -112,13 +112,6 @@ public class MusicListActivity extends AppCompatActivity {
             }
             adapter.notifyDataSetChanged();
         });
-        DefaultPlayerManager.getInstance().getPauseLiveData().observe(this, isPaused -> {
-            if (isPaused) {
-                for (Music music : itemList)
-                    music.setSelected(false);
-                adapter.notifyDataSetChanged();
-            }
-        });
         proxy = App.getProxy(MusicListActivity.this);
         App app = ((App)getApplication());
         app.addNetworkListener(new NetworkChangeReceiver.NetworkListener() {
