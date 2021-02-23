@@ -25,6 +25,7 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.AppInfo;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.AppService;
+import com.yellowzero.listen.view.DownloadDialog;
 
 import java.io.File;
 import java.util.List;
@@ -76,7 +77,8 @@ public class SettingActivity extends AppCompatActivity {
                                     llVersion.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            llVersion.setEnabled(false);
+                                            new DownloadDialog(SettingActivity.this, appInfo).show();
+                                            /*llVersion.setEnabled(false);
                                             String url = appInfo.getUrl();
                                             int index = url.lastIndexOf("/");
                                             String name = url.substring(index + 1);
@@ -112,7 +114,7 @@ public class SettingActivity extends AppCompatActivity {
                                                                 startActivity(intent);
                                                             }
                                                         }
-                                                    });
+                                                    });*/
                                         }
                                     });
                                 } else {
