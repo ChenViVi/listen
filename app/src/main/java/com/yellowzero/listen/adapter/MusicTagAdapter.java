@@ -37,14 +37,12 @@ public class MusicTagAdapter extends BaseQuickAdapter<MusicTag, BaseViewHolder> 
                     .load(item.getCover())
                     .placeholder(R.drawable.ic_holder_square)
                     .error(R.drawable.ic_holder_square)
-                    .transform(new RoundedCorners(10))
                     .into(ivCover);
         else
             Glide.with(context)
                     .load(item.getCoverRes())
                     .placeholder(R.drawable.ic_holder_square)
                     .error(R.drawable.ic_holder_square)
-                    .transform(new RoundedCorners(10))
                     .into(ivCover);
     }
 }
