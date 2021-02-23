@@ -1,24 +1,18 @@
 package com.yellowzero.listen.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
-import com.allen.library.download.DownloadObserver;
 import com.allen.library.interceptor.Transformer;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
@@ -27,7 +21,6 @@ import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.AppService;
 import com.yellowzero.listen.view.DownloadDialog;
 
-import java.io.File;
 import java.util.List;
 
 public class SettingActivity extends AppCompatActivity {
@@ -78,43 +71,6 @@ public class SettingActivity extends AppCompatActivity {
                                         @Override
                                         public void onClick(View view) {
                                             new DownloadDialog(SettingActivity.this, appInfo).show();
-                                            /*llVersion.setEnabled(false);
-                                            String url = appInfo.getUrl();
-                                            int index = url.lastIndexOf("/");
-                                            String name = url.substring(index + 1);
-                                            Toast.makeText(SettingActivity.this, R.string.ts_download_apk_process, Toast.LENGTH_SHORT).show();
-                                            RxHttpUtils
-                                                    .downloadFile(appInfo.getUrl())
-                                                    .subscribe(new DownloadObserver(name) {
-                                                        //可以通过配置tag用于取消下载请求
-                                                        @Override
-                                                        protected String setTag() {
-                                                            return "download";
-                                                        }
-
-                                                        @Override
-                                                        protected void onError(String errorMsg) {
-                                                            llVersion.setEnabled(true);
-                                                        }
-
-                                                        @Override
-                                                        protected void onSuccess(long bytesRead, long contentLength, float progress, boolean done, String filePath) {
-                                                            if (done) {
-                                                                llVersion.setEnabled(true);
-                                                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                File file = new File(filePath);
-                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                                                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                                                    Uri contentUri = FileProvider.getUriForFile(SettingActivity.this, getPackageName()+".fileprovider", file);
-                                                                    intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-                                                                } else {
-                                                                    intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                                                                }
-                                                                startActivity(intent);
-                                                            }
-                                                        }
-                                                    });*/
                                         }
                                     });
                                 } else {
