@@ -2,7 +2,10 @@ package com.yellowzero.listen.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -12,22 +15,34 @@ import android.widget.ProgressBar;
 
 import com.yellowzero.listen.R;
 
-public class AboutActivity extends AppCompatActivity {
+public class WebViewActivity extends AppCompatActivity {
+
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_URL = "url";
+    private static final String KEY_CACHE = "cache";
 
     private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_web_view);
+        String title = getIntent().getStringExtra(KEY_TITLE);
+        String url = getIntent().getStringExtra(KEY_URL);
+        boolean cache = getIntent().getBooleanExtra(KEY_CACHE, true);
         setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (!TextUtils.isEmpty(title))
+            setTitle(title);
         webView  = findViewById(R.id.webView);
         ProgressBar pbLoad  = findViewById(R.id.pbLoad);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.getSettings().setDomStorageEnabled(true);
+        if (!cache) {
+            webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webView.getSettings().setDomStorageEnabled(true);
+        }
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://chenvivi.gitee.io/yellowzero/index.html");
+        if (!TextUtils.isEmpty(url))
+            webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -36,6 +51,20 @@ public class AboutActivity extends AppCompatActivity {
                 webView.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    public static void start(Context context, String url) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(KEY_URL, url);
+        context.startActivity(intent);
+    }
+
+    public static void start(Context context, String title, String url, boolean cache) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(KEY_TITLE, title);
+        intent.putExtra(KEY_URL, url);
+        intent.putExtra(KEY_CACHE, cache);
+        context.startActivity(intent);
     }
 
     @Override

@@ -45,8 +45,7 @@
             android:name=".activity.MusicListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.AboutActivity"
-            android:label="@string/tt_about"
+            android:name=".activity.WebViewActivity"
             android:screenOrientation="portrait" />
         <provider
             android:name="androidx.core.content.FileProvider"

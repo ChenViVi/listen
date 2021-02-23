@@ -131,7 +131,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void onClickAbout(View view) {
-        startActivity(new Intent(this, AboutActivity.class));
+        WebViewActivity.start(this, getString(R.string.tt_about), "http://chenvivi.gitee.io/yellowzero/index.html", false);
     }
 
     public void onClickMusicMobile(View view) {
