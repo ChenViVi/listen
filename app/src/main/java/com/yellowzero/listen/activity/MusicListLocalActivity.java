@@ -111,6 +111,8 @@ public class MusicListLocalActivity extends AppCompatActivity {
                 loadMusic(AppData.MUSIC_QQ_PATH);
                 loadMusic(AppData.MUSIC_KUGOU_PATH);
                 loadMusic(AppData.MUSIC_MOO_PATH);
+                loadMusic(AppData.QQ_FILES_1);
+                loadMusic(AppData.QQ_FILES_2);
                 album.setMusics(musics);
                 AppData.MUSIC_LOCAL_COUNT = musics.size();
                 AppData.saveData(MusicListLocalActivity.this);

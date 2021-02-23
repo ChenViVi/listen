@@ -305,13 +305,19 @@ public class ImagedDetailActivity extends AppCompatActivity {
                 }
             });
         }
-        Glide.with(this).load(image.getUser().getAvatar()).transform(new CircleCrop()).into(ivAvatar);
+        Glide.with(this)
+                .load(image.getUser().getAvatar())
+                .placeholder(R.drawable.ic_holder_circle)
+                .error(R.drawable.ic_holder_circle)
+                .transform(new CircleCrop())
+                .into(ivAvatar);
         String suffix = image.getSuffix();
         if (image.isGif())
             Glide.with(this)
                     .asGif()
                     .load(image.getImageInfoLarge().getUrl())
-                    .error(R.drawable.ic_holder)
+                    .placeholder(R.drawable.ic_holder_square)
+                    .error(R.drawable.ic_holder_square)
                     .into(new ImageViewTarget<GifDrawable>(ivImage) {
                         @Override
                         protected void setResource(@Nullable GifDrawable resource) {
@@ -323,7 +329,8 @@ public class ImagedDetailActivity extends AppCompatActivity {
             Glide.with(this)
                     .asBitmap()
                     .load(image.getImageInfoLarge().getUrl())
-                    .error(R.drawable.ic_holder)
+                    .placeholder(R.drawable.ic_holder_square)
+                    .error(R.drawable.ic_holder_square)
                     .into(new CustomTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

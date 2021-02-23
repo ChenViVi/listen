@@ -73,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
                 }));
         andTabManager.setCurrentItem(0);
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            Glide.with(MainActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
+            Glide.with(MainActivity.this)
+                    .load(changeMusic.getImg())
+                    .placeholder(R.drawable.ic_holder_circle)
+                    .error(R.drawable.ic_holder_circle)
+                    .transform(new CircleCrop())
+                    .into(ivCover);
             tvName.setText(changeMusic.getTitle());
         });
         DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {

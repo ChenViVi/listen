@@ -50,6 +50,7 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
             viewHolder.setGone(R.id.ivVideo, true);
             return;
         }
+        viewHolder.setGone(R.id.ivVideo, false);
         if (item.getLink().contains("bilibili"))
             viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
                 @Override

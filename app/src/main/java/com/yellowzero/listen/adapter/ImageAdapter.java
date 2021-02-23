@@ -31,8 +31,8 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
         Glide.with(context)
                 .load(item.getUser().getAvatar())
                 .transform(new CircleCrop())
-                .placeholder(R.drawable.ic_holder)
-                .error(R.drawable.ic_holder)
+                .placeholder(R.drawable.ic_holder_circle)
+                .error(R.drawable.ic_holder_circle)
                 .into((ImageView) viewHolder.getView(R.id.ivAvatar));
         ImageView ivImage = viewHolder.getView(R.id.ivImage);
         ImageInfo imageInfo = item.getImageInfoSmall();
@@ -43,12 +43,14 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
         if (item.isGif())
             Glide.with(context)
                     .load(item.getImageInfoLarge().getUrl())
-                    .placeholder(R.drawable.ic_holder)
-                    .error(R.drawable.ic_holder)
+                    .placeholder(R.drawable.ic_holder_square)
+                    .error(R.drawable.ic_holder_square)
                     .into((ImageView) viewHolder.getView(R.id.ivImage));
         else
             Glide.with(context)
                     .load(item.getImageInfoSmall().getUrl())
+                    .placeholder(R.drawable.ic_holder_square)
+                    .error(R.drawable.ic_holder_square)
                     .into((ImageView) viewHolder.getView(R.id.ivImage));
     }
 }

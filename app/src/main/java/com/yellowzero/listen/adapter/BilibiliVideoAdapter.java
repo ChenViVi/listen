@@ -36,15 +36,15 @@ public class BilibiliVideoAdapter extends BaseQuickAdapter<BilibiliVideo, BaseVi
             Glide.with(context)
                     .load(item.getAvatar())
                     .transform(new CircleCrop())
-                    .placeholder(R.drawable.ic_holder)
-                    .error(R.drawable.ic_holder)
+                    .placeholder(R.drawable.ic_holder_square)
+                    .error(R.drawable.ic_holder_square)
                     .into((ImageView) viewHolder.getView(R.id.ivAvatar));
         }
         Glide.with(context)
                 .load(item.getCover())
                 .transform(new RoundedCorners(10))
-                .placeholder(R.drawable.ic_holder)
-                .error(R.drawable.ic_holder)
+                .placeholder(R.drawable.ic_holder_square)
+                .error(R.drawable.ic_holder_square)
                 .into((ImageView) viewHolder.getView(R.id.ivCover));
     }
 }

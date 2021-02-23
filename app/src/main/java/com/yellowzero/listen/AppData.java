@@ -8,10 +8,12 @@ public class AppData {
     public static boolean ENABLE_MUSIC_MOBILE = false;
     public static int MUSIC_REPEAT_MODE = 0;
     public static int MUSIC_LOCAL_COUNT = 0;
-    public static final String MUSIC_NETEASE_PATH = "sdcard/netease/cloudmusic/Music";
-    public static final String MUSIC_QQ_PATH = "sdcard/qqmusic/song";
-    public static final String MUSIC_MOO_PATH = "sdcard/blackkey/download";
-    public static final String MUSIC_KUGOU_PATH = "sdcard/kgmusic/download";
+    public static final String MUSIC_NETEASE_PATH = "/storage/emulated/0/netease/cloudmusic/Music";
+    public static final String MUSIC_QQ_PATH = "/storage/emulated/0/qqmusic/song";
+    public static final String MUSIC_MOO_PATH = "/storage/emulated/0/blackkey/download";
+    public static final String MUSIC_KUGOU_PATH = "/storage/emulated/0/kgmusic/download";
+    public static final String QQ_FILES_1 = "/storage/emulated/0/tencent/QQfile_recv";
+    public static final String QQ_FILES_2 = "/storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv";
 
 
     public static void loadData(Context context) {

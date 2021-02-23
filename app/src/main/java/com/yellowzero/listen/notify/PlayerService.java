@@ -25,7 +25,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -35,10 +34,11 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MainActivity;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
-import com.yellowzero.listen.player.contract.IPlayController;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import java.io.File;
 
 /**
  * Create by KunMinX at 19/7/17
@@ -96,7 +96,6 @@ public class PlayerService extends Service {
     }
 
     private void createNotification(DefaultAlbum.DefaultMusic testMusic) {
-        Log.e("xxx", "xxxx");
         try {
             String title = testMusic.getTitle();
             DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();
@@ -142,19 +141,22 @@ public class PlayerService extends Service {
 
             notification.contentView.setTextViewText(R.id.tvName, title);
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
-
-            Glide.with(getApplicationContext()) // safer!
-                    .asBitmap()
-                    .load(testMusic.getCoverImg())
-                    .placeholder(R.drawable.ic_holder)
-                    .error(R.drawable.ic_holder)
-                    .into(new NotificationTarget(
-                            this,
-                            R.id.ivCover,
-                            notification.contentView,
-                            notification,
-                            NOTIFICATION_ID));
-
+            String coverImg  = testMusic.getCoverImg();
+            if (testMusic.getCoverImg() == null
+                    || (!testMusic.getCoverImg().startsWith("http") && !new File(testMusic.getCoverImg()).exists()))
+                notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_holder_square);
+            else
+                Glide.with(getApplicationContext()) // safer!
+                        .asBitmap()
+                        .load(testMusic.getCoverImg())
+                        .placeholder(R.drawable.ic_holder_square)
+                        .error(R.drawable.ic_holder_square)
+                        .into(new NotificationTarget(
+                                this,
+                                R.id.ivCover,
+                                notification.contentView,
+                                notification,
+                                NOTIFICATION_ID));
             startForeground(NOTIFICATION_ID, notification);
 
             mPlayerCallHelper.bindRemoteController(getApplicationContext());

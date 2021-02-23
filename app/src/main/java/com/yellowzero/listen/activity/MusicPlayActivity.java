@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.player.DefaultPlayerManager;
-import com.yellowzero.listen.player.PlayingInfoManager;
 import com.yellowzero.listen.player.contract.IPlayController;
 
 
@@ -57,7 +56,12 @@ public class MusicPlayActivity extends AppCompatActivity {
         });
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             setTitle(changeMusic.getTitle());
-            Glide.with(MusicPlayActivity.this).load(changeMusic.getImg()).transform(new CircleCrop()).into(ivCover);
+            Glide.with(MusicPlayActivity.this)
+                    .load(changeMusic.getImg())
+                    .placeholder(R.drawable.ic_holder_circle)
+                    .error(R.drawable.ic_holder_circle)
+                    .transform(new CircleCrop())
+                    .into(ivCover);
         });
         DefaultPlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
             sbProgress.setMax(playingMusic.getDuration());
