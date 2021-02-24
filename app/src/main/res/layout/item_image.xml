@@ -18,11 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             tools:ignore="ContentDescription" />
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingTop="5dp"
@@ -32,13 +30,18 @@
                 android:id="@+id/ivAvatar"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_centerVertical="true"
                 tools:ignore="ContentDescription" />
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/ivAvatar"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="6dp"
-                android:layout_marginBottom="4dp"/>
-        </LinearLayout>
+                android:layout_marginBottom="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

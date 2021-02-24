@@ -20,59 +20,13 @@
         android:gravity="center_vertical"
         android:layout_alignParentBottom="true"
         android:background="@color/tabBackground"/>
-    <androidx.cardview.widget.CardView
+    <include
         android:id="@+id/llMusic"
+        layout="@layout/layout_music_play"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_above="@id/llTab"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="30dp"
-        app:cardBackgroundColor="#ffcc00"
-        android:visibility="gone">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/ivCover"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY"
-                tools:ignore="ContentDescription" />
-            <ImageView
-                android:id="@+id/ivNext"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_next_song"
-                android:onClick="onNext"
-                tools:ignore="ContentDescription" />
-            <ImageView
-                android:id="@+id/ivPlay"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/ivNext"
-                android:src="@drawable/ic_play_stop"
-                android:onClick="onPlay"
-                tools:ignore="ContentDescription" />
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/ivCover"
-                android:layout_toStartOf="@id/ivPlay"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:textSize="18sp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+        android:visibility="gone"/>
     <FrameLayout
         android:id="@+id/llFragment"
         android:orientation="vertical"

@@ -27,26 +27,15 @@ import com.yellowzero.listen.view.Tab;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView ivCover;
-    private TextView tvName;
-    private ImageView ivPlay;
-    private View llMusic;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(findViewById(R.id.toolbar));
-        ivCover = findViewById(R.id.ivCover);
-        tvName = findViewById(R.id.tvName);
-        ivPlay = findViewById(R.id.ivPlay);
-        llMusic = findViewById(R.id.llMusic);
-        findViewById(R.id.llMusic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MusicPlayActivity.class));
-            }
-        });
+        ImageView ivCover = findViewById(R.id.ivCover);
+        TextView tvName = findViewById(R.id.tvName);
+        ImageView ivPlay = findViewById(R.id.ivPlay);
+        View llMusic = findViewById(R.id.llMusic);
         AndTabManager andTabManager = new AndTabManager(this, findViewById(R.id.llTab));
         andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_image).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
@@ -104,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNext(View view) {
         DefaultPlayerManager.getInstance().playNext();
+    }
+
+    public void onClickPlayDetail(View view) {
+        startActivity(new Intent(MainActivity.this, MusicPlayActivity.class));
     }
 
 /*    @Override

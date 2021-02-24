@@ -14,10 +14,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
 import com.allen.library.interceptor.Transformer;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -30,6 +34,7 @@ import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
+import com.yellowzero.listen.player.contract.IPlayController;
 import com.yellowzero.listen.service.MusicService;
 import com.yellowzero.listen.util.NetworkChangeReceiver;
 import com.yellowzero.listen.util.NetworkUtil;
@@ -40,7 +45,6 @@ import java.util.Locale;
 
 public class MusicListActivity extends AppCompatActivity {
 
-    private boolean isFirstResume = true;
     private static final String KEY_TAG = "tag";
     private static final String FORMAT_MUSIC_ID = "%d_%d";
     private MusicTag tag;
@@ -64,6 +68,10 @@ public class MusicListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(tag.getName());
         RecyclerView rvList = findViewById(R.id.rvList);
         refreshLayout = findViewById(R.id.refreshLayout);
+        ImageView ivCover = findViewById(R.id.ivCover);
+        TextView tvName = findViewById(R.id.tvName);
+        ImageView ivPlay = findViewById(R.id.ivPlay);
+        View llMusic = findViewById(R.id.llMusic);
         rvList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MusicAdapter(this, itemList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -105,13 +113,6 @@ public class MusicListActivity extends AppCompatActivity {
                     refreshLayout.setRefreshing(false);
             }
         });
-        DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            for (int i = 0; i < itemList.size(); i++) {
-                Music music = itemList.get(i);
-                music.setSelected(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getId()).equals(changeMusic.getMusicId()));
-            }
-            adapter.notifyDataSetChanged();
-        });
         proxy = App.getProxy(MusicListActivity.this);
         App app = ((App)getApplication());
         app.addNetworkListener(new NetworkChangeReceiver.NetworkListener() {
@@ -124,18 +125,40 @@ public class MusicListActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+        DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
+            for (int i = 0; i < itemList.size(); i++) {
+                Music music = itemList.get(i);
+                String musicId = String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getId());
+                music.setSelected(musicId.equals(changeMusic.getMusicId()));
+            }
+            adapter.notifyDataSetChanged();
+            Glide.with(MusicListActivity.this)
+                    .load(changeMusic.getImg())
+                    .placeholder(R.drawable.ic_holder_circle)
+                    .error(R.drawable.ic_holder_circle)
+                    .transform(new CircleCrop())
+                    .into(ivCover);
+            tvName.setText(changeMusic.getTitle());
+        });
+        DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
+            switch (state) {
+                case IPlayController.STATE_STOP:
+                    llMusic.setVisibility(View.GONE);
+                    for (int i = 0; i < itemList.size(); i++)
+                        itemList.get(i).setSelected(false);
+                    adapter.notifyDataSetChanged();
+                    break;
+                case IPlayController.STATE_PAUSE:
+                    ivPlay.setImageResource(R.drawable.ic_play);
+                    llMusic.setVisibility(View.VISIBLE);
+                    break;
+                case IPlayController.STATE_PLAY:
+                    ivPlay.setImageResource(R.drawable.ic_play_pause);
+                    llMusic.setVisibility(View.VISIBLE);
+                    break;
+            }
+        });
         loadList();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (isFirstResume) {
-            isFirstResume = false;
-            return;
-        }
-        setMusicsAvailable();
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -145,6 +168,18 @@ public class MusicListActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onPlay(View view) {
+        DefaultPlayerManager.getInstance().togglePlay();
+    }
+
+    public void onNext(View view) {
+        DefaultPlayerManager.getInstance().playNext();
+    }
+
+    public void onClickPlayDetail(View view) {
+        startActivity(new Intent(MusicListActivity.this, MusicPlayActivity.class));
     }
 
     private void setMusicsAvailable() {

@@ -14,7 +14,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yellowzero.listen.AppData;
@@ -24,6 +28,7 @@ import com.yellowzero.listen.model.MusicLocal;
 import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
+import com.yellowzero.listen.player.contract.IPlayController;
 import com.yellowzero.listen.util.FileUtil;
 
 import java.io.File;
@@ -65,6 +70,10 @@ public class MusicListLocalActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(tag.getName());
         RecyclerView rvList = findViewById(R.id.rvList);
         refreshLayout = findViewById(R.id.refreshLayout);
+        ImageView ivCover = findViewById(R.id.ivCover);
+        TextView tvName = findViewById(R.id.tvName);
+        ImageView ivPlay = findViewById(R.id.ivPlay);
+        View llMusic = findViewById(R.id.llMusic);
         refreshLayout.setRefreshing(true);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -87,7 +96,49 @@ public class MusicListLocalActivity extends AppCompatActivity {
         File coverDir = new File(coverDirPath);
         if (!coverDir.exists())
             coverDir.mkdir();
+        DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
+            for (int i = 0; i < itemList.size(); i++) {
+                MusicLocal music = itemList.get(i);
+                String musicId = String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getName());
+                music.setSelected(musicId.equals(changeMusic.getMusicId()));
+            }
+            adapter.notifyDataSetChanged();
+            Glide.with(MusicListLocalActivity.this)
+                    .load(changeMusic.getImg())
+                    .placeholder(R.drawable.ic_holder_circle)
+                    .error(R.drawable.ic_holder_circle)
+                    .transform(new CircleCrop())
+                    .into(ivCover);
+            tvName.setText(changeMusic.getTitle());
+        });
+        DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
+            switch (state) {
+                case IPlayController.STATE_STOP:
+                    llMusic.setVisibility(View.GONE);
+                    break;
+                case IPlayController.STATE_PAUSE:
+                    ivPlay.setImageResource(R.drawable.ic_play);
+                    llMusic.setVisibility(View.VISIBLE);
+                    break;
+                case IPlayController.STATE_PLAY:
+                    ivPlay.setImageResource(R.drawable.ic_play_pause);
+                    llMusic.setVisibility(View.VISIBLE);
+                    break;
+            }
+        });
         loadList();
+    }
+
+    public void onPlay(View view) {
+        DefaultPlayerManager.getInstance().togglePlay();
+    }
+
+    public void onNext(View view) {
+        DefaultPlayerManager.getInstance().playNext();
+    }
+
+    public void onClickPlayDetail(View view) {
+        startActivity(new Intent(MusicListLocalActivity.this, MusicPlayActivity.class));
     }
 
     private void setPlayMusic(int position) {
@@ -170,12 +221,16 @@ public class MusicListLocalActivity extends AppCompatActivity {
                         musicLocal.setName(title);
                         musicLocal.setCover(coverPath);
                         musicLocal.setPath(file.getPath());
-                        itemList.add(musicLocal);
                         DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                         music.setTitle(title);
                         music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getTitle()));
                         music.setUrl(file.getPath());
                         music.setCoverImg(coverPath);
+                        if (DefaultPlayerManager.getInstance().isPlaying() &&
+                                music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {
+                            musicLocal.setSelected(true);
+                        }
+                        itemList.add(musicLocal);
                         musics.add(music);
                     }
                 }
