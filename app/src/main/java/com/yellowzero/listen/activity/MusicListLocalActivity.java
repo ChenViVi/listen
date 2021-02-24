@@ -92,7 +92,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
             }
         });
         rvList.setAdapter(adapter);
-        coverDirPath = getExternalFilesDir(null) + File.separator + "cover" + File.separator ;
+        coverDirPath = getExternalCacheDir() + File.separator + "cover" + File.separator ;
         File coverDir = new File(coverDirPath);
         if (!coverDir.exists())
             coverDir.mkdir();

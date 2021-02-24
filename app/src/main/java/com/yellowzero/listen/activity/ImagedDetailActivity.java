@@ -31,6 +31,7 @@ import com.allen.library.download.DownloadObserver;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -329,6 +330,7 @@ public class ImagedDetailActivity extends AppCompatActivity {
             Glide.with(this)
                     .asBitmap()
                     .load(image.getImageInfoLarge().getUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .placeholder(R.drawable.ic_holder_square)
                     .error(R.drawable.ic_holder_square)
                     .into(new CustomTarget<Bitmap>() {

@@ -18,7 +18,9 @@
         android:theme="@style/Theme.Dang"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activity.MusicListLocalActivity" />
+        <meta-data
+            android:name="com.yellowzero.listen.util.GlideOption"
+            android:value="AppGlideModule"/>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
@@ -43,6 +45,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MusicListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MusicListLocalActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WebViewActivity"
