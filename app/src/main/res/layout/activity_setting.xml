@@ -23,13 +23,15 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="18dp"
-            android:text="关于龄听"/>
+            android:text="@string/tt_about"
+            tools:ignore="RelativeOverlap" />
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_arrow_right"/>
+            android:src="@drawable/ic_arrow_right"
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/llVersion"
@@ -43,7 +45,7 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="18dp"
-            android:text="当前版本"/>
+            android:text="@string/tv_current_version"/>
         <TextView
             android:id="@+id/tvVersion"
             android:layout_width="wrap_content"
@@ -61,7 +63,8 @@
             android:padding="6dp"
             android:background="@drawable/tv_new_version"
             android:textColor="@color/white"
-            tools:text="有新版本"/>
+            tools:text="有新版本"
+            tools:ignore="RelativeOverlap" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -74,12 +77,33 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="18dp"
-            android:text="是否允许流量播放"/>
+            android:text="@string/tv_play_music_without_wifi"/>
         <CheckBox
             android:id="@+id/cbEnableMusicMobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:onClick="onClickClearCache">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
+            android:text="@string/tv_clean_cache"/>
+        <TextView
+            android:id="@+id/tvCacheSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            tools:text="213MB"/>
     </RelativeLayout>
 </LinearLayout>

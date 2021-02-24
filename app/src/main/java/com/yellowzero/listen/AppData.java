@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.io.File;
+
 public class AppData {
     public static boolean ENABLE_MUSIC_MOBILE = false;
     public static int MUSIC_REPEAT_MODE = 0;
@@ -15,8 +17,16 @@ public class AppData {
     public static final String QQ_FILES_1 = "/storage/emulated/0/tencent/QQfile_recv";
     public static final String QQ_FILES_2 = "/storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv";
 
+    public static String CACHE_DIR = "";
+    public static String CACHE_IMAGE_DIR = "";
+    public static String CACHE_COVER_DIR = "";
+    public static String CACHE_MUSIC_DIR = "";
 
     public static void loadData(Context context) {
+        CACHE_DIR = context.getExternalCacheDir().getPath();
+        CACHE_IMAGE_DIR = CACHE_DIR + File.separator + "image_manager_disk_cache" + File.separator;
+        CACHE_COVER_DIR = CACHE_DIR + File.separator + "cover" + File.separator;
+        CACHE_MUSIC_DIR = CACHE_DIR + File.separator + "video-cache" + File.separator;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         AppData.ENABLE_MUSIC_MOBILE = preferences.getBoolean("enable_music_mobile",false);
         AppData.MUSIC_REPEAT_MODE = preferences.getInt("music_repeat_mode",0);

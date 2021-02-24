@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
@@ -19,13 +20,17 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.AppInfo;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.AppService;
+import com.yellowzero.listen.util.FileUtil;
+import com.yellowzero.listen.view.CacheDialog;
 import com.yellowzero.listen.view.DownloadDialog;
 
+import java.io.File;
 import java.util.List;
 
 public class SettingActivity extends AppCompatActivity {
     private int appCode = -1;
     private CheckBox checkBox;
+    private TextView tvCacheSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,7 @@ public class SettingActivity extends AppCompatActivity {
         checkBox = findViewById(R.id.cbEnableMusicMobile);
         TextView tvVersion = findViewById(R.id.tvVersion);
         TextView tvNewVersion = findViewById(R.id.tvNewVersion);
+        tvCacheSize = findViewById(R.id.tvCacheSize);
         View llVersion = findViewById(R.id.llVersion);
         checkBox.setChecked(AppData.ENABLE_MUSIC_MOBILE);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -80,6 +86,7 @@ public class SettingActivity extends AppCompatActivity {
                             }
                         }
                     });
+        tvCacheSize.setText(FileUtil.getFileSizeString(new File(AppData.CACHE_DIR)));
     }
 
     @Override
@@ -94,6 +101,16 @@ public class SettingActivity extends AppCompatActivity {
 
     public void onClickMusicMobile(View view) {
         enableMusicMobile(checkBox.isChecked());
+    }
+
+    public void onClickClearCache(View view) {
+        new CacheDialog(this){
+            @Override
+            protected void onDeleteFinish() {
+                super.onDeleteFinish();
+                tvCacheSize.setText(FileUtil.getFileSizeString(new File(AppData.CACHE_DIR)));
+            }
+        }.show();
     }
 
     private void enableMusicMobile(boolean enable) {
