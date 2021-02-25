@@ -177,15 +177,14 @@ public class ImagedDetailActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.ts_http_loading, Toast.LENGTH_SHORT).show();
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.addCategory(Intent.CATEGORY_BROWSABLE);
         if (PackageUtil.isPackageInstalled(this, "com.sina.weibo")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
             intent.setData(Uri.parse("sinaweibo://detail?mblogid=" + image.getWeiboId()));
-        } else {
-            intent.setData(Uri.parse("https://m.weibo.cn/detail/" + image.getWeiboId()));
-        }
-        startActivity(intent);
+            startActivity(intent);
+        } else
+            WebViewActivity.start(this, "https://m.weibo.cn/detail/" + image.getWeiboId());
     }
 
     public void onClickLike(View view) {
