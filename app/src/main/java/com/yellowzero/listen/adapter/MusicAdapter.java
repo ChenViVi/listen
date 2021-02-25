@@ -33,7 +33,9 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
     @Override
     protected void convert(BaseViewHolder viewHolder, Music item) {
         viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
-                .setText(R.id.tvName, item.getName());
+                .setText(R.id.tvName, item.getName())
+                .setGone(R.id.ivCached, item.isCached())
+                .setVisible(R.id.ivVideo, !TextUtils.isEmpty(item.getLink()));
         if (!item.isAvailable())
             viewHolder.setTextColorRes(R.id.tvName, R.color.tvNameDisable);
         else {
@@ -46,11 +48,8 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
                         .setGone(R.id.tvNumber, false)
                         .setGone(R.id.ivPlaying, true);
         }
-        if (TextUtils.isEmpty(item.getLink())) {
-            viewHolder.setGone(R.id.ivVideo, true);
+        if (TextUtils.isEmpty(item.getLink()))
             return;
-        }
-        viewHolder.setGone(R.id.ivVideo, false);
         if (item.getLink().contains("bilibili"))
             viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
                 @Override
