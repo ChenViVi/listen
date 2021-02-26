@@ -34,7 +34,7 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
     protected void convert(BaseViewHolder viewHolder, Music item) {
         viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
                 .setText(R.id.tvName, item.getName())
-                .setGone(R.id.ivCached, item.isCached())
+                .setGone(R.id.ivCached, !item.isCached())
                 .setVisible(R.id.ivVideo, !TextUtils.isEmpty(item.getLink()));
         if (!item.isAvailable())
             viewHolder.setTextColorRes(R.id.tvName, R.color.tvNameDisable);
