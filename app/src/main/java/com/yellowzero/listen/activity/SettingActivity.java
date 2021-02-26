@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
@@ -22,7 +21,7 @@ import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.AppService;
 import com.yellowzero.listen.util.FileUtil;
 import com.yellowzero.listen.view.CacheDialog;
-import com.yellowzero.listen.view.DownloadDialog;
+import com.yellowzero.listen.view.UpdateDialog;
 
 import java.io.File;
 import java.util.List;
@@ -76,7 +75,7 @@ public class SettingActivity extends AppCompatActivity {
                                     llVersion.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            new DownloadDialog(SettingActivity.this, appInfo).show();
+                                            new UpdateDialog(SettingActivity.this, appInfo).show();
                                         }
                                     });
                                 } else {

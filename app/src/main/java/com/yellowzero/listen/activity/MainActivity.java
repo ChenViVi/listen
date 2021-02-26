@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +14,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.allen.library.RxHttpUtils;
+import com.allen.library.bean.BaseData;
+import com.allen.library.interceptor.Transformer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.yellowzero.listen.AppData;
@@ -19,11 +24,17 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
+import com.yellowzero.listen.model.AppInfo;
+import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.contract.IPlayController;
+import com.yellowzero.listen.service.AppService;
 import com.yellowzero.listen.view.AndTabManager;
+import com.yellowzero.listen.view.UpdateDialog;
 import com.yellowzero.listen.view.FragmentTabCheckListener;
 import com.yellowzero.listen.view.Tab;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,6 +96,39 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         });
+        RxHttpUtils.createApi(AppService.class)
+                .list()
+                .compose(Transformer.<BaseData<List<AppInfo>>>switchSchedulers())
+                .subscribe(new DataObserver<List<AppInfo>>() {
+
+                    @Override
+                    protected void onSuccess(List<AppInfo> data) {
+                        if (data != null && data.size() > 0) {
+                            AppInfo appInfo = data.get(0);
+                            try {
+                                PackageManager manager = getPackageManager();
+                                PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+                                if (appInfo.getCode() > info.versionCode && appInfo.getCode() > AppData.LAST_UPDATE_CODE) {
+                                    new UpdateDialog(MainActivity.this, appInfo){
+                                        @Override
+                                        public void onCancel() {
+                                            super.onCancel();
+                                            AppData.LAST_UPDATE_CODE = appInfo.getCode();
+                                            AppData.saveData(MainActivity.this);
+                                        }
+                                    }.show();
+                                }
+                            }   catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onError(String errorMsg) {
+
+                    }
+                });
     }
 
     public void onPlay(View view) {

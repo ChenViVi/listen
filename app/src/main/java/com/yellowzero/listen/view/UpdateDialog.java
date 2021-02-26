@@ -23,11 +23,11 @@ import com.yellowzero.listen.model.AppInfo;
 
 import java.io.File;
 
-public class DownloadDialog extends Dialog {
+public class UpdateDialog extends Dialog {
 
     private AppInfo appInfo;
 
-    public DownloadDialog(@NonNull Context context, @NonNull AppInfo appInfo) {
+    public UpdateDialog(@NonNull Context context, @NonNull AppInfo appInfo) {
         super(context);
         this.appInfo = appInfo;
     }
@@ -35,7 +35,7 @@ public class DownloadDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_download);
+        setContentView(R.layout.dialog_update);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindow().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -46,7 +46,7 @@ public class DownloadDialog extends Dialog {
         ProgressBar pbLoad = findViewById(R.id.pbLoad);
         TextView tvDownload = findViewById(R.id.tvDownload);
         TextView tvCancel = findViewById(R.id.tvCancel);
-        tvTitle.setText(appInfo.getName());
+        tvTitle.setText(String.format(getContext().getString(R.string.tv_app_update), appInfo.getName()));
         tvInfo.setText(appInfo.getInfo());
         pbLoad.setVisibility(View.GONE);
         if (appInfo.isForceUpdate()) {
@@ -56,6 +56,7 @@ public class DownloadDialog extends Dialog {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onCancel();
                 RxHttpUtils.cancel("download_apk");
                 dismiss();
             }
@@ -103,6 +104,10 @@ public class DownloadDialog extends Dialog {
                         });
             }
         });
+    }
+
+    public void onCancel() {
+
     }
 
     @Override

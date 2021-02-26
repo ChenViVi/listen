@@ -25,7 +25,7 @@
     <string name="tv_version_has_new">有新版本</string>
     <string name="tv_version_is_new">已是最新版本</string>
     <string name="tv_bilibili_main">本人投稿</string>
-    <string name="tv_cancel">取消</string>
+    <string name="tv_cancel">下次一定</string>
     <string name="tv_play_music_without_wifi">是否允许流量播放</string>
     <string name="tv_current_version">当前版本</string>
     <string name="tv_clean_cache">清除缓存</string>
@@ -34,6 +34,7 @@
     <string name="tv_clean_cache_process">正在清除中…</string>
     <string name="tv_cache_image">图片缓存</string>
     <string name="tv_cache_music">音乐缓存</string>
+    <string name="tv_app_update">软件更新-%s</string>
 
     <string name="ts_http_error">加载失败</string>
     <string name="ts_http_loading">加载中，请稍后再试</string>

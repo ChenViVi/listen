@@ -10,6 +10,8 @@ public class AppData {
     public static boolean ENABLE_MUSIC_MOBILE = false;
     public static int MUSIC_REPEAT_MODE = 0;
     public static int MUSIC_LOCAL_COUNT = 0;
+    public static int LAST_UPDATE_CODE = 0;
+
     public static final String MUSIC_NETEASE_PATH = "/storage/emulated/0/netease/cloudmusic/Music";
     public static final String MUSIC_QQ_PATH = "/storage/emulated/0/qqmusic/song";
     public static final String MUSIC_MOO_PATH = "/storage/emulated/0/blackkey/download";
@@ -22,6 +24,7 @@ public class AppData {
     public static String CACHE_COVER_DIR = "";
     public static String CACHE_MUSIC_DIR = "";
 
+
     public static void loadData(Context context) {
         CACHE_DIR = context.getExternalCacheDir().getPath();
         CACHE_IMAGE_DIR = CACHE_DIR + File.separator + "image_manager_disk_cache" + File.separator;
@@ -31,6 +34,7 @@ public class AppData {
         AppData.ENABLE_MUSIC_MOBILE = preferences.getBoolean("enable_music_mobile",false);
         AppData.MUSIC_REPEAT_MODE = preferences.getInt("music_repeat_mode",0);
         AppData.MUSIC_LOCAL_COUNT = preferences.getInt("music_local_count",0);
+        AppData.LAST_UPDATE_CODE = preferences.getInt("last_update_code",0);
     }
 
     public static void saveData(Context context) {
@@ -38,6 +42,7 @@ public class AppData {
         editor.putBoolean("enable_music_mobile", AppData.ENABLE_MUSIC_MOBILE);
         editor.putInt("music_repeat_mode", AppData.MUSIC_REPEAT_MODE);
         editor.putInt("music_local_count", AppData.MUSIC_LOCAL_COUNT);
+        editor.putInt("last_update_code", AppData.LAST_UPDATE_CODE);
         editor.apply();
     }
 }
