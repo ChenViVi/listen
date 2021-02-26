@@ -16,7 +16,7 @@
     <LinearLayout
         android:id="@+id/llTab"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="@dimen/_48sdp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_alignParentBottom="true"
@@ -27,9 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/llTab"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:visibility="gone"/>
     <FrameLayout
         android:id="@+id/llFragment"

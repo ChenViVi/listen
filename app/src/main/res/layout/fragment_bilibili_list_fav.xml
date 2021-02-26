@@ -7,5 +7,6 @@
         android:id="@+id/rvList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/_2sdp"
         android:background="@color/bgGrey"/>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

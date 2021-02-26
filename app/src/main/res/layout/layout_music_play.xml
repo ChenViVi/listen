@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    app:cardCornerRadius="30dp"
-    app:cardBackgroundColor="#ffcc00"
+    android:layout_height="@dimen/_46sdp"
+    app:cardCornerRadius="@dimen/_23sdp"
+    app:cardBackgroundColor="@color/colorPrimary"
     android:onClick="onClickPlayDetail">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/ivCover"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/_46sdp"
+            android:layout_height="@dimen/_46sdp"
             android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
         <ImageView
             android:id="@+id/ivNext"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/_46sdp"
+            android:layout_height="@dimen/_46sdp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_next_song"
@@ -27,8 +27,8 @@
             tools:ignore="ContentDescription" />
         <ImageView
             android:id="@+id/ivPlay"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/_46sdp"
+            android:layout_height="@dimen/_46sdp"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@id/ivNext"
             android:src="@drawable/ic_play_stop"
@@ -41,9 +41,9 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/ivCover"
             android:layout_toStartOf="@id/ivPlay"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:textSize="18sp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:textSize="@dimen/_14sdp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/white" />

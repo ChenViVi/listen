@@ -8,14 +8,15 @@
         android:id="@+id/llImageCache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_14sdp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:textSize="@dimen/_11sdp"
             android:text="@string/tv_cache_image"/>
         <TextView
             android:id="@+id/tvImageCacheSize"
@@ -23,20 +24,22 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:textSize="@dimen/_11sdp"
             tools:text="213MB"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/llMusicCache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_14sdp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:textSize="@dimen/_11sdp"
             android:text="@string/tv_cache_music"/>
         <TextView
             android:id="@+id/tvMusicCacheSize"
@@ -44,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:textSize="@dimen/_11sdp"
             tools:text="213MB"/>
     </RelativeLayout>
 </LinearLayout>

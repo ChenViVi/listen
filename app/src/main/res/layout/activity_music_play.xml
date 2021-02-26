@@ -15,10 +15,10 @@
         android:background="@android:color/transparent"/>
     <ImageView
         android:id="@+id/ivCover"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="@dimen/_240sdp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="@dimen/_48sdp"
         android:layout_below="@id/toolbar"
         tools:ignore="ContentDescription" />
     <LinearLayout
@@ -34,10 +34,10 @@
             android:thumb="@drawable/seekbar_thumb"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/_36sdp"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_6sdp">
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

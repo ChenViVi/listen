@@ -92,12 +92,14 @@ dependencies {
     implementation 'com.github.razerdp:BasePopup:2.2.10'
     //数据库
     implementation 'org.greenrobot:greendao:3.3.0'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    //Gson
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
-
+    //Firebase
     implementation platform('com.google.firebase:firebase-bom:26.5.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
+    //sdp
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
     // https://mvnrepository.com/artifact/com.hiczp/bilibili-api
     //implementation group: 'com.hiczp', name: 'bilibili-api', version: '0.2.0'
 }

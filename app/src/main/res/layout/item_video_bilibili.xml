@@ -3,26 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="@dimen/_82sdp"
     android:orientation="horizontal"
-    android:layout_marginBottom="5dp">
+    android:layout_marginBottom="@dimen/_3sdp">
     <ImageView
         android:id="@+id/ivCover"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:layout_marginStart="@dimen/_3sdp"
         android:layout_weight="0.36"
-        android:layout_marginStart="6dp"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.64"
-        android:padding="4dp">
+        android:padding="@dimen/_3sdp">
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="@dimen/_12sdp"
             android:textColor="@color/black"
             android:ellipsize="end"
             android:maxLines="2"
@@ -35,29 +37,29 @@
             android:gravity="center_vertical"
             android:layout_alignParentBottom="true">
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
                 android:src="@drawable/ic_play_count"
                 tools:ignore="ContentDescription" />
             <TextView
                 android:id="@+id/tvPlayCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:layout_marginStart="4dp"
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_3sdp"
                 tools:text="102万"/>
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
                 android:src="@drawable/ic_danmku_count"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="@dimen/_20sdp"
                 tools:ignore="ContentDescription"/>
             <TextView
                 android:id="@+id/tvDanmkuCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:layout_marginStart="4dp"
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_3sdp"
                 tools:text="5435"/>
         </LinearLayout>
         <LinearLayout
@@ -66,19 +68,19 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_above="@id/llBottom"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/_1sdp"
             tools:ignore="UseCompoundDrawables">
             <ImageView
                 android:id="@+id/ivAvatar"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
                 tools:ignore="ContentDescription" />
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:layout_marginStart="4dp"
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_3sdp"
                 tools:text="我是七颗糖的猪"/>
         </LinearLayout>
     </RelativeLayout>

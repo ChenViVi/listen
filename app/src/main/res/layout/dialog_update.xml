@@ -9,44 +9,44 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="@dimen/_14sdp"
         android:textColor="@color/black"
         tools:text="1.0.1"/>
     <TextView
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textSize="14sp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:textSize="@dimen/_11sdp"
         android:textColor="@color/black"
         tools:text="修复了一些bug"/>
     <ProgressBar
         android:id="@+id/pbLoad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:max="100"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="@dimen/_10sdp">
         <TextView
             android:id="@+id/tvDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textSize="14sp"
+            android:textSize="@dimen/_11sdp"
             android:textColor="@color/colorAccent"
-            android:text="@string/tv_download"/>
+            android:text="@string/tv_update_download"/>
         <TextView
             android:id="@+id/tvCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/tvDownload"
-            android:layout_marginEnd="42dp"
-            android:textSize="14sp"
+            android:layout_marginEnd="@dimen/_28sdp"
+            android:textSize="@dimen/_11sdp"
             android:textColor="@color/colorAccent"
-            android:text="@string/tv_cancel"/>
+            android:text="@string/tv_update_cancel"/>
     </RelativeLayout>
 </LinearLayout>

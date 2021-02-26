@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/refreshLayout">
@@ -11,28 +11,26 @@
             android:id="@+id/llTag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="4dp">
+            android:padding="@dimen/_2sdp"
+            android:background="@color/white">
             <ImageView
                 android:id="@+id/ivTag"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_tag" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/ivTag"
-                android:padding="4dp"
+                android:padding="@dimen/_4sdp"
                 android:textColor="@color/colorAccent"
-                android:textSize="16sp"
+                android:textSize="@dimen/_12sdp"
                 android:text="@string/tv_tag"/>
             <ImageView
                 android:id="@+id/ivMore"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_arrow_right" />

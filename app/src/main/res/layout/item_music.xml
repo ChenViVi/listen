@@ -3,23 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="@dimen/_50sdp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="@dimen/_4sdp"
+    android:paddingBottom="@dimen/_4sdp">
     <TextView
         android:id="@+id/tvNumber"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
         android:gravity="center"
-        android:textSize="18sp"/>
+        android:textSize="@dimen/_14sdp"/>
     <ImageView
         android:id="@+id/ivPlaying"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
         android:src="@drawable/ic_playing"
-        android:padding="21dp"
+        android:padding="@dimen/_18sdp"
         android:visibility="gone"
         tools:ignore="ContentDescription" />
     <RelativeLayout
@@ -30,26 +30,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textSize="16sp"
+            android:textSize="@dimen/_13sdp"
             android:textColor="@color/black"
             tools:ignore="RelativeOverlap" />
         <ImageView
             android:id="@+id/ivVideo"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
             android:src="@drawable/ic_video"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="14dp"
+            android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription" />
         <ImageView
             android:id="@+id/ivCached"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_checked"
             android:layout_toStartOf="@id/ivVideo"
-            android:layout_marginEnd="28dp"
+            android:layout_marginEnd="@dimen/_22sdp"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 </LinearLayout>
