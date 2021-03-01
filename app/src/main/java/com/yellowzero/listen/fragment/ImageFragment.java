@@ -124,7 +124,7 @@ public class ImageFragment extends Fragment {
     private void loadList() {
         if (tagId == null || tagId != -1)
             RxHttpUtils.createApi(ImageService.class)
-                    .list(tagId, page, PAGE_SIZE)
+                    .list(tagId, page * PAGE_SIZE, PAGE_SIZE)
                     .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
                     .subscribe(new DataObserver<List<Image>>() {
 
