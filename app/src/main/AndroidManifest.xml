@@ -20,7 +20,8 @@
         tools:targetApi="m">
         <meta-data
             android:name="com.yellowzero.listen.util.GlideOption"
-            android:value="AppGlideModule"/>
+            android:value="AppGlideModule" />
+
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
@@ -41,6 +42,9 @@
             android:name=".activity.ImagedDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.TestActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ImageActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -52,6 +56,7 @@
         <activity
             android:name=".activity.WebViewActivity"
             android:screenOrientation="portrait" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.yellowzero.listen.fileprovider"
