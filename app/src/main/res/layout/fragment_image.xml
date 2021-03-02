@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/refreshLayout">
@@ -18,7 +19,8 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_tag" />
+                android:src="@drawable/ic_tag"
+                tools:ignore="ContentDescription" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,14 +28,16 @@
                 android:padding="@dimen/_4sdp"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/_12sdp"
-                android:text="@string/tv_tag"/>
+                android:text="@string/tv_tag"
+                tools:ignore="RelativeOverlap" />
             <ImageView
                 android:id="@+id/ivMore"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right"
+                tools:ignore="ContentDescription" />
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvList"
@@ -43,5 +47,16 @@
             android:paddingTop="5dp"
             android:paddingStart="5dp"
             android:background="@color/bgGrey" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:src="@drawable/ic_arrow_up"
+            android:tint="@color/white"
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

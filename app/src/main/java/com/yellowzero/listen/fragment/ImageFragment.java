@@ -62,7 +62,15 @@ public class ImageFragment extends Fragment {
         RecyclerView rvList = view.findViewById(R.id.rvList);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         ImageView ivMore = view.findViewById(R.id.ivMore);
-        rvList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        rvList.setLayoutManager(layoutManager);
+        view.findViewById(R.id.fabTop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemList.size() > 0)
+                    layoutManager.scrollToPositionWithOffset(0,0);
+            }
+        });
         adapter = new ImageAdapter(getContext(), itemList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
