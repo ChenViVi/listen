@@ -106,10 +106,6 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
      * @param albumIndex 从 album 进来的一定是 album 列表的 index
      */
     public void playAudio(int albumIndex) {
-        if (isPlaying() && albumIndex == mPlayingInfoManager.getAlbumIndex()) {
-            return;
-        }
-
         mPlayingInfoManager.setAlbumIndex(albumIndex);
         setChangingPlayingMusic(true);
         playAudio();
