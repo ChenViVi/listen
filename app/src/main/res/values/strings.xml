@@ -37,6 +37,7 @@
     <string name="tv_cache_image">图片缓存</string>
     <string name="tv_cache_music">音乐缓存</string>
     <string name="tv_app_update">软件更新-%s</string>
+    <string name="tv_image_empty">你已经看完所有的图片了</string>
 
     <string name="ts_http_error">加载失败</string>
     <string name="ts_http_loading">加载中，请稍后再试</string>

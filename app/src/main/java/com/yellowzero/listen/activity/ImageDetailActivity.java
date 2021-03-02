@@ -57,6 +57,7 @@ public class ImageDetailActivity extends AppCompatActivity {
     private ImageDetailAdapter adapter;
     private ImageEntityDao imageEntityDao;
 
+    private VerticalLayoutManager layoutManager;
     private TextView tvName;
     private TextView tvViewCount;
     private TextView tvLikeCount;
@@ -72,13 +73,16 @@ public class ImageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
         position = getIntent().getIntExtra(KEY_POSITION, 0);
-        tagId = getIntent().getIntExtra(KEY_TAG_ID, -1);
-        if (tagId == -1)
-            tagId = null;
+        tagId = getIntent().getIntExtra(KEY_TAG_ID, -100);
         image = currentImage = (Image) getIntent().getSerializableExtra(KEY_IMAGE);
         if (image == null)
             return;
-        itemList.add(image);
+        if (tagId == -100)
+            tagId = null;
+        if (tagId == null || tagId != -1) {
+            itemList.add(image);
+            position++;
+        }
         imageEntityDao = ((App) getApplication()).getDaoSession().getImageEntityDao();
         Toolbar toolbar = findViewById(R.id.toolbar);
         tvName = findViewById(R.id.tvName);
@@ -95,7 +99,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         adapter = new ImageDetailAdapter(this, itemList);
-        VerticalLayoutManager layoutManager = new VerticalLayoutManager(this);
+        layoutManager = new VerticalLayoutManager(this);
         layoutManager.setOnPageSlideListener(new VerticalLayoutManager.OnPageSlideListener() {
             @Override
             public void onPageSelected(int position, boolean isBottom) {
@@ -108,6 +112,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         rvList.setLayoutManager(layoutManager);
         rvList.setAdapter(adapter);
         loadBarView();
+        loadList();
     }
 
     public static void start(Context context, Integer tagId, int position, @NonNull Image image) {
@@ -157,20 +162,31 @@ public class ImageDetailActivity extends AppCompatActivity {
     }
 
     private void loadList() {
-        RxHttpUtils.createApi(ImageService.class)
-                .list(tagId, position, PAGE_SIZE)
-                .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
-                .subscribe(new DataObserver<List<Image>>() {
+        if (tagId == null || tagId != -1)
+            RxHttpUtils.createApi(ImageService.class)
+                    .list(tagId, position, PAGE_SIZE)
+                    .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
+                    .subscribe(new DataObserver<List<Image>>() {
 
-                    @Override
-                    protected void onSuccess(List<Image> data) {
-                        if (data != null && data.size() > 0) {
-                            itemList.addAll(data);
-                            adapter.notifyDataSetChanged();
-                            position = position + PAGE_SIZE;
+                        @Override
+                        protected void onSuccess(List<Image> data) {
+                            if (data != null && data.size() > 0) {
+                                itemList.addAll(data);
+                                adapter.notifyDataSetChanged();
+                                position = position + PAGE_SIZE;
+                            } else
+                                Toast.makeText(ImageDetailActivity.this, R.string.tv_image_empty, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
+        else
+            if (itemList.size() == 0) {
+                List<ImageEntity> imageEntityList = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Like.eq(true)).list();
+                for (ImageEntity imageEntity : imageEntityList)
+                    itemList.add(new Image(imageEntity));
+                adapter.notifyDataSetChanged();
+                layoutManager.scrollToPosition(position);
+            } else
+                Toast.makeText(ImageDetailActivity.this, R.string.tv_image_empty, Toast.LENGTH_SHORT).show();
     }
 
     public void onClickSource(View view) {

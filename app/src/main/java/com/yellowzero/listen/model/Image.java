@@ -18,7 +18,6 @@ public class Image implements Serializable {
     private String text;
     private int viewCount;
     private int likeCount;
-    private boolean isLoadFromDb;
 
     public Image(ImageEntity imageEntity) {
         setId(imageEntity.getId());
@@ -36,7 +35,6 @@ public class Image implements Serializable {
                 imageEntity.getUrlLarge(),
                 imageEntity.getWidthLarge(),
                 imageEntity.getHeightLarge()));
-        setLoadFromDb(true);
     }
 
     public long getId() {
@@ -117,14 +115,6 @@ public class Image implements Serializable {
 
     public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
-    }
-
-    public boolean isLoadFromDb() {
-        return isLoadFromDb;
-    }
-
-    public void setLoadFromDb(boolean loadFromDb) {
-        isLoadFromDb = loadFromDb;
     }
 
     public ArrayList<String> getTagList() {

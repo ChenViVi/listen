@@ -67,7 +67,7 @@ public class ImageFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                ImageDetailActivity.start(getContext(), tagId, position + 1, itemList.get(position));
+                ImageDetailActivity.start(getContext(), tagId, position, itemList.get(position));
             }
         });
         adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -163,7 +163,6 @@ public class ImageFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(List<ImageTag> data) {
-
                         tagList.clear();
                         ImageTag tagAll = new ImageTag();
                         tagAll.setId(null);
