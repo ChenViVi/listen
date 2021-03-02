@@ -116,7 +116,7 @@ public class PlayerService extends Service {
                 notificationManager.createNotificationChannelGroup(playGroup);
 
                 NotificationChannel playChannel = new NotificationChannel(CHANNEL_ID,
-                        getString(R.string.notify_of_play), NotificationManager.IMPORTANCE_HIGH);
+                        getString(R.string.notify_of_play), NotificationManager.IMPORTANCE_LOW);
                 playChannel.setGroup(GROUP_ID);
                 notificationManager.createNotificationChannel(playChannel);
             }
