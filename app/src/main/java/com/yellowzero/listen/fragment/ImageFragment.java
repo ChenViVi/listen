@@ -23,7 +23,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
-import com.yellowzero.listen.activity.ImagedDetailActivity;
+import com.yellowzero.listen.activity.ImageDetailActivity;
 import com.yellowzero.listen.adapter.ImageAdapter;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.model.ImageTag;
@@ -67,7 +67,7 @@ public class ImageFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                ImagedDetailActivity.start(getContext(), itemList.get(position));
+                ImageDetailActivity.start(getContext(), tagId, position + 1, itemList.get(position));
             }
         });
         adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {

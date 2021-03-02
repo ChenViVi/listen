@@ -8,24 +8,40 @@ import org.greenrobot.greendao.annotation.Generated;
 public class ImageEntity {
     @Id
     private long id;
-    private String urlSmall;
-    private int imageWidth;
-    private int imageHeight;
+    private String pid;
+    private long weiboId;
+    private String text;
+    private int viewCount;
+    private int likeCount;
     private String userName;
     private String urlAvatar;
+    private String urlSmall;
+    private int widthSmall;
+    private int heightSmall;
+    private String urlLarge;
+    private int widthLarge;
+    private int heightLarge;
     private boolean like;
-    private boolean download;
-    @Generated(hash = 1609411885)
-    public ImageEntity(long id, String urlSmall, int imageWidth, int imageHeight,
-            String userName, String urlAvatar, boolean like, boolean download) {
+    @Generated(hash = 1723459513)
+    public ImageEntity(long id, String pid, long weiboId, String text,
+            int viewCount, int likeCount, String userName, String urlAvatar,
+            String urlSmall, int widthSmall, int heightSmall, String urlLarge,
+            int widthLarge, int heightLarge, boolean like) {
         this.id = id;
-        this.urlSmall = urlSmall;
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
+        this.pid = pid;
+        this.weiboId = weiboId;
+        this.text = text;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
         this.userName = userName;
         this.urlAvatar = urlAvatar;
+        this.urlSmall = urlSmall;
+        this.widthSmall = widthSmall;
+        this.heightSmall = heightSmall;
+        this.urlLarge = urlLarge;
+        this.widthLarge = widthLarge;
+        this.heightLarge = heightLarge;
         this.like = like;
-        this.download = download;
     }
     @Generated(hash = 2080458212)
     public ImageEntity() {
@@ -36,23 +52,35 @@ public class ImageEntity {
     public void setId(long id) {
         this.id = id;
     }
-    public String getUrlSmall() {
-        return this.urlSmall;
+    public String getPid() {
+        return this.pid;
     }
-    public void setUrlSmall(String urlSmall) {
-        this.urlSmall = urlSmall;
+    public void setPid(String pid) {
+        this.pid = pid;
     }
-    public int getImageWidth() {
-        return this.imageWidth;
+    public long getWeiboId() {
+        return this.weiboId;
     }
-    public void setImageWidth(int imageWidth) {
-        this.imageWidth = imageWidth;
+    public void setWeiboId(long weiboId) {
+        this.weiboId = weiboId;
     }
-    public int getImageHeight() {
-        return this.imageHeight;
+    public String getText() {
+        return this.text;
     }
-    public void setImageHeight(int imageHeight) {
-        this.imageHeight = imageHeight;
+    public void setText(String text) {
+        this.text = text;
+    }
+    public int getViewCount() {
+        return this.viewCount;
+    }
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
+    public int getLikeCount() {
+        return this.likeCount;
+    }
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
     public String getUserName() {
         return this.userName;
@@ -66,16 +94,46 @@ public class ImageEntity {
     public void setUrlAvatar(String urlAvatar) {
         this.urlAvatar = urlAvatar;
     }
+    public String getUrlSmall() {
+        return this.urlSmall;
+    }
+    public void setUrlSmall(String urlSmall) {
+        this.urlSmall = urlSmall;
+    }
+    public int getWidthSmall() {
+        return this.widthSmall;
+    }
+    public void setWidthSmall(int widthSmall) {
+        this.widthSmall = widthSmall;
+    }
+    public int getHeightSmall() {
+        return this.heightSmall;
+    }
+    public void setHeightSmall(int heightSmall) {
+        this.heightSmall = heightSmall;
+    }
+    public String getUrlLarge() {
+        return this.urlLarge;
+    }
+    public void setUrlLarge(String urlLarge) {
+        this.urlLarge = urlLarge;
+    }
+    public int getWidthLarge() {
+        return this.widthLarge;
+    }
+    public void setWidthLarge(int widthLarge) {
+        this.widthLarge = widthLarge;
+    }
+    public int getHeightLarge() {
+        return this.heightLarge;
+    }
+    public void setHeightLarge(int heightLarge) {
+        this.heightLarge = heightLarge;
+    }
     public boolean getLike() {
         return this.like;
     }
     public void setLike(boolean like) {
         this.like = like;
-    }
-    public boolean getDownload() {
-        return this.download;
-    }
-    public void setDownload(boolean download) {
-        this.download = download;
     }
 }

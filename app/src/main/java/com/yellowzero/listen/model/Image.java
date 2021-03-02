@@ -21,10 +21,22 @@ public class Image implements Serializable {
     private boolean isLoadFromDb;
 
     public Image(ImageEntity imageEntity) {
-        this.id = imageEntity.getId();
-        this.imageInfoSmall = this.imageInfoLarge = new ImageInfo(imageEntity.getUrlSmall(), imageEntity.getImageWidth(), imageEntity.getImageHeight());
-        this.user = new UserWeibo(imageEntity.getUserName(), imageEntity.getUrlAvatar());
-        this.isLoadFromDb = true;
+        setId(imageEntity.getId());
+        setPid(imageEntity.getPid());
+        setWeiboId(imageEntity.getWeiboId());
+        setText(imageEntity.getText());
+        setViewCount(imageEntity.getViewCount());
+        setLikeCount(imageEntity.getLikeCount());
+        setUser(new UserWeibo(imageEntity.getUserName(), imageEntity.getUrlAvatar()));
+        setImageInfoSmall(new ImageInfo(
+                imageEntity.getUrlSmall(),
+                imageEntity.getWidthSmall(),
+                imageEntity.getHeightSmall()));
+        setImageInfoLarge(new ImageInfo(
+                imageEntity.getUrlLarge(),
+                imageEntity.getWidthLarge(),
+                imageEntity.getHeightLarge()));
+        setLoadFromDb(true);
     }
 
     public long getId() {
@@ -142,5 +154,24 @@ public class Image implements Serializable {
         if (suffix == null)
             return false;
         return suffix.equals("gif");
+    }
+
+    public ImageEntity toEntity() {
+        return new ImageEntity(
+                getId(),
+                getPid(),
+                getWeiboId(),
+                getText(),
+                getViewCount(),
+                getLikeCount(),
+                getUser().getName(),
+                getUser().getAvatar(),
+                getImageInfoSmall().getUrl(),
+                getImageInfoSmall().getWidth(),
+                getImageInfoSmall().getHeight(),
+                getImageInfoLarge().getUrl(),
+                getImageInfoLarge().getWidth(),
+                getImageInfoLarge().getHeight(),
+                false);
     }
 }

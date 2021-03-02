@@ -22,5 +22,5 @@ public interface ImageService {
     @GET("image/view")
     Observable<String> view(@Query("image_id") long imageId);
     @GET("image/like")
-    Observable<String> like(@Query("image_id") long imageId, @Query("like") int like);
+    Observable<String> like(@Query("image_id") long imageId, @Query("like") boolean like);
 }

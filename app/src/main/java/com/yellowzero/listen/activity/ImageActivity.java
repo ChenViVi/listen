@@ -56,7 +56,7 @@ public class ImageActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                ImagedDetailActivity.start(ImageActivity.this, itemList.get(position));
+                ImageDetailActivity.start(ImageActivity.this, tag.getId(), position, itemList.get(position));
             }
         });
         adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {

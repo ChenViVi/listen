@@ -43,6 +43,7 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
         if (item.isGif())
             Glide.with(context)
                     .load(item.getImageInfoLarge().getUrl())
+                    .thumbnail(Glide.with(context).load(item.getImageInfoSmall().getUrl()))
                     .placeholder(R.drawable.ic_holder_square)
                     .error(R.drawable.ic_holder_square)
                     .into((ImageView) viewHolder.getView(R.id.ivImage));

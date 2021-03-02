@@ -39,10 +39,7 @@
             android:label="@string/tt_setting"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ImagedDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.TestActivity"
+            android:name=".activity.ImageDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ImageActivity"

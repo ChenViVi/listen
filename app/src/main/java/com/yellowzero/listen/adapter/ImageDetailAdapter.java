@@ -6,6 +6,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.allen.library.RxHttpUtils;
+import com.allen.library.interceptor.Transformer;
+import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -14,16 +17,17 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.ImageActivity;
 import com.yellowzero.listen.model.Image;
+import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.view.TagCloudView;
 
 import java.util.List;
 
-public class TestAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  implements LoadMoreModule {
+public class ImageDetailAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  implements LoadMoreModule {
 
     private Context context;
 
-    public TestAdapter(Context context, List<Image> items) {
-        super(R.layout.item_test, items);
+    public ImageDetailAdapter(Context context, List<Image> items) {
+        super(R.layout.item_image_detail, items);
         this.context = context;
     }
 
@@ -62,6 +66,21 @@ public class TestAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  implem
                     .error(R.drawable.ic_holder_square)
                     .into(ivImage);
         svDetail.setOnTouchListener(new Test(ivImage, svDetail));
+        RxHttpUtils.createApi(ImageService.class)
+                .view(item.getId())
+                .compose(Transformer.<String>switchSchedulers())
+                .subscribe(new StringObserver() {
+
+                    @Override
+                    protected void onError(String errorMsg) {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(String data) {
+
+                    }
+                });
     }
 
     class Test implements View.OnTouchListener {
