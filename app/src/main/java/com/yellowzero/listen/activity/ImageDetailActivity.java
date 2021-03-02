@@ -25,6 +25,7 @@ import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.material.snackbar.Snackbar;
+import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.adapter.ImageDetailAdapter;
@@ -113,6 +114,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         rvList.setAdapter(adapter);
         loadBarView();
         loadList();
+        StatusBarUtil.setColor(this, R.color.black);
     }
 
     public static void start(Context context, Integer tagId, int position, @NonNull Image image) {
