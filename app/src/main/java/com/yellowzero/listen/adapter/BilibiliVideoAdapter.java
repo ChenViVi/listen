@@ -43,8 +43,8 @@ public class BilibiliVideoAdapter extends BaseQuickAdapter<BilibiliVideo, BaseVi
         Glide.with(context)
                 .load(item.getCover())
                 .transform(new RoundedCorners(10))
-                .placeholder(R.drawable.ic_holder_square)
-                .error(R.drawable.ic_holder_square)
+                .placeholder(R.drawable.ic_holder_rectangle)
+                .error(R.drawable.ic_holder_rectangle)
                 .into((ImageView) viewHolder.getView(R.id.ivCover));
     }
 }
