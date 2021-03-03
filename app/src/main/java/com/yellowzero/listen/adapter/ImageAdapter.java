@@ -1,11 +1,19 @@
 package com.yellowzero.listen.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -36,22 +44,51 @@ public class ImageAdapter extends BaseQuickAdapter<Image, BaseViewHolder>  imple
                 .into((ImageView) viewHolder.getView(R.id.ivAvatar));
         ImageView ivImage = viewHolder.getView(R.id.ivImage);
         ImageInfo imageInfo = item.getImageInfoSmall();
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ivImage.getLayoutParams();
-        lp.width = ScreenUtil.getAppScreenWidth(context)/2 - ScreenUtil.dp2px(5);
-        lp.height = lp.width * imageInfo.getHeight() / imageInfo.getWidth();
-        ivImage.setLayoutParams(lp);
-        if (item.isGif())
-            Glide.with(context)
-                    .load(item.getImageInfoLarge().getUrl())
-                    .thumbnail(Glide.with(context).load(item.getImageInfoSmall().getUrl()))
-                    .placeholder(R.drawable.ic_holder_square)
-                    .error(R.drawable.ic_holder_square)
-                    .into((ImageView) viewHolder.getView(R.id.ivImage));
+        boolean isResized = false;
+        if (imageInfo.getWidth() !=0 && imageInfo.getHeight() != 0) {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ivImage.getLayoutParams();
+            lp.width = ScreenUtil.getAppScreenWidth(context)/2 - ScreenUtil.dp2px(5);
+            lp.height = lp.width * imageInfo.getHeight() / imageInfo.getWidth();
+            ivImage.setLayoutParams(lp);
+            isResized = true;
+        }
+        String urlImage;
+        boolean isGif = item.isGif();
+        if (isGif)
+            urlImage = item.getImageInfoLarge().getUrl();
         else
-            Glide.with(context)
-                    .load(item.getImageInfoSmall().getUrl())
-                    .placeholder(R.drawable.ic_holder_square)
-                    .error(R.drawable.ic_holder_square)
-                    .into((ImageView) viewHolder.getView(R.id.ivImage));
+            urlImage = item.getImageInfoSmall().getUrl();
+        RequestBuilder<Drawable> builder = Glide.with(context)
+                .load(urlImage)
+                .placeholder(R.drawable.ic_holder_square)
+                .error(R.drawable.ic_holder_square);
+        if(isGif)
+            builder = builder.thumbnail(Glide.with(context).load(item.getImageInfoSmall().getUrl()));
+        if (!isResized)
+            builder = builder.listener(new ImageRequestListener(ivImage));
+        builder.into(ivImage);
+    }
+
+    class ImageRequestListener implements RequestListener<Drawable> {
+
+        private ImageView ivImage;
+
+        ImageRequestListener(ImageView ivImage) {
+            this.ivImage = ivImage;
+        }
+
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)ivImage.getLayoutParams();
+            lp.width = ScreenUtil.getAppScreenWidth(context)/2 - ScreenUtil.dp2px(5);
+            lp.height = lp.width * resource.getIntrinsicHeight() / resource.getIntrinsicWidth();
+            ivImage.setLayoutParams(lp);
+            return false;
+        }
     }
 }
