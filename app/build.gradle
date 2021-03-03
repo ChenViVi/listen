@@ -69,10 +69,10 @@ packer {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
-    implementation 'com.google.android.material:material:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
     implementation 'androidx.browser:browser:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     // 打包工具
     implementation 'com.mcxiaoke.packer-ng:helper:2.0.1'
     //网络请求工具
