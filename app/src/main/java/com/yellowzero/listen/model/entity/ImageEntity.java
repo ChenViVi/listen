@@ -10,6 +10,7 @@ public class ImageEntity {
     private long id;
     private String pid;
     private long weiboId;
+    private long repostId;
     private String text;
     private int viewCount;
     private int likeCount;
@@ -22,14 +23,15 @@ public class ImageEntity {
     private int widthLarge;
     private int heightLarge;
     private boolean like;
-    @Generated(hash = 1723459513)
-    public ImageEntity(long id, String pid, long weiboId, String text,
-            int viewCount, int likeCount, String userName, String urlAvatar,
-            String urlSmall, int widthSmall, int heightSmall, String urlLarge,
-            int widthLarge, int heightLarge, boolean like) {
+    @Generated(hash = 428977801)
+    public ImageEntity(long id, String pid, long weiboId, long repostId,
+            String text, int viewCount, int likeCount, String userName,
+            String urlAvatar, String urlSmall, int widthSmall, int heightSmall,
+            String urlLarge, int widthLarge, int heightLarge, boolean like) {
         this.id = id;
         this.pid = pid;
         this.weiboId = weiboId;
+        this.repostId = repostId;
         this.text = text;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
@@ -63,6 +65,12 @@ public class ImageEntity {
     }
     public void setWeiboId(long weiboId) {
         this.weiboId = weiboId;
+    }
+    public long getRepostId() {
+        return this.repostId;
+    }
+    public void setRepostId(long repostId) {
+        this.repostId = repostId;
     }
     public String getText() {
         return this.text;

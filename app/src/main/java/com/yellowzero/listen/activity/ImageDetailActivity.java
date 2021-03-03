@@ -202,6 +202,18 @@ public class ImageDetailActivity extends AppCompatActivity {
             WebViewActivity.start(this, "https://m.weibo.cn/detail/" + currentImage.getWeiboId());
     }
 
+    public void onClickAddTag(View view) {
+        if (PackageUtil.isPackageInstalled(this, "com.sina.weibo")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setData(Uri.parse("sinaweibo://detail?mblogid=" + currentImage.getRepostId()));
+            startActivity(intent);
+        } else
+            WebViewActivity.start(this, "https://m.weibo.cn/detail/" + currentImage.getRepostId());
+        Toast.makeText(this, R.string.ts_add_tag, Toast.LENGTH_SHORT).show();
+    }
+
     public void onClickLike(View view) {
         ImageEntity imageEntity = imageEntityDao.load(image.getId());
         boolean isNewEntity = false;

@@ -11,6 +11,7 @@ public class Image implements Serializable {
     private long id;
     private String pid;
     private long weiboId;
+    private long repostId;
     private ImageInfo imageInfoSmall;
     private ImageInfo imageInfoLarge;
     private UserWeibo user;
@@ -23,6 +24,7 @@ public class Image implements Serializable {
         setId(imageEntity.getId());
         setPid(imageEntity.getPid());
         setWeiboId(imageEntity.getWeiboId());
+        setRepostId(imageEntity.getRepostId());
         setText(imageEntity.getText());
         setViewCount(imageEntity.getViewCount());
         setLikeCount(imageEntity.getLikeCount());
@@ -59,6 +61,14 @@ public class Image implements Serializable {
 
     public void setWeiboId(long weiboId) {
         this.weiboId = weiboId;
+    }
+
+    public long getRepostId() {
+        return repostId;
+    }
+
+    public void setRepostId(long repostId) {
+        this.repostId = repostId;
     }
 
     public ImageInfo getImageInfoSmall() {
@@ -151,6 +161,7 @@ public class Image implements Serializable {
                 getId(),
                 getPid(),
                 getWeiboId(),
+                getRepostId(),
                 getText(),
                 getViewCount(),
                 getLikeCount(),
