@@ -61,7 +61,6 @@ public class ImageDetailAdapter extends BaseQuickAdapter<Image, BaseViewHolder> 
             Glide.with(context)
                     .load(item.getImageInfoLarge().getUrl())
                     .thumbnail(Glide.with(context).load(item.getImageInfoSmall().getUrl()))
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .placeholder(R.drawable.ic_holder_square)
                     .error(R.drawable.ic_holder_square)
                     .into(ivImage);
