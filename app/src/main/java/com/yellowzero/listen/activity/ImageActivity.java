@@ -34,7 +34,7 @@ public class ImageActivity extends AppCompatActivity {
     private static final String KEY_TAG = "tag";
 
     private ImageTag tag;
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 40;
     private int page = 0;
     private List<Image> itemList = new ArrayList<>();
     private ImageAdapter adapter;
