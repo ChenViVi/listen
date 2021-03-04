@@ -114,7 +114,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         rvList.setAdapter(adapter);
         loadBarView();
         loadList();
-        StatusBarUtil.setColor(this, R.color.black);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.black));
     }
 
     public static void start(Context context, Integer tagId, int position, @NonNull Image image) {

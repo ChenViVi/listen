@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.contract.IPlayController;
@@ -80,6 +81,7 @@ public class MusicPlayActivity extends AppCompatActivity {
         });
         setModeImageView(DefaultPlayerManager.getInstance().getRepeatMode());
         DefaultPlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.bgMusicPlayStart));
     }
 
     @Override

@@ -22,4 +22,6 @@
     <color name="btnGrey">#AFAFAF</color>
     <color name="bgMusicTag">#e0e0e0</color>
     <color name="tvNameDisable">#C3C3C3</color>
+    <color name="bgMusicPlayStart">#aea99e</color>
+    <color name="bgMusicPlayEnd">#454b64</color>
 </resources>
