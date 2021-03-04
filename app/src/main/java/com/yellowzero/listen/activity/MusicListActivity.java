@@ -207,6 +207,13 @@ public class MusicListActivity extends AppCompatActivity {
                 .list(tag.getId())
                 .compose(Transformer.<BaseData<List<Music>>>switchSchedulers())
                 .subscribe(new DataObserver<List<Music>>() {
+
+                    @Override
+                    protected void onError(String errorMsg) {
+                        super.onError(errorMsg);
+                        refreshLayout.setRefreshing(false);
+                    }
+
                     @Override
                     protected void onSuccess(List<Music> data) {
                         itemList.clear();
@@ -231,12 +238,6 @@ public class MusicListActivity extends AppCompatActivity {
                         }
                         album.setMusics(musics);
                         adapter.notifyDataSetChanged();
-                        refreshLayout.setRefreshing(false);
-                    }
-
-                    @Override
-                    protected void onError(String errorMsg) {
-                        super.onError(errorMsg);
                         refreshLayout.setRefreshing(false);
                     }
                 });

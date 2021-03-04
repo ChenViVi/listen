@@ -137,6 +137,12 @@ public class ImageFragment extends Fragment {
                     .subscribe(new DataObserver<List<Image>>() {
 
                         @Override
+                        protected void onError(String errorMsg) {
+                            super.onError(errorMsg);
+                            refreshLayout.setRefreshing(false);
+                        }
+
+                        @Override
                         protected void onSuccess(List<Image> data) {
                             if (page == 0) {
                                 itemList.clear();

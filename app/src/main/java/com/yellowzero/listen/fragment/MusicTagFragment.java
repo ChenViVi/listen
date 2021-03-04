@@ -102,6 +102,12 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
                 .subscribe(new DataObserver<List<MusicTag>>() {
 
                     @Override
+                    protected void onError(String errorMsg) {
+                        super.onError(errorMsg);
+                        refreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
                     protected void onSuccess(List<MusicTag> data) {
                         itemList.clear();
                         /*MusicTag likeTag = new MusicTag();
