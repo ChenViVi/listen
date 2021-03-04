@@ -33,6 +33,7 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
     private String albumId;
     private String musicId;
     private String img;
+    private String url;
 
     public ChangeMusic() {
     }
@@ -63,6 +64,7 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
         this.musicId = music.getMusicId();
         this.img = music.getCoverImg();
         this.artist = (A) music.getArtist();
+        this.url = music.getUrl();
     }
 
     public String getTitle() {
@@ -111,5 +113,13 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
 
     public void setArtist(A artist) {
         this.artist = artist;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

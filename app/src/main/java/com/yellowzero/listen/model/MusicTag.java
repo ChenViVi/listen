@@ -3,6 +3,9 @@ package com.yellowzero.listen.model;
 import java.io.Serializable;
 
 public class MusicTag implements Serializable {
+    public static final int ID_FAV = -1;
+    public static final int ID_LOCAL = -2;
+
     private int id;
     private String name;
     private String cover;

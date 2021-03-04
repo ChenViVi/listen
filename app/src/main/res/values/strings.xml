@@ -20,7 +20,7 @@
     <string name="tv_tag_like">我的收藏</string>
     <string name="tv_music_count">%d首</string>
     <string name="tv_image_tag_count">%s(%d)</string>
-    <string name="tv_music_like">我喜欢的音乐</string>
+    <string name="tv_music_fav">我喜欢的音乐</string>
     <string name="tv_music_local">本地音乐</string>
     <string name="tv_open">打开</string>
     <string name="tv_version_error">获取版本号错误</string>

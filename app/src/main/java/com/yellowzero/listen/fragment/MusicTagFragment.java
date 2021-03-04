@@ -15,12 +15,15 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.yellowzero.listen.App;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MusicListActivity;
+import com.yellowzero.listen.activity.MusicListFavActivity;
 import com.yellowzero.listen.activity.MusicListLocalActivity;
 import com.yellowzero.listen.adapter.MusicTagAdapter;
 import com.yellowzero.listen.model.MusicTag;
+import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.MusicService;
 
@@ -41,6 +44,7 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
     private List<MusicTag> itemList = new ArrayList<>();
     private MusicTagAdapter adapter;
     private MusicTag tag;
+    private MusicEntityDao musicEntityDao;
 
     @Nullable
     @Override
@@ -51,9 +55,9 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        musicEntityDao = ((App) getActivity().getApplication()).getDaoSession().getMusicEntityDao();
         rvList = view.findViewById(R.id.rvList);
         refreshLayout = view.findViewById(R.id.refreshLayout);
-        //rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setLayoutManager(new GridLayoutManager(getContext(), 2));
         adapter = new MusicTagAdapter(getContext(), itemList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -61,7 +65,7 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 tag = itemList.get(position);
-                if (tag.getId() == -2) {
+                if (tag.getId() == MusicTag.ID_LOCAL)
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R)
                         XXPermissions.with(getContext())
                                 .permission(Permission.MANAGE_EXTERNAL_STORAGE)
@@ -70,7 +74,8 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
                         XXPermissions.with(getContext())
                                 .permission(Permission.READ_EXTERNAL_STORAGE)
                                 .request(MusicTagFragment.this);
-                }
+                else if (tag.getId() == MusicTag.ID_FAV)
+                    MusicListFavActivity.start(getContext(), tag);
                 else
                     MusicListActivity.start(getContext(), tag);
             }
@@ -89,8 +94,9 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
     @Override
     public void onResume() {
         super.onResume();
-        if (itemList.size() > 0) {
-            itemList.get(0).setCount(AppData.MUSIC_LOCAL_COUNT);
+        if (itemList.size() > 1) {
+            itemList.get(0).setCount(musicEntityDao.count());
+            itemList.get(1).setCount(AppData.MUSIC_LOCAL_COUNT);
             adapter.notifyDataSetChanged();
         }
     }
@@ -110,14 +116,15 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
                     @Override
                     protected void onSuccess(List<MusicTag> data) {
                         itemList.clear();
-                        /*MusicTag likeTag = new MusicTag();
-                        likeTag.setName(getString(R.string.tv_music_like));
-                        likeTag.setId(-1);
-                        likeTag.setCoverRes(R.drawable.ic_music_like);
-                        itemList.add(likeTag);*/
+                        MusicTag favTag = new MusicTag();
+                        favTag.setName(getString(R.string.tv_music_fav));
+                        favTag.setId(MusicTag.ID_FAV);
+                        favTag.setCoverRes(R.drawable.ic_music_fav);
+                        favTag.setCount(musicEntityDao.count());
+                        itemList.add(favTag);
                         MusicTag localTag = new MusicTag();
                         localTag.setName(getString(R.string.tv_music_local));
-                        localTag.setId(-2);
+                        localTag.setId(MusicTag.ID_LOCAL);
                         localTag.setCoverRes(R.drawable.ic_music_local);
                         localTag.setCount(AppData.MUSIC_LOCAL_COUNT);
                         itemList.add(localTag);

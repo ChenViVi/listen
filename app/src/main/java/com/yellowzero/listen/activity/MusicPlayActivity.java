@@ -15,10 +15,15 @@ import android.widget.SeekBar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.jaeger.library.StatusBarUtil;
+import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
+import com.yellowzero.listen.model.entity.MusicEntity;
+import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.player.DefaultPlayerManager;
+import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.player.contract.IPlayController;
 
+import java.util.List;
 
 public class MusicPlayActivity extends AppCompatActivity {
 
@@ -27,16 +32,21 @@ public class MusicPlayActivity extends AppCompatActivity {
     private AppCompatSeekBar sbProgress;
     private ImageView ivPlay;
     private ImageView ivMode;
+    private ImageView ivFav;
+
+    private MusicEntityDao musicEntityDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_play);
+        musicEntityDao = ((App) getApplication()).getDaoSession().getMusicEntityDao();
         toolbar = findViewById(R.id.toolbar);
         ivCover = findViewById(R.id.ivCover);
         sbProgress = findViewById(R.id.sbProgress);
         ivPlay = findViewById(R.id.ivPlay);
         ivMode = findViewById(R.id.ivMode);
+        ivFav = findViewById(R.id.ivFav);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -63,6 +73,8 @@ public class MusicPlayActivity extends AppCompatActivity {
                     .error(R.drawable.ic_holder_circle)
                     .transform(new CircleCrop())
                     .into(ivCover);
+            List<MusicEntity> musicEntities = musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(changeMusic.getUrl())).list();
+            ivFav.setImageResource(musicEntities.size() > 0 ? R.drawable.ic_fav_enable : R.drawable.ic_fav);
         });
         DefaultPlayerManager.getInstance().getPlayingMusicLiveData().observe(this, playingMusic -> {
             sbProgress.setMax(playingMusic.getDuration());
@@ -128,5 +140,16 @@ public class MusicPlayActivity extends AppCompatActivity {
 
     public void onClickMode(View view) {
         DefaultPlayerManager.getInstance().changeMode();
+    }
+
+    public void onClickFav(View view) {
+        DefaultAlbum.DefaultMusic music = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
+        List<MusicEntity> musicEntities = musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(music.getUrl())).list();
+        boolean isFav = musicEntities.size() > 0;
+        if (isFav)
+            musicEntityDao.delete(musicEntities.get(0));
+        else
+            musicEntityDao.insert(music.toEntity());
+        ivFav.setImageResource(!isFav ? R.drawable.ic_fav_enable : R.drawable.ic_fav);
     }
 }

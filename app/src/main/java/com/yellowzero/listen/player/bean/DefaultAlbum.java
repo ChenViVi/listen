@@ -16,6 +16,7 @@
 
 package com.yellowzero.listen.player.bean;
 
+import com.yellowzero.listen.model.entity.MusicEntity;
 import com.yellowzero.listen.player.bean.base.BaseAlbumItem;
 import com.yellowzero.listen.player.bean.base.BaseArtistItem;
 import com.yellowzero.listen.player.bean.base.BaseMusicItem;
@@ -26,7 +27,14 @@ import com.yellowzero.listen.player.bean.base.BaseMusicItem;
 public class DefaultAlbum extends BaseAlbumItem<DefaultAlbum.DefaultMusic, DefaultAlbum.DefaultArtist> {
 
     public static class DefaultMusic extends BaseMusicItem<DefaultArtist> {
-
+        public MusicEntity toEntity() {
+            MusicEntity entity = new MusicEntity();
+            entity.setMusicId(getMusicId());
+            entity.setTitle(getTitle());
+            entity.setUrl(getUrl());
+            entity.setCoverImg(getCoverImg());
+            return entity;
+        }
     }
 
     public static class DefaultArtist extends BaseArtistItem {
