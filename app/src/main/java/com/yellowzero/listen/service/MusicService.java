@@ -1,8 +1,8 @@
 package com.yellowzero.listen.service;
 
 import com.allen.library.bean.BaseData;
-import com.yellowzero.listen.model.Music;
 import com.yellowzero.listen.model.MusicTag;
+import com.yellowzero.listen.model.Music;
 
 import java.util.List;
 

@@ -34,21 +34,21 @@
             android:textColor="@color/black"
             tools:ignore="RelativeOverlap" />
         <ImageView
-            android:id="@+id/ivVideo"
-            android:layout_width="@dimen/_22sdp"
-            android:layout_height="@dimen/_22sdp"
-            android:src="@drawable/ic_video"
+            android:id="@+id/ivCached"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:src="@drawable/ic_checked"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription" />
         <ImageView
-            android:id="@+id/ivCached"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:id="@+id/ivVideo"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_checked"
-            android:layout_toStartOf="@id/ivVideo"
+            android:src="@drawable/ic_video"
+            android:layout_toStartOf="@id/ivCached"
             android:layout_marginEnd="@dimen/_22sdp"
             tools:ignore="ContentDescription" />
     </RelativeLayout>

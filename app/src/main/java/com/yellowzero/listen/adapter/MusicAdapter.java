@@ -33,12 +33,12 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
     @Override
     protected void convert(BaseViewHolder viewHolder, Music item) {
         viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
-                .setText(R.id.tvName, item.getName())
-                .setGone(R.id.ivCached, !item.isCached())
-                .setVisible(R.id.ivVideo, !TextUtils.isEmpty(item.getLink()));
-        if (!item.isAvailable())
-            viewHolder.setTextColorRes(R.id.tvName, R.color.tvNameDisable);
-        else {
+                .setText(R.id.tvName, item.getName());
+        if (item.getType() == Music.TYPE_LOCAL) {
+            viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
+                    .setText(R.id.tvName, item.getName())
+                    .setGone(R.id.ivVideo, true)
+                    .setVisible(R.id.ivCached, true);
             if (item.isSelected())
                 viewHolder.setTextColorRes(R.id.tvName, R.color.colorPrimary)
                         .setGone(R.id.tvNumber, true)
@@ -47,33 +47,48 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
                 viewHolder.setTextColorRes(R.id.tvName, R.color.black)
                         .setGone(R.id.tvNumber, false)
                         .setGone(R.id.ivPlaying, true);
-        }
-        if (TextUtils.isEmpty(item.getLink()))
-            return;
-        if (item.getLink().contains("bilibili"))
-            viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (PackageUtil.isPackageInstalled(context, "tv.danmaku.bili")) {
-                        new CustomTabsIntent.Builder()
-                                .build()
-                                .launchUrl(context, Uri.parse(item.getLink()));
-                    } else
-                        WebViewActivity.start(context, item.getLink());
-                }
-            });
-        else {
-            viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (PackageUtil.isPackageInstalled(context, "com.ss.android.ugc.aweme")) {
-                        new CustomTabsIntent.Builder()
-                                .build()
-                                .launchUrl(context, Uri.parse(String.format(FORMAT_TIKTOK_APP, item.getLink()) + FORMAT_TIKTOK_APP_SUFFIX));
-                    } else
-                        WebViewActivity.start(context, String.format(FORMAT_TIKTOK_WEB, item.getLink()));
-                }
-            });
+        } else {
+            viewHolder.setVisible(R.id.ivCached, item.isCached())
+                    .setVisible(R.id.ivVideo, !TextUtils.isEmpty(item.getLink()));
+            if (!item.isAvailable())
+                viewHolder.setTextColorRes(R.id.tvName, R.color.tvNameDisable);
+            else {
+                if (item.isSelected())
+                    viewHolder.setTextColorRes(R.id.tvName, R.color.colorPrimary)
+                            .setGone(R.id.tvNumber, true)
+                            .setGone(R.id.ivPlaying, false);
+                else
+                    viewHolder.setTextColorRes(R.id.tvName, R.color.black)
+                            .setGone(R.id.tvNumber, false)
+                            .setGone(R.id.ivPlaying, true);
+            }
+            if (TextUtils.isEmpty(item.getLink()))
+                return;
+            if (item.getLink().contains("bilibili"))
+                viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (PackageUtil.isPackageInstalled(context, "tv.danmaku.bili")) {
+                            new CustomTabsIntent.Builder()
+                                    .build()
+                                    .launchUrl(context, Uri.parse(item.getLink()));
+                        } else
+                            WebViewActivity.start(context, item.getLink());
+                    }
+                });
+            else {
+                viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (PackageUtil.isPackageInstalled(context, "com.ss.android.ugc.aweme")) {
+                            new CustomTabsIntent.Builder()
+                                    .build()
+                                    .launchUrl(context, Uri.parse(String.format(FORMAT_TIKTOK_APP, item.getLink()) + FORMAT_TIKTOK_APP_SUFFIX));
+                        } else
+                            WebViewActivity.start(context, String.format(FORMAT_TIKTOK_WEB, item.getLink()));
+                    }
+                });
+            }
         }
     }
 }

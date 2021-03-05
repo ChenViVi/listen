@@ -1,7 +1,11 @@
 package com.yellowzero.listen.model;
 
 public class Music {
+    public static final int TYPE_NETWORK = 0;
+    public static final int TYPE_LOCAL = 1;
+
     private int id;
+    private int type;
     private boolean isSelected;
     private boolean isAvailable;
     private boolean isCached;
@@ -17,6 +21,14 @@ public class Music {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public boolean isSelected() {

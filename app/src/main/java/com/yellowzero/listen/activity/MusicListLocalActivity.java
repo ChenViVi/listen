@@ -23,9 +23,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
-import com.yellowzero.listen.adapter.MusicLocalAdapter;
-import com.yellowzero.listen.model.MusicLocal;
+import com.yellowzero.listen.adapter.MusicAdapter;
 import com.yellowzero.listen.model.MusicTag;
+import com.yellowzero.listen.model.Music;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.player.contract.IPlayController;
@@ -51,10 +51,10 @@ public class MusicListLocalActivity extends AppCompatActivity {
 
     private MusicTag tag;
     private SwipeRefreshLayout refreshLayout;
-    private List<MusicLocal> itemList = new ArrayList<>();
+    private List<Music> itemList = new ArrayList<>();
     List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
     private DefaultAlbum album = new DefaultAlbum();
-    private MusicLocalAdapter adapter;
+    private MusicAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
             }
         });
         rvList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MusicLocalAdapter(this, itemList);
+        adapter = new MusicAdapter(this, itemList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
@@ -98,7 +98,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
             coverDir.mkdir();
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             for (int i = 0; i < itemList.size(); i++) {
-                MusicLocal music = itemList.get(i);
+                Music music = itemList.get(i);
                 String musicId = String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getName());
                 music.setSelected(musicId.equals(changeMusic.getMusicId()));
             }
@@ -146,7 +146,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
                 !DefaultPlayerManager.getInstance().getAlbum().getAlbumId().equals(album.getAlbumId()))
             DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
-        for (MusicLocal music : itemList)
+        for (Music music : itemList)
             music.setSelected(false);
         itemList.get(position).setSelected(true);
     }
@@ -216,11 +216,12 @@ public class MusicListLocalActivity extends AppCompatActivity {
                                     }
                                 }).start();
                         }
-                        MusicLocal musicLocal = new MusicLocal();
+                        Music musicLocal = new Music();
+                        musicLocal.setType(Music.TYPE_LOCAL);
                         musicLocal.setNumber(indexNumber++);
                         musicLocal.setName(title);
                         musicLocal.setCover(coverPath);
-                        musicLocal.setPath(file.getPath());
+                        musicLocal.setUrl(file.getPath());
                         DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                         music.setTitle(title);
                         music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getTitle()));
