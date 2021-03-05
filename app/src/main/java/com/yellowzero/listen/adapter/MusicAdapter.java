@@ -34,7 +34,7 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
     protected void convert(BaseViewHolder viewHolder, Music item) {
         viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
                 .setText(R.id.tvName, item.getName());
-        if (item.getType() == Music.TYPE_LOCAL) {
+        if (item.isLocal()) {
             viewHolder.setText(R.id.tvNumber, String.valueOf(item.getNumber()))
                     .setText(R.id.tvName, item.getName())
                     .setGone(R.id.ivVideo, true)

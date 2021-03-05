@@ -95,9 +95,9 @@ public class PlayerService extends Service {
         return START_NOT_STICKY;
     }
 
-    private void createNotification(DefaultAlbum.DefaultMusic testMusic) {
+    private void createNotification(DefaultAlbum.DefaultMusic music) {
         try {
-            String title = testMusic.getTitle();
+            String title = music.getName();
             DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();
             String summary = album.getSummary();
             RemoteViews expandedView;
@@ -141,14 +141,14 @@ public class PlayerService extends Service {
 
             notification.contentView.setTextViewText(R.id.tvName, title);
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
-            String coverImg  = testMusic.getCoverImg();
-            if (testMusic.getCoverImg() == null
-                    || (!testMusic.getCoverImg().startsWith("http") && !new File(testMusic.getCoverImg()).exists()))
+            String cover = music.getCover();
+            if (cover == null
+                    || (!cover.startsWith("http") && !new File(cover).exists()))
                 notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_holder_square);
             else
                 Glide.with(getApplicationContext()) // safer!
                         .asBitmap()
-                        .load(testMusic.getCoverImg())
+                        .load(music.getCover())
                         .placeholder(R.drawable.ic_holder_square)
                         .error(R.drawable.ic_holder_square)
                         .into(new NotificationTarget(

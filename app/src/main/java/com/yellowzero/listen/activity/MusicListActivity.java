@@ -137,7 +137,7 @@ public class MusicListActivity extends AppCompatActivity {
                     .error(R.drawable.ic_holder_circle)
                     .transform(new CircleCrop())
                     .into(ivCover);
-            tvName.setText(changeMusic.getTitle());
+            tvName.setText(changeMusic.getName());
         });
         DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
             switch (state) {
@@ -226,9 +226,10 @@ public class MusicListActivity extends AppCompatActivity {
                             setMusicsAvailable();
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                             music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), musicData.getNumber()));
-                            music.setTitle(musicData.getName());
+                            music.setName(musicData.getName());
                             music.setUrl(musicData.getUrl());
-                            music.setCoverImg(musicData.getCover());
+                            music.setCover(musicData.getCover());
+                            music.setLink(musicData.getLink());
                             musics.add(music);
                             if (DefaultPlayerManager.getInstance().isPlaying() &&
                                     music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {

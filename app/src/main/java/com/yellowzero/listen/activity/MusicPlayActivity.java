@@ -66,7 +66,7 @@ public class MusicPlayActivity extends AppCompatActivity {
             }
         });
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
-            setTitle(changeMusic.getTitle());
+            setTitle(changeMusic.getName());
             Glide.with(MusicPlayActivity.this)
                     .load(changeMusic.getImg())
                     .placeholder(R.drawable.ic_holder_circle)

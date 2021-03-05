@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     .error(R.drawable.ic_holder_circle)
                     .transform(new CircleCrop())
                     .into(ivCover);
-            tvName.setText(changeMusic.getTitle());
+            tvName.setText(changeMusic.getName());
         });
         DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
             switch (state) {

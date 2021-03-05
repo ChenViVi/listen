@@ -29,9 +29,10 @@ public class DefaultAlbum extends BaseAlbumItem<DefaultAlbum.DefaultMusic, Defau
     public static class DefaultMusic extends BaseMusicItem<DefaultArtist> {
         public MusicEntity toEntity() {
             MusicEntity entity = new MusicEntity();
-            entity.setName(getTitle());
+            entity.setName(getName());
             entity.setUrl(getUrl());
-            entity.setCover(getCoverImg());
+            entity.setCover(getCover());
+            entity.setLink(getLink());
             return entity;
         }
     }

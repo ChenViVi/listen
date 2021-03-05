@@ -24,20 +24,14 @@ package com.yellowzero.listen.player.bean.base;
 public class BaseMusicItem<A extends BaseArtistItem> {
 
     private String musicId;
-    private String coverImg;
+    private int type;
+    private String name;
     private String url;
-    private String title;
+    private String cover;
+    private String link;
     private A artist;
 
     public BaseMusicItem() {
-    }
-
-    public BaseMusicItem(String musicId, String coverImg, String url, String title, A artist) {
-        this.musicId = musicId;
-        this.coverImg = coverImg;
-        this.url = url;
-        this.title = title;
-        this.artist = artist;
     }
 
     public String getMusicId() {
@@ -48,12 +42,20 @@ public class BaseMusicItem<A extends BaseArtistItem> {
         this.musicId = musicId;
     }
 
-    public String getCoverImg() {
-        return coverImg;
+    public int getType() {
+        return type;
     }
 
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUrl() {
@@ -64,12 +66,20 @@ public class BaseMusicItem<A extends BaseArtistItem> {
         this.url = url;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCover() {
+        return cover;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public A getArtist() {

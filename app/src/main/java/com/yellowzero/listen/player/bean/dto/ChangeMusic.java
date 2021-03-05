@@ -27,19 +27,20 @@ import com.yellowzero.listen.player.bean.base.BaseMusicItem;
  */
 public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A extends BaseArtistItem> {
 
-    private String title;
+    private String name;
     private String summary;
     private A artist;
     private String albumId;
     private String musicId;
     private String img;
     private String url;
+    private String link;
 
     public ChangeMusic() {
     }
 
-    public ChangeMusic(String title, String summary, String albumId, String musicId, String img, A artist) {
-        this.title = title;
+    public ChangeMusic(String name, String summary, String albumId, String musicId, String img, A artist) {
+        this.name = name;
         this.summary = summary;
         this.albumId = albumId;
         this.musicId = musicId;
@@ -48,7 +49,7 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
     }
 
     public ChangeMusic(B musicAlbum, int playIndex) {
-        this.title = musicAlbum.getTitle();
+        this.name = musicAlbum.getTitle();
         this.summary = musicAlbum.getSummary();
         this.albumId = musicAlbum.getAlbumId();
         this.musicId = ((M) musicAlbum.getMusics().get(playIndex)).getMusicId();
@@ -58,21 +59,22 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
 
     public void setBaseInfo(B musicAlbum, M music) {
         //要用当前实际播放的列表，因为不同模式存在不同的播放列表
-        this.title = music.getTitle();
+        this.name = music.getName();
         this.summary = musicAlbum.getSummary();
         this.albumId = musicAlbum.getAlbumId();
         this.musicId = music.getMusicId();
-        this.img = music.getCoverImg();
+        this.img = music.getCover();
         this.artist = (A) music.getArtist();
         this.url = music.getUrl();
+        this.link = music.getLink();
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSummary() {
@@ -121,5 +123,13 @@ public class ChangeMusic<B extends BaseAlbumItem, M extends BaseMusicItem, A ext
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

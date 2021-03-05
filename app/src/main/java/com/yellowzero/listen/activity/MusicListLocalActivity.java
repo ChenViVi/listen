@@ -108,7 +108,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
                     .error(R.drawable.ic_holder_circle)
                     .transform(new CircleCrop())
                     .into(ivCover);
-            tvName.setText(changeMusic.getTitle());
+            tvName.setText(changeMusic.getName());
         });
         DefaultPlayerManager.getInstance().getStateLiveData().observe(this, state -> {
             switch (state) {
@@ -216,16 +216,15 @@ public class MusicListLocalActivity extends AppCompatActivity {
                                 }).start();
                         }
                         Music musicLocal = new Music();
-                        musicLocal.setType(Music.TYPE_LOCAL);
                         musicLocal.setNumber(indexNumber++);
                         musicLocal.setName(title);
                         musicLocal.setCover(coverPath);
                         musicLocal.setUrl(file.getPath());
                         DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
-                        music.setTitle(title);
+                        music.setName(title);
                         music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), musicLocal.getNumber()));
                         music.setUrl(file.getPath());
-                        music.setCoverImg(coverPath);
+                        music.setCover(coverPath);
                         if (DefaultPlayerManager.getInstance().isPlaying() &&
                                 music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {
                             musicLocal.setSelected(true);

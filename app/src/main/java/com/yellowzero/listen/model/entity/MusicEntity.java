@@ -8,17 +8,18 @@ import org.greenrobot.greendao.annotation.Generated;
 public class MusicEntity {
     @Id
     private long id;
-    private int type;
     private String name;
     private String url;
     private String cover;
-    @Generated(hash = 1241762285)
-    public MusicEntity(long id, int type, String name, String url, String cover) {
+    private String link;
+    @Generated(hash = 1678015931)
+    public MusicEntity(long id, String name, String url, String cover,
+            String link) {
         this.id = id;
-        this.type = type;
         this.name = name;
         this.url = url;
         this.cover = cover;
+        this.link = link;
     }
     @Generated(hash = 1380251324)
     public MusicEntity() {
@@ -28,12 +29,6 @@ public class MusicEntity {
     }
     public void setId(long id) {
         this.id = id;
-    }
-    public int getType() {
-        return this.type;
-    }
-    public void setType(int type) {
-        this.type = type;
     }
     public String getName() {
         return this.name;
@@ -52,5 +47,11 @@ public class MusicEntity {
     }
     public void setCover(String cover) {
         this.cover = cover;
+    }
+    public String getLink() {
+        return this.link;
+    }
+    public void setLink(String link) {
+        this.link = link;
     }
 }
