@@ -159,6 +159,7 @@ public class Image implements Serializable {
         entity.setPid(getPid());
         entity.setWeiboId(getWeiboId());
         entity.setRepostId(getRepostId());
+        entity.setText(getText());
         entity.setUserName(getUser().getName());
         entity.setUrlAvatar(getUser().getAvatar());
         entity.setUrlSmall(getImageInfoSmall().getUrl());
