@@ -128,7 +128,8 @@ public class MusicListFavActivity extends AppCompatActivity {
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
-                String musicId = String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), music.getNumber());
+                String musicId = String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
+                        tag.getId(), music.getUrl());
                 music.setSelected(musicId.equals(changeMusic.getMusicId()));
             }
             adapter.notifyDataSetChanged();
@@ -214,7 +215,7 @@ public class MusicListFavActivity extends AppCompatActivity {
             itemList.add(musicData);
             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
             music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
-                    tag.getId(), musicData.getNumber()));
+                    tag.getId(), musicData.getUrl()));
             music.setName(musicData.getName());
             music.setUrl(musicData.getUrl());
             music.setCover(musicData.getCover());
