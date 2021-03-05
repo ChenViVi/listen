@@ -92,7 +92,6 @@ public class ImageFragment extends Fragment {
             public void onRefresh() {
                 page = 0;
                 loadList();
-                loadTags();
             }
         });
         tagsPopup = new TagsPopup(getContext());
