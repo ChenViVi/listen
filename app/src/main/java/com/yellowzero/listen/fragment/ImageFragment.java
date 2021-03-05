@@ -157,7 +157,10 @@ public class ImageFragment extends Fragment {
                     });
         else {
             itemList.clear();
-            List<ImageEntity> imageEntityList = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Like.eq(true)).list();
+            List<ImageEntity> imageEntityList = imageEntityDao
+                    .queryBuilder()
+                    .orderDesc(ImageEntityDao.Properties.Id)
+                    .list();
             for (ImageEntity imageEntity : imageEntityList)
                 itemList.add(new Image(imageEntity));
             adapter.notifyDataSetChanged();

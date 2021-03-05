@@ -26,8 +26,6 @@ public class Image implements Serializable {
         setWeiboId(imageEntity.getWeiboId());
         setRepostId(imageEntity.getRepostId());
         setText(imageEntity.getText());
-        setViewCount(imageEntity.getViewCount());
-        setLikeCount(imageEntity.getLikeCount());
         setUser(new UserWeibo(imageEntity.getUserName(), imageEntity.getUrlAvatar()));
         setImageInfoSmall(new ImageInfo(
                 imageEntity.getUrlSmall(),
@@ -157,22 +155,18 @@ public class Image implements Serializable {
     }
 
     public ImageEntity toEntity() {
-        return new ImageEntity(
-                getId(),
-                getPid(),
-                getWeiboId(),
-                getRepostId(),
-                getText(),
-                getViewCount(),
-                getLikeCount(),
-                getUser().getName(),
-                getUser().getAvatar(),
-                getImageInfoSmall().getUrl(),
-                getImageInfoSmall().getWidth(),
-                getImageInfoSmall().getHeight(),
-                getImageInfoLarge().getUrl(),
-                getImageInfoLarge().getWidth(),
-                getImageInfoLarge().getHeight(),
-                false);
+        ImageEntity entity = new ImageEntity();
+        entity.setPid(getPid());
+        entity.setWeiboId(getWeiboId());
+        entity.setRepostId(getRepostId());
+        entity.setUserName(getUser().getName());
+        entity.setUrlAvatar(getUser().getAvatar());
+        entity.setUrlSmall(getImageInfoSmall().getUrl());
+        entity.setWidthSmall(getImageInfoSmall().getWidth());
+        entity.setHeightSmall(getImageInfoSmall().getHeight());
+        entity.setUrlLarge(getImageInfoLarge().getUrl());
+        entity.setWidthLarge(getImageInfoLarge().getWidth());
+        entity.setHeightLarge(getImageInfoLarge().getHeight());
+        return entity;
     }
 }

@@ -32,6 +32,7 @@ import com.yellowzero.listen.adapter.ImageDetailAdapter;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.model.entity.ImageEntity;
 import com.yellowzero.listen.model.entity.ImageEntityDao;
+import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
@@ -145,10 +146,8 @@ public class ImageDetailActivity extends AppCompatActivity {
         tvName.setText(currentImage.getUser().getName());
         tvViewCount.setText(String.valueOf(currentImage.getViewCount()));
         tvLikeCount.setText(String.valueOf(currentImage.getLikeCount()));
-        ImageEntity imageEntity = imageEntityDao.load(currentImage.getId());
-        boolean isLike = false;
-        if (imageEntity != null)
-            isLike = imageEntity.getLike();
+        List<ImageEntity> imageEntities = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Pid.eq(currentImage.getPid())).list();
+        boolean isLike = (imageEntities.size() != 0);
         String path = getExternalFilesDir(null) + File.separator + image.getImageName();
         File file = new File(path);
         boolean isDownload = file.exists();
@@ -182,7 +181,10 @@ public class ImageDetailActivity extends AppCompatActivity {
                     });
         else
             if (itemList.size() == 0) {
-                List<ImageEntity> imageEntityList = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Like.eq(true)).list();
+                List<ImageEntity> imageEntityList = imageEntityDao
+                        .queryBuilder()
+                        .orderDesc(ImageEntityDao.Properties.Id)
+                        .list();
                 for (ImageEntity imageEntity : imageEntityList)
                     itemList.add(new Image(imageEntity));
                 adapter.notifyDataSetChanged();
@@ -215,22 +217,16 @@ public class ImageDetailActivity extends AppCompatActivity {
     }
 
     public void onClickLike(View view) {
-        ImageEntity imageEntity = imageEntityDao.load(image.getId());
-        boolean isNewEntity = false;
-        if (imageEntity == null) {
-            isNewEntity = true;
-            imageEntity = currentImage.toEntity();
-        }
-        imageEntity.setLike(!imageEntity.getLike());
-        if (imageEntity.getLike())
-            imageEntity.setLikeCount(imageEntity.getLikeCount() + 1);
-        else if(imageEntity.getLikeCount() > 0)
-            imageEntity.setLikeCount(imageEntity.getLikeCount() - 1);
-        saveImageEntity(imageEntity, isNewEntity);
-        ivLike.setImageResource(imageEntity.getLike() ? R.drawable.ic_star_enable : R.drawable.ic_star);
-        tvLikeCount.setText(String.valueOf(imageEntity.getLike() ? image.getLikeCount() + 1 : image.getLikeCount()));
+        List<ImageEntity> imageEntities = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Pid.eq(currentImage.getPid())).list();
+        boolean isLike = (imageEntities.size() == 0);
+        if (isLike)
+            imageEntityDao.insert(currentImage.toEntity());
+        else
+            imageEntityDao.delete(imageEntities.get(0));
+        ivLike.setImageResource(isLike? R.drawable.ic_star_enable : R.drawable.ic_star);
+        tvLikeCount.setText(String.valueOf(isLike ? currentImage.getLikeCount() + 1 : currentImage.getLikeCount()));
         RxHttpUtils.createApi(ImageService.class)
-                .like(image.getId(), imageEntity.getLike())
+                .like(image.getId(), isLike)
                 .compose(Transformer.<String>switchSchedulers())
                 .subscribe(new StringObserver() {
 
@@ -341,22 +337,5 @@ public class ImageDetailActivity extends AppCompatActivity {
         }
         intent.setType("image/*");
         startActivity(intent);
-    }
-
-    private void saveImageEntity(ImageEntity imageEntity, boolean isNewEntity) {
-        if (isNewEntity)
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    imageEntityDao.insert(imageEntity);
-                }
-            }).start();
-        else
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    imageEntityDao.update(imageEntity);
-                }
-            }).start();
     }
 }

@@ -12,8 +12,6 @@ public class ImageEntity {
     private long weiboId;
     private long repostId;
     private String text;
-    private int viewCount;
-    private int likeCount;
     private String userName;
     private String urlAvatar;
     private String urlSmall;
@@ -22,19 +20,16 @@ public class ImageEntity {
     private String urlLarge;
     private int widthLarge;
     private int heightLarge;
-    private boolean like;
-    @Generated(hash = 310857054)
+    @Generated(hash = 24207231)
     public ImageEntity(Long id, String pid, long weiboId, long repostId,
-            String text, int viewCount, int likeCount, String userName,
-            String urlAvatar, String urlSmall, int widthSmall, int heightSmall,
-            String urlLarge, int widthLarge, int heightLarge, boolean like) {
+            String text, String userName, String urlAvatar, String urlSmall,
+            int widthSmall, int heightSmall, String urlLarge, int widthLarge,
+            int heightLarge) {
         this.id = id;
         this.pid = pid;
         this.weiboId = weiboId;
         this.repostId = repostId;
         this.text = text;
-        this.viewCount = viewCount;
-        this.likeCount = likeCount;
         this.userName = userName;
         this.urlAvatar = urlAvatar;
         this.urlSmall = urlSmall;
@@ -43,7 +38,6 @@ public class ImageEntity {
         this.urlLarge = urlLarge;
         this.widthLarge = widthLarge;
         this.heightLarge = heightLarge;
-        this.like = like;
     }
     @Generated(hash = 2080458212)
     public ImageEntity() {
@@ -77,18 +71,6 @@ public class ImageEntity {
     }
     public void setText(String text) {
         this.text = text;
-    }
-    public int getViewCount() {
-        return this.viewCount;
-    }
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-    public int getLikeCount() {
-        return this.likeCount;
-    }
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
     }
     public String getUserName() {
         return this.userName;
@@ -138,11 +120,4 @@ public class ImageEntity {
     public void setHeightLarge(int heightLarge) {
         this.heightLarge = heightLarge;
     }
-    public boolean getLike() {
-        return this.like;
-    }
-    public void setLike(boolean like) {
-        this.like = like;
-    }
-    
 }
