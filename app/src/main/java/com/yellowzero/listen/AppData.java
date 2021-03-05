@@ -18,6 +18,7 @@ public class AppData {
     public static final String MUSIC_KUGOU_PATH = "/storage/emulated/0/kgmusic/download";
     public static final String QQ_FILES_1 = "/storage/emulated/0/tencent/QQfile_recv";
     public static final String QQ_FILES_2 = "/storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv";
+    public static final String FORMAT_MUSIC_ID = "%d_%d";
 
     public static String CACHE_DIR = "";
     public static String CACHE_IMAGE_DIR = "";

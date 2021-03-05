@@ -46,7 +46,6 @@ import java.util.Locale;
 public class MusicListActivity extends AppCompatActivity {
 
     private static final String KEY_TAG = "tag";
-    private static final String FORMAT_MUSIC_ID = "%d_%d";
     private MusicTag tag;
     private SwipeRefreshLayout refreshLayout;
     private List<Music> itemList = new ArrayList<>();
@@ -128,7 +127,7 @@ public class MusicListActivity extends AppCompatActivity {
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
-                String musicId = String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getId());
+                String musicId = String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), music.getNumber());
                 music.setSelected(musicId.equals(changeMusic.getMusicId()));
             }
             adapter.notifyDataSetChanged();
@@ -226,7 +225,7 @@ public class MusicListActivity extends AppCompatActivity {
                             musicData.setCached(proxy.isCached(musicData.getUrl()));
                             setMusicsAvailable();
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
-                            music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), musicData.getId()));
+                            music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), musicData.getNumber()));
                             music.setTitle(musicData.getName());
                             music.setUrl(musicData.getUrl());
                             music.setCoverImg(musicData.getCover());

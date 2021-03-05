@@ -44,7 +44,6 @@ public class MusicListLocalActivity extends AppCompatActivity {
 
     private static final String KEY_TAG = "tag";
     private static final String YELLOW_ZERO = "黄龄";
-    private static final String FORMAT_MUSIC_ID = "%d_%s";
     private final String regexSuffix = "(m4a)|(3gp)|(mp3)|(wma)|(ogg)|(wav)|(mid)|(flac)";
     private int indexNumber;
     private String coverDirPath;
@@ -99,7 +98,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
-                String musicId = String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getName());
+                String musicId = String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), music.getNumber());
                 music.setSelected(musicId.equals(changeMusic.getMusicId()));
             }
             adapter.notifyDataSetChanged();
@@ -224,7 +223,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
                         musicLocal.setUrl(file.getPath());
                         DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                         music.setTitle(title);
-                        music.setMusicId(String.format(Locale.getDefault(), FORMAT_MUSIC_ID, tag.getId(), music.getTitle()));
+                        music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), musicLocal.getNumber()));
                         music.setUrl(file.getPath());
                         music.setCoverImg(coverPath);
                         if (DefaultPlayerManager.getInstance().isPlaying() &&

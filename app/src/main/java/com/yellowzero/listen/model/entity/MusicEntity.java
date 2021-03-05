@@ -8,61 +8,49 @@ import org.greenrobot.greendao.annotation.Generated;
 public class MusicEntity {
     @Id
     private long id;
-    private String musicId;
-    private String title;
+    private int type;
+    private String name;
     private String url;
-    private String coverImg;
-
-    @Generated(hash = 872911466)
-    public MusicEntity(long id, String musicId, String title, String url,
-            String coverImg) {
+    private String cover;
+    @Generated(hash = 1241762285)
+    public MusicEntity(long id, int type, String name, String url, String cover) {
         this.id = id;
-        this.musicId = musicId;
-        this.title = title;
+        this.type = type;
+        this.name = name;
         this.url = url;
-        this.coverImg = coverImg;
+        this.cover = cover;
     }
     @Generated(hash = 1380251324)
     public MusicEntity() {
     }
-
     public long getId() {
-        return id;
+        return this.id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
-    public String getMusicId() {
-        return musicId;
+    public int getType() {
+        return this.type;
     }
-
-    public void setMusicId(String musicId) {
-        this.musicId = musicId;
+    public void setType(int type) {
+        this.type = type;
     }
-
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return this.name;
     }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
-
     public String getUrl() {
-        return url;
+        return this.url;
     }
-
     public void setUrl(String url) {
         this.url = url;
     }
-
-    public String getCoverImg() {
-        return coverImg;
+    public String getCover() {
+        return this.cover;
     }
-
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 }

@@ -1,5 +1,7 @@
 package com.yellowzero.listen.model;
 
+import com.yellowzero.listen.model.entity.MusicEntity;
+
 public class Music {
     public static final int TYPE_NETWORK = 0;
     public static final int TYPE_LOCAL = 1;
@@ -93,5 +95,14 @@ public class Music {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public MusicEntity toEntity() {
+        MusicEntity entity = new MusicEntity();
+        entity.setType(getType());
+        entity.setName(getName());
+        entity.setUrl(getUrl());
+        entity.setCover(getCover());
+        return entity;
     }
 }
