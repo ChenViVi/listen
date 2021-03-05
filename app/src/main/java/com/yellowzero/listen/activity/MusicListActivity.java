@@ -112,7 +112,7 @@ public class MusicListActivity extends AppCompatActivity {
                     refreshLayout.setRefreshing(false);
             }
         });
-        proxy = App.getProxy(MusicListActivity.this);
+        proxy = App.getProxy(this);
         App app = ((App)getApplication());
         app.addNetworkListener(new NetworkChangeReceiver.NetworkListener() {
             @Override
@@ -223,9 +223,9 @@ public class MusicListActivity extends AppCompatActivity {
                             Music musicData = itemList.get(i);
                             musicData.setNumber(i + 1);
                             musicData.setCached(proxy.isCached(musicData.getUrl()));
-                            setMusicsAvailable();
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
-                            music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID, tag.getId(), musicData.getNumber()));
+                            music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
+                                    tag.getId(), musicData.getNumber()));
                             music.setName(musicData.getName());
                             music.setUrl(musicData.getUrl());
                             music.setCover(musicData.getCover());
@@ -236,6 +236,7 @@ public class MusicListActivity extends AppCompatActivity {
                                 musicData.setSelected(true);
                             }
                         }
+                        setMusicsAvailable();
                         album.setMusics(musics);
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);

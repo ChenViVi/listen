@@ -58,7 +58,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_list_local);
+        setContentView(R.layout.activity_music_list);
         tag = (MusicTag) getIntent().getSerializableExtra(KEY_TAG);
         if (tag == null)
             return;
