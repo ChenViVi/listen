@@ -12,6 +12,7 @@ public class Music {
     private boolean isSelected;
     private boolean isAvailable;
     private boolean isCached;
+    private boolean isFav;
 
     public Music(){}
 
@@ -92,6 +93,14 @@ public class Music {
 
     public void setCached(boolean cached) {
         isCached = cached;
+    }
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
     }
 
     public boolean isLocal() {

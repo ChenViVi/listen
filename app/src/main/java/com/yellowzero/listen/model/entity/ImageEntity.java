@@ -7,7 +7,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class ImageEntity {
     @Id
-    private long id;
+    private Long id;
     private String pid;
     private long weiboId;
     private long repostId;
@@ -23,8 +23,8 @@ public class ImageEntity {
     private int widthLarge;
     private int heightLarge;
     private boolean like;
-    @Generated(hash = 428977801)
-    public ImageEntity(long id, String pid, long weiboId, long repostId,
+    @Generated(hash = 310857054)
+    public ImageEntity(Long id, String pid, long weiboId, long repostId,
             String text, int viewCount, int likeCount, String userName,
             String urlAvatar, String urlSmall, int widthSmall, int heightSmall,
             String urlLarge, int widthLarge, int heightLarge, boolean like) {
@@ -48,10 +48,10 @@ public class ImageEntity {
     @Generated(hash = 2080458212)
     public ImageEntity() {
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getPid() {
@@ -144,4 +144,5 @@ public class ImageEntity {
     public void setLike(boolean like) {
         this.like = like;
     }
+    
 }

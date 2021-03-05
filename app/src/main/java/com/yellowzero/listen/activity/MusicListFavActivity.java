@@ -51,7 +51,6 @@ public class MusicListFavActivity extends AppCompatActivity {
     private MusicEntityDao musicEntityDao;
     private MusicAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +72,7 @@ public class MusicListFavActivity extends AppCompatActivity {
         ImageView ivPlay = findViewById(R.id.ivPlay);
         View llMusic = findViewById(R.id.llMusic);
         rvList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MusicAdapter(this, itemList);
+        adapter = new MusicAdapter(this, itemList, musicEntityDao);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
@@ -163,6 +162,18 @@ public class MusicListFavActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (itemList.size() == 0)
+            return;
+        for (Music music : itemList)
+            music.setFav(musicEntityDao.queryBuilder()
+                    .where(MusicEntityDao.Properties.Url.eq(music.getUrl()))
+                    .list().size() > 0);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
@@ -212,6 +223,7 @@ public class MusicListFavActivity extends AppCompatActivity {
             Music musicData = new Music(musicEntity);
             musicData.setNumber(i + 1);
             musicData.setCached(proxy.isCached(musicEntity.getUrl()));
+            musicData.setFav(true);
             itemList.add(musicData);
             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
             music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,

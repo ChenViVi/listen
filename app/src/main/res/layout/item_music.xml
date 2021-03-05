@@ -27,29 +27,41 @@
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/ivVideo"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textSize="@dimen/_13sdp"
             android:textColor="@color/black"
             tools:ignore="RelativeOverlap" />
         <ImageView
+            android:id="@+id/ivVideo"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_video_grey"
+            android:layout_toStartOf="@id/ivFav"
+            tools:ignore="ContentDescription" />
+        <ImageView
+            android:id="@+id/ivFav"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_fav_grey"
+            android:layout_toStartOf="@id/ivCached"
+            tools:ignore="ContentDescription" />
+        <ImageView
             android:id="@+id/ivCached"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
             android:src="@drawable/ic_checked"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/_10sdp"
-            tools:ignore="ContentDescription" />
-        <ImageView
-            android:id="@+id/ivVideo"
-            android:layout_width="@dimen/_22sdp"
-            android:layout_height="@dimen/_22sdp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_video"
-            android:layout_toStartOf="@id/ivCached"
-            android:layout_marginEnd="@dimen/_22sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 </LinearLayout>

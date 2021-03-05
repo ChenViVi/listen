@@ -31,6 +31,7 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.adapter.MusicAdapter;
 import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.Music;
+import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
@@ -51,6 +52,7 @@ public class MusicListActivity extends AppCompatActivity {
     private List<Music> itemList = new ArrayList<>();
     private DefaultAlbum album = new DefaultAlbum();
     private HttpProxyCacheServer proxy;
+    private MusicEntityDao musicEntityDao;
     private MusicAdapter adapter;
 
     @Override
@@ -60,6 +62,8 @@ public class MusicListActivity extends AppCompatActivity {
         tag = (MusicTag) getIntent().getSerializableExtra(KEY_TAG);
         if (tag == null)
             return;
+        musicEntityDao = ((App) getApplication()).getDaoSession().getMusicEntityDao();
+        proxy = App.getProxy(this);
         album.setAlbumId(String.valueOf(tag.getId()));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,7 +76,7 @@ public class MusicListActivity extends AppCompatActivity {
         ImageView ivPlay = findViewById(R.id.ivPlay);
         View llMusic = findViewById(R.id.llMusic);
         rvList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MusicAdapter(this, itemList);
+        adapter = new MusicAdapter(this, itemList, musicEntityDao);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
@@ -112,7 +116,6 @@ public class MusicListActivity extends AppCompatActivity {
                     refreshLayout.setRefreshing(false);
             }
         });
-        proxy = App.getProxy(this);
         App app = ((App)getApplication());
         app.addNetworkListener(new NetworkChangeReceiver.NetworkListener() {
             @Override
@@ -159,6 +162,18 @@ public class MusicListActivity extends AppCompatActivity {
             }
         });
         loadList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (itemList.size() == 0)
+            return;
+        for (Music music : itemList)
+            music.setFav(musicEntityDao.queryBuilder()
+                    .where(MusicEntityDao.Properties.Url.eq(music.getUrl()))
+                    .list().size() > 0);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -224,6 +239,7 @@ public class MusicListActivity extends AppCompatActivity {
                             Music musicData = itemList.get(i);
                             musicData.setNumber(i + 1);
                             musicData.setCached(proxy.isCached(musicData.getUrl()));
+                            musicData.setFav(musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(musicData.getUrl())).list().size() > 0);
                             DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                             music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
                                     tag.getId(), musicData.getUrl()));

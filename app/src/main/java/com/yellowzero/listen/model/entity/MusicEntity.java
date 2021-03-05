@@ -6,14 +6,14 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class MusicEntity {
-    @Id
-    private long id;
+    @Id(autoincrement = true)
+    private Long id;
     private String name;
     private String url;
     private String cover;
     private String link;
-    @Generated(hash = 1678015931)
-    public MusicEntity(long id, String name, String url, String cover,
+    @Generated(hash = 624947827)
+    public MusicEntity(Long id, String name, String url, String cover,
             String link) {
         this.id = id;
         this.name = name;
@@ -24,10 +24,10 @@ public class MusicEntity {
     @Generated(hash = 1380251324)
     public MusicEntity() {
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getName() {

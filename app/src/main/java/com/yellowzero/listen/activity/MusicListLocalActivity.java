@@ -21,11 +21,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.yellowzero.listen.App;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.adapter.MusicAdapter;
 import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.Music;
+import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.player.contract.IPlayController;
@@ -53,6 +55,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
     private List<Music> itemList = new ArrayList<>();
     List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
     private DefaultAlbum album = new DefaultAlbum();
+    private MusicEntityDao musicEntityDao;
     private MusicAdapter adapter;
 
     @Override
@@ -62,6 +65,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
         tag = (MusicTag) getIntent().getSerializableExtra(KEY_TAG);
         if (tag == null)
             return;
+        musicEntityDao = ((App) getApplication()).getDaoSession().getMusicEntityDao();
         album.setAlbumId(String.valueOf(tag.getId()));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +86,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
             }
         });
         rvList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MusicAdapter(this, itemList);
+        adapter = new MusicAdapter(this, itemList, musicEntityDao);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
@@ -127,6 +131,18 @@ public class MusicListLocalActivity extends AppCompatActivity {
             }
         });
         loadList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (itemList.size() == 0)
+            return;
+        for (Music music : itemList)
+            music.setFav(musicEntityDao.queryBuilder()
+                    .where(MusicEntityDao.Properties.Url.eq(music.getUrl()))
+                    .list().size() > 0);
+        adapter.notifyDataSetChanged();
     }
 
     public void onPlay(View view) {
@@ -216,22 +232,23 @@ public class MusicListLocalActivity extends AppCompatActivity {
                                     }
                                 }).start();
                         }
-                        Music musicLocal = new Music();
-                        musicLocal.setNumber(indexNumber++);
-                        musicLocal.setName(title);
-                        musicLocal.setCover(coverPath);
-                        musicLocal.setUrl(file.getPath());
+                        Music musicData = new Music();
+                        musicData.setNumber(indexNumber++);
+                        musicData.setName(title);
+                        musicData.setCover(coverPath);
+                        musicData.setUrl(file.getPath());
+                        musicData.setFav(musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(musicData.getUrl())).list().size() > 0);
                         DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                         music.setName(title);
                         music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
-                                tag.getId(), musicLocal.getUrl()));
+                                tag.getId(), musicData.getUrl()));
                         music.setUrl(file.getPath());
                         music.setCover(coverPath);
                         if (DefaultPlayerManager.getInstance().isPlaying() &&
                                 music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {
-                            musicLocal.setSelected(true);
+                            musicData.setSelected(true);
                         }
-                        itemList.add(musicLocal);
+                        itemList.add(musicData);
                         musics.add(music);
                     }
                 }
