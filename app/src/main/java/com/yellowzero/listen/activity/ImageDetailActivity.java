@@ -219,12 +219,14 @@ public class ImageDetailActivity extends AppCompatActivity {
     public void onClickLike(View view) {
         List<ImageEntity> imageEntities = imageEntityDao.queryBuilder().where(ImageEntityDao.Properties.Pid.eq(currentImage.getPid())).list();
         boolean isLike = (imageEntities.size() == 0);
-        if (isLike)
+        if (isLike) {
             imageEntityDao.insert(currentImage.toEntity());
+            currentImage.setLikeCount(currentImage.getLikeCount() + 1);
+        }
         else
             imageEntityDao.delete(imageEntities.get(0));
         ivLike.setImageResource(isLike? R.drawable.ic_star_enable : R.drawable.ic_star);
-        tvLikeCount.setText(String.valueOf(isLike ? currentImage.getLikeCount() + 1 : currentImage.getLikeCount()));
+        tvLikeCount.setText(String.valueOf(currentImage.getLikeCount()));
         RxHttpUtils.createApi(ImageService.class)
                 .like(image.getId(), isLike)
                 .compose(Transformer.<String>switchSchedulers())

@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/refreshLayout">
@@ -63,7 +61,7 @@
         android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_12sdp"
         android:src="@drawable/ic_arrow_up"
-        android:tint="@color/white"
+        app:tint="@color/white"
         app:layout_behavior=".view.ScrollAwareFABBehavior"
         tools:ignore="ContentDescription" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

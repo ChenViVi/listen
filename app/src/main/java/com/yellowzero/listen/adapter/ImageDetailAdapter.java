@@ -10,7 +10,6 @@ import com.allen.library.RxHttpUtils;
 import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -51,19 +50,12 @@ public class ImageDetailAdapter extends BaseQuickAdapter<Image, BaseViewHolder> 
             }
         });
         viewHolder.setText(R.id.tvText, Html.fromHtml(item.getText()));
-        if (item.isGif())
-            Glide.with(context)
-                    .load(item.getImageInfoLarge().getUrl())
-                    .placeholder(R.drawable.ic_holder_square)
-                    .error(R.drawable.ic_holder_square)
-                    .into(ivImage);
-        else
-            Glide.with(context)
-                    .load(item.getImageInfoLarge().getUrl())
-                    .thumbnail(Glide.with(context).load(item.getImageInfoSmall().getUrl()))
-                    .placeholder(R.drawable.ic_holder_square)
-                    .error(R.drawable.ic_holder_square)
-                    .into(ivImage);
+        Glide.with(context)
+                .load(item.getImageInfoLarge().getUrl())
+                .thumbnail(Glide.with(context).load(item.getImageInfoSmall().getUrl()))
+                .placeholder(R.drawable.ic_holder_square)
+                .error(R.drawable.ic_holder_square)
+                .into(ivImage);
         svDetail.setOnTouchListener(new Test(ivImage, svDetail));
         RxHttpUtils.createApi(ImageService.class)
                 .view(item.getId())
