@@ -1,21 +1,22 @@
-package com.yellowzero.listen.activity;
+package com.yellowzero.listen.fragment;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.content.Context;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -24,9 +25,11 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yellowzero.listen.App;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
+import com.yellowzero.listen.activity.MusicListLocalActivity;
+import com.yellowzero.listen.activity.MusicPlayActivity;
 import com.yellowzero.listen.adapter.MusicAdapter;
-import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.Music;
+import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.bean.DefaultAlbum;
@@ -42,9 +45,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-public class MusicListLocalActivity extends AppCompatActivity {
-
-    private static final String KEY_TAG = "tag";
+public class TestFragment extends Fragment {
+    private static final String KEY_IS_ARTIST = "isArtist";
     private final String regexSuffix = "(m4a)|(3gp)|(mp3)|(wma)|(ogg)|(wav)|(mid)|(flac)";
     private int indexNumber;
     private String coverDirPath;
@@ -58,26 +60,26 @@ public class MusicListLocalActivity extends AppCompatActivity {
     private MusicEntityDao musicEntityDao;
     private MusicAdapter adapter;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_list);
-        tag = (MusicTag) getIntent().getSerializableExtra(KEY_TAG);
-        if (tag == null)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_test,null);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        if (bundle == null)
             return;
-        yellowZero = getString(R.string.yellow_zero);
-        musicEntityDao = ((App) getApplication()).getDaoSession().getMusicEntityDao();
+        album.setAlbumId(getString(bundle.getBoolean(KEY_IS_ARTIST, true)? R.string.yellow_zero : R.string.tv_other));
+        musicEntityDao = ((App) getActivity().getApplication()).getDaoSession().getMusicEntityDao();
         album.setAlbumId(String.valueOf(tag.getId()));
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(tag.getName());
-        RecyclerView rvList = findViewById(R.id.rvList);
-        refreshLayout = findViewById(R.id.refreshLayout);
-        ImageView ivCover = findViewById(R.id.ivCover);
-        TextView tvName = findViewById(R.id.tvName);
-        ImageView ivPlay = findViewById(R.id.ivPlay);
-        View llMusic = findViewById(R.id.llMusic);
+        RecyclerView rvList = view.findViewById(R.id.rvList);
+        refreshLayout = view.findViewById(R.id.refreshLayout);
+        ImageView ivCover = view.findViewById(R.id.ivCover);
+        TextView tvName = view.findViewById(R.id.tvName);
+        ImageView ivPlay = view.findViewById(R.id.ivPlay);
+        View llMusic = view.findViewById(R.id.llMusic);
         refreshLayout.setRefreshing(true);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -86,8 +88,8 @@ public class MusicListLocalActivity extends AppCompatActivity {
                 loadList();
             }
         });
-        rvList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MusicAdapter(this, itemList, musicEntityDao);
+        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MusicAdapter(getContext(), itemList, musicEntityDao);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
@@ -96,7 +98,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
             }
         });
         rvList.setAdapter(adapter);
-        coverDirPath = getExternalCacheDir() + File.separator + "cover" + File.separator ;
+        coverDirPath = getContext().getExternalCacheDir() + File.separator + "cover" + File.separator ;
         File coverDir = new File(coverDirPath);
         if (!coverDir.exists())
             coverDir.mkdir();
@@ -108,7 +110,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
                 music.setSelected(musicId.equals(changeMusic.getMusicId()));
             }
             adapter.notifyDataSetChanged();
-            Glide.with(MusicListLocalActivity.this)
+            Glide.with(getContext())
                     .load(changeMusic.getImg())
                     .placeholder(R.drawable.ic_holder_circle)
                     .error(R.drawable.ic_holder_circle)
@@ -135,7 +137,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (itemList.size() == 0)
             return;
@@ -155,7 +157,7 @@ public class MusicListLocalActivity extends AppCompatActivity {
     }
 
     public void onClickPlayDetail(View view) {
-        startActivity(new Intent(MusicListLocalActivity.this, MusicPlayActivity.class));
+        startActivity(new Intent(getContext(), MusicPlayActivity.class));
     }
 
     private void setPlayMusic(int position) {
@@ -184,8 +186,8 @@ public class MusicListLocalActivity extends AppCompatActivity {
                 loadMusic(AppData.MUSIC_MIGU);
                 album.setMusics(musics);
                 AppData.MUSIC_LOCAL_COUNT = musics.size();
-                AppData.saveData(MusicListLocalActivity.this);
-                runOnUiThread(new Runnable() {
+                AppData.saveData(getContext());
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
@@ -258,18 +260,11 @@ public class MusicListLocalActivity extends AppCompatActivity {
         }
     }
 
-    public static void start(Context context, MusicTag tag) {
-        Intent intent = new Intent(context, MusicListLocalActivity.class);
-        intent.putExtra(KEY_TAG, tag);
-        context.startActivity(intent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public static TestFragment createInstance(boolean isArtist) {
+        TestFragment fragment = new TestFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(KEY_IS_ARTIST, isArtist);
+        fragment.setArguments(args);
+        return fragment;
     }
 }
