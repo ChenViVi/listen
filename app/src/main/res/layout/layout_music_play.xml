@@ -6,7 +6,8 @@
     android:layout_height="@dimen/_46sdp"
     app:cardCornerRadius="@dimen/_23sdp"
     app:cardBackgroundColor="@color/colorPrimary"
-    android:onClick="onClickPlayDetail">
+    android:onClick="onClickPlayDetail"
+    android:id="@+id/llMusic">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

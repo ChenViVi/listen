@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class MusicTag implements Serializable {
     public static final int ID_FAV = -1;
     public static final int ID_LOCAL = -2;
+    public static final int ID_LOCAL_ARTIST = -3;
+    public static final int ID_LOCAL_OTHER = -4;
 
     private int id;
     private String name;

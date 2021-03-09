@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +24,6 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yellowzero.listen.App;
 import com.yellowzero.listen.AppData;
 import com.yellowzero.listen.R;
-import com.yellowzero.listen.activity.MusicListLocalActivity;
 import com.yellowzero.listen.activity.MusicPlayActivity;
 import com.yellowzero.listen.adapter.MusicAdapter;
 import com.yellowzero.listen.model.Music;
@@ -36,6 +34,8 @@ import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.player.contract.IPlayController;
 import com.yellowzero.listen.util.FileUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
@@ -45,25 +45,35 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-public class TestFragment extends Fragment {
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+public class MusicListLocalFragment extends Fragment {
     private static final String KEY_IS_ARTIST = "isArtist";
     private final String regexSuffix = "(m4a)|(3gp)|(mp3)|(wma)|(ogg)|(wav)|(mid)|(flac)";
     private int indexNumber;
     private String coverDirPath;
 
+    private int tagId;
+    private boolean isArtist;
     private String yellowZero;
-    private MusicTag tag;
     private SwipeRefreshLayout refreshLayout;
     private List<Music> itemList = new ArrayList<>();
     List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
     private DefaultAlbum album = new DefaultAlbum();
     private MusicEntityDao musicEntityDao;
     private MusicAdapter adapter;
+    private Disposable disposable;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_test,null);
+        return inflater.inflate(R.layout.fragment_music_list_local,null);
     }
 
     @Override
@@ -71,15 +81,35 @@ public class TestFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle == null)
             return;
-        album.setAlbumId(getString(bundle.getBoolean(KEY_IS_ARTIST, true)? R.string.yellow_zero : R.string.tv_other));
+        isArtist = bundle.getBoolean(KEY_IS_ARTIST, true);
+        tagId = isArtist? MusicTag.ID_LOCAL_ARTIST : MusicTag.ID_LOCAL_OTHER;
+        album.setAlbumId(getString(isArtist? R.string.yellow_zero : R.string.tv_other));
+        yellowZero = getString(R.string.yellow_zero);
         musicEntityDao = ((App) getActivity().getApplication()).getDaoSession().getMusicEntityDao();
-        album.setAlbumId(String.valueOf(tag.getId()));
         RecyclerView rvList = view.findViewById(R.id.rvList);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         ImageView ivCover = view.findViewById(R.id.ivCover);
         TextView tvName = view.findViewById(R.id.tvName);
         ImageView ivPlay = view.findViewById(R.id.ivPlay);
         View llMusic = view.findViewById(R.id.llMusic);
+        view.findViewById(R.id.ivPlay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DefaultPlayerManager.getInstance().togglePlay();
+            }
+        });
+        view.findViewById(R.id.ivNext).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DefaultPlayerManager.getInstance().playNext();
+            }
+        });
+        view.findViewById(R.id.llMusic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), MusicPlayActivity.class));
+            }
+        });
         refreshLayout.setRefreshing(true);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -106,7 +136,7 @@ public class TestFragment extends Fragment {
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
                 String musicId = String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
-                        tag.getId(), music.getUrl());
+                        tagId, music.getUrl());
                 music.setSelected(musicId.equals(changeMusic.getMusicId()));
             }
             adapter.notifyDataSetChanged();
@@ -148,16 +178,11 @@ public class TestFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public void onPlay(View view) {
-        DefaultPlayerManager.getInstance().togglePlay();
-    }
-
-    public void onNext(View view) {
-        DefaultPlayerManager.getInstance().playNext();
-    }
-
-    public void onClickPlayDetail(View view) {
-        startActivity(new Intent(getContext(), MusicPlayActivity.class));
+    @Override
+    public void onDestroy() {
+        if(disposable != null && !disposable.isDisposed())
+            disposable.dispose();
+        super.onDestroy();
     }
 
     private void setPlayMusic(int position) {
@@ -171,12 +196,12 @@ public class TestFragment extends Fragment {
     }
 
     private void loadList() {
-        new Thread(new Runnable() {
+        indexNumber = 1;
+        itemList.clear();
+        musics.clear();
+        disposable = Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
-            public void run() {
-                indexNumber = 1;
-                itemList.clear();
-                musics.clear();
+            public void subscribe(@NotNull ObservableEmitter<Object> emitter) {
                 loadMusic(AppData.MUSIC_NETEASE_PATH);
                 loadMusic(AppData.MUSIC_QQ_PATH);
                 loadMusic(AppData.MUSIC_KUGOU_PATH);
@@ -184,18 +209,21 @@ public class TestFragment extends Fragment {
                 loadMusic(AppData.QQ_FILES_1);
                 loadMusic(AppData.QQ_FILES_2);
                 loadMusic(AppData.MUSIC_MIGU);
-                album.setMusics(musics);
-                AppData.MUSIC_LOCAL_COUNT = musics.size();
-                AppData.saveData(getContext());
-                getActivity().runOnUiThread(new Runnable() {
+                emitter.onNext(1);
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void run() {
+                    public void accept(Object o) {
+                        album.setMusics(musics);
+                        AppData.MUSIC_LOCAL_COUNT = musics.size();
+                        AppData.saveData(getContext());
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
                     }
                 });
-            }
-        }).start();
     }
 
     private void loadMusic(String dir) {
@@ -216,8 +244,8 @@ public class TestFragment extends Fragment {
                 for (File file : files) {
                     mmr.setDataSource(file.getPath());
                     String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-                    if (file.getPath().contains(yellowZero)
-                            || (!TextUtils.isEmpty(artist) && artist.contains(yellowZero))) {
+                    if (file.getPath().contains(yellowZero) == isArtist
+                            || (!TextUtils.isEmpty(artist) && artist.contains(yellowZero) == isArtist)) {
                         String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                         if (TextUtils.isEmpty(title))
                             title = FileUtil.getPrefix(file.getPath());
@@ -246,7 +274,7 @@ public class TestFragment extends Fragment {
                         DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
                         music.setName(title);
                         music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
-                                tag.getId(), musicData.getUrl()));
+                                tagId, musicData.getUrl()));
                         music.setUrl(file.getPath());
                         music.setCover(coverPath);
                         if (DefaultPlayerManager.getInstance().isPlaying() &&
@@ -260,8 +288,8 @@ public class TestFragment extends Fragment {
         }
     }
 
-    public static TestFragment createInstance(boolean isArtist) {
-        TestFragment fragment = new TestFragment();
+    public static MusicListLocalFragment createInstance(boolean isArtist) {
+        MusicListLocalFragment fragment = new MusicListLocalFragment();
         Bundle args = new Bundle();
         args.putBoolean(KEY_IS_ARTIST, isArtist);
         fragment.setArguments(args);

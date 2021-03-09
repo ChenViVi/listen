@@ -21,7 +21,6 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.activity.MusicListActivity;
 import com.yellowzero.listen.activity.MusicListFavActivity;
 import com.yellowzero.listen.activity.MusicListLocalActivity;
-import com.yellowzero.listen.activity.TestActivity;
 import com.yellowzero.listen.adapter.MusicTagAdapter;
 import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.entity.MusicEntityDao;
@@ -142,7 +141,7 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
 
     @Override
     public void onGranted(List<String> permissions, boolean all) {
-        TestActivity.start(getContext(), tag);
+        MusicListLocalActivity.start(getContext(), tag);
     }
 
     @Override
