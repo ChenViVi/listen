@@ -25,6 +25,8 @@ import com.yellowzero.listen.adapter.MusicTagAdapter;
 import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
+import com.yellowzero.listen.player.DefaultPlayerManager;
+import com.yellowzero.listen.player.bean.DefaultAlbum;
 import com.yellowzero.listen.service.MusicService;
 
 import java.util.ArrayList;
@@ -94,11 +96,27 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
     @Override
     public void onResume() {
         super.onResume();
-        if (itemList.size() > 1) {
-            itemList.get(0).setCount(musicEntityDao.count());
-            itemList.get(1).setCount(AppData.MUSIC_LOCAL_COUNT);
+        if (itemList.size() > 0) {
+            setSelectTag();
+            if (itemList.size() > 1) {
+                itemList.get(0).setCount(musicEntityDao.count());
+                itemList.get(1).setCount(AppData.MUSIC_LOCAL_COUNT);
+            }
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void setSelectTag() {
+        DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();
+        for (MusicTag tag : itemList)
+            if (!DefaultPlayerManager.getInstance().isStop()
+                    && album!= null){
+                int albumId = Integer.parseInt(album.getAlbumId());
+                if (albumId == MusicTag.ID_LOCAL_ARTIST || albumId == MusicTag.ID_LOCAL_OTHER)
+                    albumId = MusicTag.ID_LOCAL;
+                tag.setSelected(tag.getId() == albumId);
+            } else
+                tag.setSelected(false);
     }
 
     public void loadList() {
@@ -131,6 +149,7 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback{
                         refreshLayout.setRefreshing(false);
                         if (data != null)
                             itemList.addAll(data);
+                        setSelectTag();
                         adapter.notifyDataSetChanged();
                         if (adapter.getLoadMoreModule().isLoading())
                             adapter.getLoadMoreModule().loadMoreComplete();

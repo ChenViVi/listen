@@ -69,6 +69,8 @@ public interface IPlayController<B extends BaseAlbumItem, M extends BaseMusicIte
 
     boolean isPaused();
 
+    boolean isStop();
+
     boolean isInit();
 
     void setSeek(int progress);

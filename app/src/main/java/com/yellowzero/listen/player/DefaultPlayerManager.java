@@ -119,6 +119,11 @@ public class DefaultPlayerManager implements IPlayController<DefaultAlbum, Defau
     }
 
     @Override
+    public boolean isStop() {
+        return mController.isStop();
+    }
+
+    @Override
     public boolean isInit() {
         return mController.isInit();
     }

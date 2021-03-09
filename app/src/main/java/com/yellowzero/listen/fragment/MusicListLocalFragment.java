@@ -83,7 +83,7 @@ public class MusicListLocalFragment extends Fragment {
             return;
         isArtist = bundle.getBoolean(KEY_IS_ARTIST, true);
         tagId = isArtist? MusicTag.ID_LOCAL_ARTIST : MusicTag.ID_LOCAL_OTHER;
-        album.setAlbumId(getString(isArtist? R.string.yellow_zero : R.string.tv_other));
+        album.setAlbumId(String.valueOf(isArtist? MusicTag.ID_LOCAL_ARTIST : MusicTag.ID_LOCAL_OTHER));
         yellowZero = getString(R.string.yellow_zero);
         musicEntityDao = ((App) getActivity().getApplication()).getDaoSession().getMusicEntityDao();
         RecyclerView rvList = view.findViewById(R.id.rvList);

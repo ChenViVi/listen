@@ -99,7 +99,15 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
     }
 
     public boolean isPaused() {
+        if(stateLiveData.getValue() == null)
+            return true;
         return stateLiveData.getValue() != IPlayController.STATE_PLAY;
+    }
+
+    public boolean isStop() {
+        if(stateLiveData.getValue() == null)
+            return true;
+        return stateLiveData.getValue() == IPlayController.STATE_STOP;
     }
 
     /**

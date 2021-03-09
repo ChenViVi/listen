@@ -27,7 +27,9 @@ public class MusicTagAdapter extends BaseQuickAdapter<MusicTag, BaseViewHolder> 
     @Override
     protected void convert(BaseViewHolder viewHolder, MusicTag item) {
         viewHolder.setText(R.id.tvName, item.getName())
-                .setText(R.id.tvNum, String.format(context.getString(R.string.tv_music_count), item.getCount()));
+                .setText(R.id.tvNum, String.format(context.getString(R.string.tv_music_count), item.getCount()))
+                .setGone(R.id.ivPlay, item.isSelected())
+                .setGone(R.id.ivPlaying, !item.isSelected());
         ImageView ivCover = viewHolder.getView(R.id.ivCover);
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) ivCover.getLayoutParams();
         lp.width = lp.height = ScreenUtil.getScreenWidth(context)/2 - ScreenUtil.dp2px(5);

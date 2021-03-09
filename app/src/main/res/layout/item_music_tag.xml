@@ -20,7 +20,8 @@
                 android:id="@+id/ivCover"
                 android:layout_width="@dimen/_180sdp"
                 android:layout_height="@dimen/_180sdp"
-                tools:src="@drawable/ic_holder_square"/>
+                tools:src="@drawable/ic_holder_square"
+                tools:ignore="ContentDescription" />
             <TextView
                 android:id="@+id/tvNum"
                 android:layout_width="wrap_content"
@@ -35,15 +36,39 @@
                 tools:text="15首"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_9sdp"
-                android:background="@drawable/bg_song_count"/>
+                android:background="@drawable/bg_song_count"
+                tools:ignore="RelativeOverlap" />
         </RelativeLayout>
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="@dimen/_2sdp"
-            android:textSize="@dimen/_12sdp"
-            tools:text="B站"/>
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivPlay"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:src="@drawable/ic_play_grey"
+                tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/ivPlaying"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:src="@drawable/ic_playing"
+                android:padding="@dimen/_2sdp"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:padding="@dimen/_2sdp"
+                android:textSize="@dimen/_12sdp"
+                tools:text="B站"/>
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

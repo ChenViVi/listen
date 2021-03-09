@@ -3,6 +3,7 @@ package com.yellowzero.listen.model;
 import java.io.Serializable;
 
 public class MusicTag implements Serializable {
+    public static final int ID_NULL = 0;
     public static final int ID_FAV = -1;
     public static final int ID_LOCAL = -2;
     public static final int ID_LOCAL_ARTIST = -3;
@@ -13,6 +14,7 @@ public class MusicTag implements Serializable {
     private String cover;
     private int coverRes;
     private long count;
+    private boolean selected;
 
     public int getId() {
         return id;
@@ -52,5 +54,13 @@ public class MusicTag implements Serializable {
 
     public void setCount(long count) {
         this.count = count;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 }
