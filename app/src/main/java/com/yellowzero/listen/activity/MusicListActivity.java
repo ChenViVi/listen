@@ -65,6 +65,7 @@ public class MusicListActivity extends AppCompatActivity {
         musicEntityDao = ((App) getApplication()).getDaoSession().getMusicEntityDao();
         proxy = App.getProxy(this);
         album.setAlbumId(String.valueOf(tag.getId()));
+        album.setTitle(tag.getName());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

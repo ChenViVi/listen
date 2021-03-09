@@ -11,12 +11,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.jaeger.library.StatusBarUtil;
 import com.yellowzero.listen.App;
 import com.yellowzero.listen.R;
+import com.yellowzero.listen.model.MusicTag;
 import com.yellowzero.listen.model.entity.MusicEntity;
 import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.player.DefaultPlayerManager;
@@ -25,7 +30,7 @@ import com.yellowzero.listen.player.contract.IPlayController;
 
 import java.util.List;
 
-public class MusicPlayActivity extends AppCompatActivity {
+public class MusicPlayActivity extends AppCompatActivity implements OnPermissionCallback {
 
     private Toolbar toolbar;
     private ImageView ivCover;
@@ -142,6 +147,28 @@ public class MusicPlayActivity extends AppCompatActivity {
         DefaultPlayerManager.getInstance().changeMode();
     }
 
+    public void onClickPlayList(View view) {
+        DefaultAlbum album = DefaultPlayerManager.getInstance().getAlbum();
+        if (album == null)
+            return;
+        int albumId = Integer.parseInt(album.getAlbumId());
+        if (albumId == MusicTag.ID_LOCAL_ARTIST || albumId == MusicTag.ID_LOCAL_OTHER)
+            albumId = MusicTag.ID_LOCAL;
+        if (albumId == MusicTag.ID_LOCAL)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R)
+                XXPermissions.with(this)
+                        .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                        .request(this);
+            else
+                XXPermissions.with(this)
+                        .permission(Permission.READ_EXTERNAL_STORAGE)
+                        .request(this);
+        else if (albumId == MusicTag.ID_FAV)
+            MusicListFavActivity.start(this, album.getTag());
+        else
+            MusicListActivity.start(this, album.getTag());
+    }
+
     public void onClickFav(View view) {
         DefaultAlbum.DefaultMusic music = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
         List<MusicEntity> musicEntities = musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(music.getUrl())).list();
@@ -151,5 +178,15 @@ public class MusicPlayActivity extends AppCompatActivity {
         else
             musicEntityDao.insert(music.toEntity());
         ivFav.setImageResource(!isFav ? R.drawable.ic_fav_enable : R.drawable.ic_fav);
+    }
+
+    @Override
+    public void onGranted(List<String> permissions, boolean all) {
+        MusicListLocalActivity.start(this, DefaultPlayerManager.getInstance().getAlbum().getTag());
+    }
+
+    @Override
+    public void onDenied(List<String> permissions, boolean never) {
+        Toast.makeText(this, R.string.ts_permission_storage, Toast.LENGTH_SHORT).show();
     }
 }

@@ -16,6 +16,8 @@
 
 package com.yellowzero.listen.player.bean.base;
 
+import com.yellowzero.listen.model.MusicTag;
+
 import java.util.List;
 
 /**
@@ -92,4 +94,10 @@ public class BaseAlbumItem<M extends BaseMusicItem, A extends BaseArtistItem> {
         this.musics = musics;
     }
 
+    public MusicTag getTag() {
+        MusicTag tag = new MusicTag();
+        tag.setId(Integer.parseInt(getAlbumId()));
+        tag.setName(getTitle());
+        return tag;
+    }
 }

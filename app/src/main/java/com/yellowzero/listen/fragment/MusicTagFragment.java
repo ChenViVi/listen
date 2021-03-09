@@ -39,7 +39,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MusicTagFragment extends Fragment implements OnPermissionCallback{
+public class MusicTagFragment extends Fragment implements OnPermissionCallback {
 
     private RecyclerView rvList;
     private SwipeRefreshLayout refreshLayout;

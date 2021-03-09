@@ -78,6 +78,14 @@
                 android:src="@drawable/ic_mode_loop"
                 android:onClick="onClickMode"
                 tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/ivPlayList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_play_list"
+                android:onClick="onClickPlayList"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
