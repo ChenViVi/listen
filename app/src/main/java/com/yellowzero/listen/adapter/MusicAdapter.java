@@ -1,6 +1,7 @@
 package com.yellowzero.listen.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
@@ -96,6 +97,21 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
                             WebViewActivity.start(context, item.getLink());
                     }
                 });
+            else if (item.getLink().contains("weibo")) {
+                viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (PackageUtil.isPackageInstalled(context, "com.sina.weibo")) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                            intent.setData(Uri.parse("sinaweibo://detail?mblogid=" + item.getLink()));
+                            context.startActivity(intent);
+                        } else
+                            WebViewActivity.start(context, "https://m.weibo.cn/detail/" + item.getLink());
+                    }
+                });
+            }
             else {
                 viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
                     @Override
