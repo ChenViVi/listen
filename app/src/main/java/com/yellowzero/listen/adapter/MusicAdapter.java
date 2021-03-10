@@ -98,6 +98,7 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
                     }
                 });
             else if (item.getLink().contains("weibo")) {
+                String link = item.getLink().replace("weibo","");
                 viewHolder.getView(R.id.ivVideo).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -105,10 +106,10 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             intent.addCategory(Intent.CATEGORY_DEFAULT);
                             intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                            intent.setData(Uri.parse("sinaweibo://detail?mblogid=" + item.getLink()));
+                            intent.setData(Uri.parse("sinaweibo://detail?mblogid=" + link));
                             context.startActivity(intent);
                         } else
-                            WebViewActivity.start(context, "https://m.weibo.cn/detail/" + item.getLink());
+                            WebViewActivity.start(context, "https://m.weibo.cn/detail/" + link);
                     }
                 });
             }
