@@ -132,7 +132,7 @@ public class MusicListLocalFragment extends Fragment {
         coverDirPath = getContext().getExternalCacheDir() + File.separator + "cover" + File.separator ;
         File coverDir = new File(coverDirPath);
         if (!coverDir.exists())
-            coverDir.mkdir();
+            coverDir.mkdirs();
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             for (int i = 0; i < itemList.size(); i++) {
                 Music music = itemList.get(i);
@@ -210,6 +210,7 @@ public class MusicListLocalFragment extends Fragment {
                 loadMusic(AppData.QQ_FILES_1);
                 loadMusic(AppData.QQ_FILES_2);
                 loadMusic(AppData.MUSIC_MIGU);
+                loadMusic(AppData.BAIDU_DISK);
                 emitter.onNext(1);
                 emitter.onComplete();
             }
@@ -230,7 +231,7 @@ public class MusicListLocalFragment extends Fragment {
     private void loadMusic(String dir) {
         File dirMusic = new File(dir);
         if (dirMusic.exists() && dirMusic.isDirectory()) {
-            File[] files = dirMusic.listFiles(new FileFilter() {
+            List<File> files = FileUtil.loopFiles(dirMusic, new FileFilter() {
                 @Override
                 public boolean accept(File file) {
                     String path = file.getPath();

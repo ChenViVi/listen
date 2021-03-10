@@ -3,7 +3,10 @@ package com.yellowzero.listen.util;
 import android.text.TextUtils;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtil {
     public static String getSuffix(String path) {
@@ -166,5 +169,19 @@ public class FileUtil {
         } else {
             return false;
         }
+    }
+
+    public static List<File> loopFiles(File file, FileFilter fileFilter) {
+        List<File> fileList = new ArrayList<>();
+        if (null != file && file.exists()) {
+            if (file.isDirectory()) {
+                File[] subFiles = file.listFiles();
+                if (subFiles != null && subFiles.length != 0)
+                    for (File tmp : subFiles)
+                        fileList.addAll(loopFiles(tmp, fileFilter));
+            } else if (null == fileFilter || fileFilter.accept(file))
+                fileList.add(file);
+        }
+        return fileList;
     }
 }
