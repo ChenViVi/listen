@@ -55,10 +55,12 @@ public class PlayerService extends Service {
     private static final int NOTIFICATION_ID = 5;
     private PlayerCallHelper mPlayerCallHelper;
 
-
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
+    public void onCreate() {
+        super.onCreate();
+        DefaultAlbum.DefaultMusic results = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
+        if (results != null)
+            createNotification(results);
         if (mPlayerCallHelper == null) {
             mPlayerCallHelper = new PlayerCallHelper(new PlayerCallHelper.PlayerCallHelperListener() {
                 @Override
@@ -82,15 +84,18 @@ public class PlayerService extends Service {
                 }
             });
         }
+        mPlayerCallHelper.bindCallListener(getApplicationContext());
+    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (mPlayerCallHelper != null)
+            return START_NOT_STICKY;
         DefaultAlbum.DefaultMusic results = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
         if (results == null) {
             stopSelf();
             return START_NOT_STICKY;
         }
-
-        mPlayerCallHelper.bindCallListener(getApplicationContext());
-
         createNotification(results);
         return START_NOT_STICKY;
     }
