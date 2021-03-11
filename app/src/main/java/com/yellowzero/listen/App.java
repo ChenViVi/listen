@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.config.OkHttpConfig;
@@ -47,11 +48,13 @@ public class App extends Application {
             @Override
             public void notifyService(boolean startOrStop) {
                 Intent intent = new Intent(App.this, PlayerService.class);
-                if (startOrStop) {
-                    startService(intent);
-                } else {
+                if (startOrStop)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        startForegroundService(intent);
+                    else
+                        startService(intent);
+                else
                     stopService(intent);
-                }
             }
         });
         IntentFilter intentFilter = new IntentFilter();

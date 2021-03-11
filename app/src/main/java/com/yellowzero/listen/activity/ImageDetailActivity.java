@@ -154,12 +154,13 @@ public class ImageDetailActivity extends AppCompatActivity {
         ivLike.setImageResource(isLike ? R.drawable.ic_star_enable : R.drawable.ic_star);
         ivDownload.setImageResource(isDownload ? R.drawable.ic_download_enable : R.drawable.ic_download);
         tvDownload.setText(isDownload ? R.string.tv_downloaded : R.string.tv_download);
-        Glide.with(ImageDetailActivity.this)
-                .load(currentImage.getUser().getAvatar())
-                .placeholder(R.drawable.ic_holder_circle)
-                .error(R.drawable.ic_holder_circle)
-                .transform(new CircleCrop())
-                .into(ivAvatar);
+        if (!isDestroyed())
+            Glide.with(ImageDetailActivity.this)
+                    .load(currentImage.getUser().getAvatar())
+                    .placeholder(R.drawable.ic_holder_circle)
+                    .error(R.drawable.ic_holder_circle)
+                    .transform(new CircleCrop())
+                    .into(ivAvatar);
     }
 
     private void loadList() {

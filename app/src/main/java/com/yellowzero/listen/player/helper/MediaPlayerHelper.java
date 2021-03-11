@@ -271,7 +271,10 @@ public class MediaPlayerHelper implements OnCompletionListener, OnBufferingUpdat
         public void run() {
             refress_time_handler.removeCallbacks(refress_time_Thread);
             if (uiHolder.player != null && uiHolder.player.isPlaying()) {
-                callBack(CallBackState.PROGRESS, 100 * uiHolder.player.getCurrentPosition() / uiHolder.player.getDuration());
+                if (uiHolder.player.getDuration() == 0)
+                    callBack(CallBackState.PROGRESS, 0);
+                else
+                    callBack(CallBackState.PROGRESS, 100 * uiHolder.player.getCurrentPosition() / uiHolder.player.getDuration());
             }
             refress_time_handler.postDelayed(refress_time_Thread, delaySecondTime);
         }

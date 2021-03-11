@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
@@ -59,11 +60,12 @@ public class MusicListLocalFragment extends Fragment {
     private int indexNumber;
     private String coverDirPath;
 
+    private boolean isFirstLoad = true;
     private int tagId;
     private boolean isArtist;
     private String yellowZero;
     private SwipeRefreshLayout refreshLayout;
-    private List<Music> itemList = new ArrayList<>();
+    private CopyOnWriteArrayList<Music> itemList = new CopyOnWriteArrayList<>();
     List<DefaultAlbum.DefaultMusic> musics = new ArrayList<>();
     private DefaultAlbum album = new DefaultAlbum();
     private MusicEntityDao musicEntityDao;
@@ -170,6 +172,8 @@ public class MusicListLocalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (isFirstLoad)
+            return;
         if (itemList.size() == 0)
             return;
         for (Music music : itemList)
@@ -197,6 +201,7 @@ public class MusicListLocalFragment extends Fragment {
     }
 
     private void loadList() {
+        isFirstLoad = false;
         indexNumber = 1;
         itemList.clear();
         musics.clear();

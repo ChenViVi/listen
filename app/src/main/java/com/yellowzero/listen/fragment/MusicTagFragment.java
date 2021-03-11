@@ -1,5 +1,6 @@
 package com.yellowzero.listen.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,15 +134,18 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback {
 
                     @Override
                     protected void onSuccess(List<MusicTag> data) {
+                        Context context = getContext();
+                        if (context == null)
+                            return;
                         itemList.clear();
                         MusicTag favTag = new MusicTag();
-                        favTag.setName(getString(R.string.tv_music_fav));
+                        favTag.setName(context.getString(R.string.tv_music_fav));
                         favTag.setId(MusicTag.ID_FAV);
                         favTag.setCoverRes(R.drawable.ic_music_fav);
                         favTag.setCount(musicEntityDao.count());
                         itemList.add(favTag);
                         MusicTag localTag = new MusicTag();
-                        localTag.setName(getString(R.string.tv_music_local));
+                        localTag.setName(context.getString(R.string.tv_music_local));
                         localTag.setId(MusicTag.ID_LOCAL);
                         localTag.setCoverRes(R.drawable.ic_music_local);
                         localTag.setCount(AppData.MUSIC_LOCAL_COUNT);
