@@ -25,6 +25,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -54,10 +55,12 @@ public class PlayerService extends Service {
     private static final String CHANNEL_ID = "channel_001";
     private static final int NOTIFICATION_ID = 5;
     private PlayerCallHelper mPlayerCallHelper;
+    private boolean isFirstNotify = true;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.e("xxxx", "onCreate");
         DefaultAlbum.DefaultMusic results = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
         if (results != null)
             createNotification(results);
@@ -89,13 +92,16 @@ public class PlayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mPlayerCallHelper != null)
-            return START_NOT_STICKY;
         DefaultAlbum.DefaultMusic results = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
         if (results == null) {
             stopSelf();
             return START_NOT_STICKY;
         }
+        if (isFirstNotify) {
+            isFirstNotify = false;
+            return START_NOT_STICKY;
+        }
+        Log.e("xxxx", "onStartCommand");
         createNotification(results);
         return START_NOT_STICKY;
     }
