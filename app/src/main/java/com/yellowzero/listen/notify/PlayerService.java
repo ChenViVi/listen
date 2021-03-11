@@ -25,7 +25,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -60,7 +59,6 @@ public class PlayerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("xxxx", "onCreate");
         DefaultAlbum.DefaultMusic results = DefaultPlayerManager.getInstance().getCurrentPlayingMusic();
         if (results != null)
             createNotification(results);
@@ -101,7 +99,6 @@ public class PlayerService extends Service {
             isFirstNotify = false;
             return START_NOT_STICKY;
         }
-        Log.e("xxxx", "onStartCommand");
         createNotification(results);
         return START_NOT_STICKY;
     }
