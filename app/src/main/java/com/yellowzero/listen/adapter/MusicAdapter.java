@@ -52,6 +52,7 @@ public class MusicAdapter extends BaseQuickAdapter<Music, BaseViewHolder>  imple
                     musicEntityDao.delete(musicEntities.get(0));
                 else
                     musicEntityDao.insert(item.toEntity());
+                item.setFav(!isFav);
                 ivFav.setImageResource(!isFav ? R.drawable.ic_fav_enable : R.drawable.ic_fav_grey);
             }
         });
