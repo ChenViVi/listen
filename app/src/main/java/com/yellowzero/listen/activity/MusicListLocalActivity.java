@@ -33,11 +33,10 @@ public class MusicListLocalActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager viewPager = findViewById(R.id.viewPager);
         TabViewPagerAdapter adapterTab = new TabViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapterTab);
-        tabLayout.setupWithViewPager(viewPager);
         adapterTab.addFragment(MusicListLocalFragment.createInstance(true), getString(R.string.yellow_zero));
         adapterTab.addFragment(MusicListLocalFragment.createInstance(false), getString(R.string.tv_other));
-        adapterTab.notifyDataSetChanged();
+        viewPager.setAdapter(adapterTab);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

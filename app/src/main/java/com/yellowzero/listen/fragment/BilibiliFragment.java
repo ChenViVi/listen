@@ -23,6 +23,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 public class BilibiliFragment extends Fragment {
+
+    private TabViewPagerAdapter adapterTab;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,7 +37,7 @@ public class BilibiliFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         ViewPager viewPager = view.findViewById(R.id.viewPager);
-        TabViewPagerAdapter adapterTab = new TabViewPagerAdapter(getChildFragmentManager());
+        adapterTab = new TabViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapterTab);
         tabLayout.setupWithViewPager(viewPager);
         adapterTab.addFragment(new BilibiliListMainFragment(), getString(R.string.tv_bilibili_main));
@@ -50,5 +53,11 @@ public class BilibiliFragment extends Fragment {
                         adapterTab.notifyDataSetChanged();
                     }
                 });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapterTab.notifyDataSetChanged();
     }
 }
