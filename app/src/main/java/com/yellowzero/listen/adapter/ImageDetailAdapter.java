@@ -74,7 +74,7 @@ public class ImageDetailAdapter extends BaseQuickAdapter<Image, BaseViewHolder> 
                 });
     }
 
-    class Test implements View.OnTouchListener {
+    static class Test implements View.OnTouchListener {
 
         private View ivImage;
         private View svDetail;

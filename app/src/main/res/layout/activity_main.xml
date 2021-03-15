@@ -20,7 +20,112 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_alignParentBottom="true"
-        android:background="@color/tabBackground"/>
+        android:background="@color/tabBackground">
+        <LinearLayout
+            android:id="@+id/llTabImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivTabImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:src="@drawable/tab_image_active"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvTabImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/tv_image"
+                android:textColor="@color/colorPrimary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llTabMusic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivTabMusic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:src="@drawable/tab_music_inactive"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvTabMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/tv_music"
+                android:textColor="@color/tabGrey"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llTabVideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivTabVideo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:src="@drawable/tab_video_inactive"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvTabVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/tv_video"
+                android:textColor="@color/tabGrey"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llTabSchedule"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivTabSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:src="@drawable/tab_schedule_inactive"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvTabSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/tv_schedule"
+                android:textColor="@color/tabGrey"/>
+        </LinearLayout>
+    </LinearLayout>
     <include
         android:id="@+id/llMusic"
         layout="@layout/layout_music_play"

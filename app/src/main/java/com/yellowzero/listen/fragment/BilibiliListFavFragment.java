@@ -89,7 +89,7 @@ public class BilibiliListFavFragment extends Fragment {
         return fragment;
     }
 
-    public void loadList() {
+    private void loadList() {
         RxHttpUtils.createApi("bilibili","https://api.bilibili.com/", BilibiliService.class)
                 .list(bizId,3,1000)
                 .compose(Transformer.<String>switchSchedulers())
