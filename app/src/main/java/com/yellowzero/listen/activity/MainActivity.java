@@ -1,12 +1,13 @@
 package com.yellowzero.listen.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,19 +25,21 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
+import com.yellowzero.listen.fragment.ScheduleFragment;
 import com.yellowzero.listen.model.AppInfo;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.player.DefaultPlayerManager;
 import com.yellowzero.listen.player.contract.IPlayController;
 import com.yellowzero.listen.service.AppService;
-import com.yellowzero.listen.view.AndTabManager;
 import com.yellowzero.listen.view.UpdateDialog;
-import com.yellowzero.listen.view.FragmentTabCheckListener;
 import com.yellowzero.listen.view.Tab;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private List<Tab> tabs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,31 +50,48 @@ public class MainActivity extends AppCompatActivity {
         TextView tvName = findViewById(R.id.tvName);
         ImageView ivPlay = findViewById(R.id.ivPlay);
         View llMusic = findViewById(R.id.llMusic);
-        AndTabManager andTabManager = new AndTabManager(this, findViewById(R.id.llTab));
-        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_image).toString())
+        View llTabImage = findViewById(R.id.llTabImage);
+        ImageView ivTabImage = findViewById(R.id.ivTabImage);
+        ImageView ivTabMusic = findViewById(R.id.ivTabMusic);
+        tabs.add(new Tab().setText(getResources().getText(R.string.tv_image).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
                 .setIconNormalResId(R.drawable.tab_image_inactive)
-                .setIconPressedResId(R.drawable.tab_image_active));
-        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_music).toString())
+                .setIconPressedResId(R.drawable.tab_image_active)
+                .setView(llTabImage)
+                .setTextView(findViewById(R.id.tvTabImage))
+                .setImageView(ivTabImage)
+                .setFragment(new ImageFragment()));
+        tabs.add(new Tab().setText(getResources().getText(R.string.tv_music).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
                 .setIconNormalResId(R.drawable.tab_music_inactive)
-                .setIconPressedResId(R.drawable.tab_music_active));
-        andTabManager.addTab(new Tab().setText(getResources().getText(R.string.tv_video).toString())
+                .setIconPressedResId(R.drawable.tab_music_active)
+                .setView(findViewById(R.id.llTabMusic))
+                .setTextView(findViewById(R.id.tvTabMusic))
+                .setImageView(ivTabMusic)
+                .setFragment(new MusicTagFragment()));
+        tabs.add(new Tab().setText(getResources().getText(R.string.tv_video).toString())
                 .setNormalColor(getResources().getColor(R.color.tabGrey))
                 .setSelectColor(getResources().getColor(R.color.colorPrimary))
                 .setIconNormalResId(R.drawable.tab_video_inactive)
-                .setIconPressedResId(R.drawable.tab_video_active));
-        andTabManager.setOnTabCheckListener(new FragmentTabCheckListener(
-                getSupportFragmentManager(),
-                R.id.llFragment,
-                new Fragment[] {
-                        new ImageFragment(),
-                        new MusicTagFragment(),
-                        new BilibiliFragment()
-                }));
-        andTabManager.setCurrentItem(0);
+                .setIconPressedResId(R.drawable.tab_video_active)
+                .setView(findViewById(R.id.llTabVideo))
+                .setTextView(findViewById(R.id.tvTabVideo))
+                .setImageView(findViewById(R.id.ivTabVideo))
+                .setFragment(new BilibiliFragment()));
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        for (int i = 0; i < tabs.size(); i++) {
+            Tab tab = tabs.get(i);
+            View llTab = tab.getView();
+            llTab.setTag(i);
+            llTab.setOnClickListener(this);
+            transaction.add(R.id.llFragment, tab.getFragment());
+        }
+        transaction.show(tabs.get(0).getFragment());
+        for (int i = 1; i < tabs.size(); i++)
+            transaction.hide(tabs.get(i).getFragment());
+        transaction.commit();
         DefaultPlayerManager.getInstance().getChangeMusicLiveData().observe(this, changeMusic -> {
             Glide.with(MainActivity.this)
                     .load(changeMusic.getImg())
@@ -131,18 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void onPlay(View view) {
-        DefaultPlayerManager.getInstance().togglePlay();
-    }
-
-    public void onNext(View view) {
-        DefaultPlayerManager.getInstance().playNext();
-    }
-
-    public void onClickPlayDetail(View view) {
-        startActivity(new Intent(MainActivity.this, MusicPlayActivity.class));
-    }
-
 /*    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_setting);
@@ -171,5 +179,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         AppData.saveData(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        for (Tab tab : tabs) {
+            if (v == tab.getView()) {
+                tab.getImageView().setImageResource(tab.getIconPressedResId());
+                tab.getTextView().setTextColor(tab.getSelectColor());
+                transaction.show(tab.getFragment());
+            } else {
+                tab.getImageView().setImageResource(tab.getIconNormalResId());
+                tab.getTextView().setTextColor(tab.getNormalColor());
+                transaction.hide(tab.getFragment());
+            }
+        }
+        transaction.commit();
+    }
+
+    public void onPlay(View view) {
+        DefaultPlayerManager.getInstance().togglePlay();
+    }
+
+    public void onNext(View view) {
+        DefaultPlayerManager.getInstance().playNext();
+    }
+
+    public void onClickPlayDetail(View view) {
+        startActivity(new Intent(MainActivity.this, MusicPlayActivity.class));
     }
 }
