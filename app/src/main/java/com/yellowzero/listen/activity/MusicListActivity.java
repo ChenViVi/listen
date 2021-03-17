@@ -81,6 +81,8 @@ public class MusicListActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                if (refreshLayout.isRefreshing() || position >= album.getMusics().size())
+                    return;
                 if (itemList.get(position).isAvailable()) {
                     setPlayMusic(position);
                     adapter.notifyDataSetChanged();
@@ -209,9 +211,7 @@ public class MusicListActivity extends AppCompatActivity {
     }
 
     private void setPlayMusic(int position) {
-        if (DefaultPlayerManager.getInstance().getAlbum() == null ||
-                !DefaultPlayerManager.getInstance().getAlbum().getAlbumId().equals(album.getAlbumId()))
-            DefaultPlayerManager.getInstance().loadAlbum(album);
+        DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
         for (Music music : itemList)
             music.setSelected(false);
@@ -222,7 +222,7 @@ public class MusicListActivity extends AppCompatActivity {
         RxHttpUtils.createApi(MusicService.class)
                 .list(tag.getId())
                 .compose(Transformer.<BaseData<List<Music>>>switchSchedulers())
-                .subscribe(new DataObserver<List<Music>>() {
+                .subscribe(new DataObserver<List<Music>>(this) {
 
                     @Override
                     protected void onError(String errorMsg) {

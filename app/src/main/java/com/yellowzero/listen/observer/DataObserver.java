@@ -1,11 +1,15 @@
 package com.yellowzero.listen.observer;
 
+import android.app.Activity;
 import android.text.TextUtils;
 
 import com.allen.library.base.BaseObserver;
 import com.allen.library.bean.BaseData;
 import com.allen.library.utils.ToastUtils;
 
+import java.lang.ref.WeakReference;
+
+import androidx.fragment.app.Fragment;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -28,13 +32,43 @@ import io.reactivex.disposables.Disposable;
 
 public class DataObserver<T> extends BaseObserver<BaseData<T>> {
 
+    private boolean initWithActivity = false;
+    private boolean initWithFragment = false;
+    private WeakReference<Activity> activity;
+    private WeakReference<Fragment> fragment;
+
+    public DataObserver() { }
+
+    public DataObserver(Activity activity) {
+        this.activity = new WeakReference<>(activity);
+        initWithActivity = true;
+    }
+
+    public DataObserver(Fragment fragment) {
+        this.fragment = new WeakReference<>(fragment);
+        initWithFragment = true;
+    }
+
     /**
      * 失败回调
      *
      * @param errorMsg 错误信息
      */
     protected void onError(String errorMsg) {
-
+        if (!TextUtils.isEmpty(errorMsg))
+            if (!initWithActivity && !initWithFragment)
+                ToastUtils.showToast(errorMsg);
+            else if (initWithActivity
+                    && activity != null
+                    && activity.get()!= null
+                    && activity.get().isFinishing())
+                ToastUtils.showToast(errorMsg);
+            else if (initWithFragment
+                    && fragment != null
+                    && fragment.get() != null
+                    && fragment.get().getActivity() != null
+                    && fragment.get().getActivity().isFinishing())
+                ToastUtils.showToast(errorMsg);
     }
 
     /**
@@ -52,18 +86,27 @@ public class DataObserver<T> extends BaseObserver<BaseData<T>> {
 
     @Override
     public void doOnError(String errorMsg) {
-        if (!isHideToast() && !TextUtils.isEmpty(errorMsg)) {
-            ToastUtils.showToast(errorMsg);
-        }
         onError(errorMsg);
     }
 
     @Override
     public void doOnNext(BaseData<T> data) {
         if (data.getCode() == 200)
-            onSuccess(data.getData());
+            if (!initWithActivity && !initWithFragment)
+                onSuccess(data.getData());
+            else if (initWithActivity
+                    && activity != null
+                    && activity.get()!= null
+                    && !activity.get().isFinishing())
+                onSuccess(data.getData());
+            else if (initWithFragment
+                    && fragment != null
+                    && fragment.get() != null
+                    && fragment.get().getActivity() != null
+                    && !fragment.get().getActivity().isFinishing())
+                onSuccess(data.getData());
         else
-            doOnError(data.getMsg());
+            onError(data.getMsg());
     }
 
     @Override

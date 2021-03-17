@@ -72,7 +72,8 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         if (extraFormatList != null) {
             MediaPlayerHelper.getInstance().getFormatList().addAll(extraFormatList);
         }
-        playModeLiveData.setValue(IPlayController.STATE_STOP);
+        stateLiveData.setValue(IPlayController.STATE_STOP);
+        playModeLiveData.setValue(AppData.MUSIC_REPEAT_MODE);
     }
 
     public boolean isInit() {
@@ -265,7 +266,7 @@ public class PlayerController<B extends BaseAlbumItem, M extends BaseMusicItem> 
         MediaPlayerHelper.getInstance().getMediaPlayer().reset();
         stateLiveData.setValue(IPlayController.STATE_STOP);
         //这里设为true是因为可能通知栏清除后，还可能在页面中点击播放
-        resetIsChangingPlayingChapter();
+        //resetIsChangingPlayingChapter();
         MediaPlayerHelper.getInstance().setProgressInterval(1000).setMediaPlayerHelperCallBack(null);
         if (mIServiceNotifier != null) {
             mIServiceNotifier.notifyService(false);

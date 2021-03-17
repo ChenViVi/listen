@@ -97,7 +97,7 @@ public class ImageActivity extends AppCompatActivity {
         RxHttpUtils.createApi(ImageService.class)
                 .list(tag.getId(), page * PAGE_SIZE, PAGE_SIZE)
                 .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
-                .subscribe(new DataObserver<List<Image>>() {
+                .subscribe(new DataObserver<List<Image>>(this) {
 
                     @Override
                     protected void onError(String errorMsg) {

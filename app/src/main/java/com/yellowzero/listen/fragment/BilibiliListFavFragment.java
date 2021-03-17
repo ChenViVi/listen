@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.allen.library.RxHttpUtils;
 import com.allen.library.interceptor.Transformer;
-import com.allen.library.observer.StringObserver;
 import com.allen.library.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -19,6 +18,7 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.adapter.BilibiliVideoAdapter;
 import com.yellowzero.listen.model.BilibiliVideo;
 import com.yellowzero.listen.model.BilibiliFav;
+import com.yellowzero.listen.observer.StringObserver;
 import com.yellowzero.listen.service.BilibiliService;
 
 import java.util.ArrayList;
@@ -93,11 +93,11 @@ public class BilibiliListFavFragment extends Fragment {
         RxHttpUtils.createApi("bilibili","https://api.bilibili.com/", BilibiliService.class)
                 .list(bizId,3,1000)
                 .compose(Transformer.<String>switchSchedulers())
-                .subscribe(new StringObserver() {
+                .subscribe(new StringObserver(this) {
 
                     @Override
                     protected void onError(String errorMsg) {
-                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+                        super.onError(errorMsg);
                         refreshLayout.setRefreshing(false);
                     }
 

@@ -150,9 +150,18 @@ public class PlayerService extends Service {
             notification.contentView.setTextViewText(R.id.tvName, title);
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
             String cover = music.getCover();
+            startForeground(NOTIFICATION_ID, notification);
             if (cover == null
                     || (!cover.startsWith("http") && !new File(cover).exists()))
-                notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_holder_square);
+                Glide.with(getApplicationContext()) // safer!
+                        .asBitmap()
+                        .load(R.drawable.ic_holder_square)
+                        .into(new NotificationTarget(
+                                this,
+                                R.id.ivCover,
+                                notification.contentView,
+                                notification,
+                                NOTIFICATION_ID));
             else
                 Glide.with(getApplicationContext()) // safer!
                         .asBitmap()
@@ -165,11 +174,8 @@ public class PlayerService extends Service {
                                 notification.contentView,
                                 notification,
                                 NOTIFICATION_ID));
-            startForeground(NOTIFICATION_ID, notification);
-
             mPlayerCallHelper.bindRemoteController(getApplicationContext());
             mPlayerCallHelper.requestAudioFocus(title, summary);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

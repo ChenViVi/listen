@@ -77,6 +77,8 @@ public class MusicListFavActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                if (refreshLayout.isRefreshing() || position >= album.getMusics().size())
+                    return;
                 if (itemList.get(position).isAvailable()) {
                     setPlayMusic(position);
                     adapter.notifyDataSetChanged();
@@ -198,17 +200,18 @@ public class MusicListFavActivity extends AppCompatActivity {
     private void setMusicsAvailable() {
         int state = NetworkUtil.getConnectedState(this);
         for (Music music : itemList) {
-            if (AppData.ENABLE_MUSIC_MOBILE)
-                music.setAvailable(state != NetworkUtil.STATE_OFFLINE || music.isCached());
+            if (music.getUrl().contains("http"))
+                if (AppData.ENABLE_MUSIC_MOBILE)
+                    music.setAvailable(state != NetworkUtil.STATE_OFFLINE || music.isCached());
+                else
+                    music.setAvailable(state == NetworkUtil.STATE_WIFI || music.isCached());
             else
-                music.setAvailable(state == NetworkUtil.STATE_WIFI || music.isCached());
+                music.setAvailable(true);
         }
     }
 
     private void setPlayMusic(int position) {
-        if (DefaultPlayerManager.getInstance().getAlbum() == null ||
-                !DefaultPlayerManager.getInstance().getAlbum().getAlbumId().equals(album.getAlbumId()))
-            DefaultPlayerManager.getInstance().loadAlbum(album);
+        DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
         for (Music music : itemList)
             music.setSelected(false);

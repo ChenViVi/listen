@@ -96,7 +96,6 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPermission
                     break;
             }
         });
-        setModeImageView(DefaultPlayerManager.getInstance().getRepeatMode());
         DefaultPlayerManager.getInstance().getPlayModeLiveData().observe(this, this::setModeImageView);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.bgMusicPlayStart));
     }
@@ -122,13 +121,12 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPermission
     }
 
     private void setModeImageView(int mode) {
-        if (mode == IPlayController.MODE_LIST_CYCLE) {
+        if (mode == IPlayController.MODE_LIST_CYCLE)
             ivMode.setImageResource(R.drawable.ic_mode_loop);
-        } else if (mode == IPlayController.MODE_SINGLE_CYCLE) {
+        else if (mode == IPlayController.MODE_SINGLE_CYCLE)
             ivMode.setImageResource(R.drawable.ic_mode_single);
-        } else if (mode == IPlayController.MODE_RANDOM) {
+        else if (mode == IPlayController.MODE_RANDOM)
             ivMode.setImageResource(R.drawable.ic_mode_random);
-        }
     }
 
     public void onClickLast(View view) {

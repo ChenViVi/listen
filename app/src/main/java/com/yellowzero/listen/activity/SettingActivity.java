@@ -63,7 +63,7 @@ public class SettingActivity extends AppCompatActivity {
             RxHttpUtils.createApi(AppService.class)
                     .list()
                     .compose(Transformer.<BaseData<List<AppInfo>>>switchSchedulers())
-                    .subscribe(new DataObserver<List<AppInfo>>() {
+                    .subscribe(new DataObserver<List<AppInfo>>(this) {
 
                         @Override
                         protected void onSuccess(List<AppInfo> data) {
