@@ -74,13 +74,13 @@ public abstract class StringObserver extends BaseObserver<String> {
         else if (initWithActivity
                 && activity != null
                 && activity.get()!= null
-                && activity.get().isFinishing())
+                && !activity.get().isFinishing())
             onSuccess(string);
         else if (initWithFragment
                 && fragment != null
                 && fragment.get() != null
                 && fragment.get().getActivity() != null
-                && fragment.get().getActivity().isFinishing())
+                && !fragment.get().getActivity().isFinishing())
             onSuccess(string);
     }
 
