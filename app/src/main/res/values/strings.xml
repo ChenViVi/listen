@@ -10,6 +10,7 @@
     <string name="tv_music">音乐</string>
     <string name="tv_video">视频</string>
     <string name="tv_image">图片</string>
+    <string name="tv_schedule">日程</string>
     <string name="tv_source">来源</string>
     <string name="tv_add_tag">添加标签</string>
     <string name="tv_like">收藏</string>
