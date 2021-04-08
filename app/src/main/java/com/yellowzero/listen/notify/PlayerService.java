@@ -153,7 +153,15 @@ public class PlayerService extends Service {
             startForeground(NOTIFICATION_ID, notification);
             if (cover == null
                     || (!cover.startsWith("http") && !new File(cover).exists()))
-                notification.contentView.setImageViewResource(R.id.ivCover, R.drawable.ic_holder_square);
+                Glide.with(getApplicationContext()) // safer!
+                        .asBitmap()
+                        .load(R.drawable.ic_holder_square)
+                        .into(new NotificationTarget(
+                                this,
+                                R.id.ivCover,
+                                notification.contentView,
+                                notification,
+                                NOTIFICATION_ID));
             else
                 Glide.with(getApplicationContext()) // safer!
                         .asBitmap()
@@ -168,7 +176,6 @@ public class PlayerService extends Service {
                                 NOTIFICATION_ID));
             mPlayerCallHelper.bindRemoteController(getApplicationContext());
             mPlayerCallHelper.requestAudioFocus(title, summary);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

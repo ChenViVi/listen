@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -126,6 +127,8 @@ public class MusicListLocalFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                if (refreshLayout.isRefreshing() || position >= album.getMusics().size())
+                    return;
                 setPlayMusic(position);
                 adapter.notifyDataSetChanged();
             }
@@ -191,9 +194,7 @@ public class MusicListLocalFragment extends Fragment {
     }
 
     private void setPlayMusic(int position) {
-        if (DefaultPlayerManager.getInstance().getAlbum() == null ||
-                !DefaultPlayerManager.getInstance().getAlbum().getAlbumId().equals(album.getAlbumId()))
-            DefaultPlayerManager.getInstance().loadAlbum(album);
+        DefaultPlayerManager.getInstance().loadAlbum(album);
         DefaultPlayerManager.getInstance().playAudio(position);
         for (Music music : itemList)
             music.setSelected(false);
@@ -247,51 +248,55 @@ public class MusicListLocalFragment extends Fragment {
                 }
             });
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-            if (files != null)
-                for (File file : files) {
-                    mmr.setDataSource(file.getPath());
-                    String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-                    if (file.getPath().contains(yellowZero) == isArtist
-                            || (!TextUtils.isEmpty(artist) && artist.contains(yellowZero) == isArtist)) {
-                        String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-                        if (TextUtils.isEmpty(title))
-                            title = FileUtil.getPrefix(file.getPath());
-                        String coverPath = coverDirPath + title + ".jpg";
-                        File coverFile = new File(coverPath);
-                        if (!coverFile.exists()) {
-                            byte[] coverData = mmr.getEmbeddedPicture();
-                            if (coverData != null)
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try (FileOutputStream fos = new FileOutputStream(coverFile)) {
-                                            fos.write(coverData);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }).start();
-                        }
-                        Music musicData = new Music();
-                        musicData.setNumber(indexNumber++);
-                        musicData.setName(title);
-                        musicData.setCover(coverPath);
-                        musicData.setUrl(file.getPath());
-                        musicData.setFav(musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(musicData.getUrl())).list().size() > 0);
-                        DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
-                        music.setName(title);
-                        music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
-                                tagId, musicData.getUrl()));
-                        music.setUrl(file.getPath());
-                        music.setCover(coverPath);
-                        if (DefaultPlayerManager.getInstance().isPlaying() &&
-                                music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {
-                            musicData.setSelected(true);
-                        }
-                        itemList.add(musicData);
-                        musics.add(music);
-                    }
+            for (File file : files) {
+                try (FileInputStream in = new FileInputStream(file.getAbsolutePath())) {
+                    mmr.setDataSource(in.getFD());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    continue;
                 }
+                String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                if (file.getPath().contains(yellowZero) == isArtist
+                        || (!TextUtils.isEmpty(artist) && artist.contains(yellowZero) == isArtist)) {
+                    String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                    if (TextUtils.isEmpty(title))
+                        title = FileUtil.getPrefix(file.getPath());
+                    String coverPath = coverDirPath + title + ".jpg";
+                    File coverFile = new File(coverPath);
+                    if (!coverFile.exists()) {
+                        byte[] coverData = mmr.getEmbeddedPicture();
+                        if (coverData != null)
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try (FileOutputStream fos = new FileOutputStream(coverFile)) {
+                                        fos.write(coverData);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                    }
+                    Music musicData = new Music();
+                    musicData.setNumber(indexNumber++);
+                    musicData.setName(title);
+                    musicData.setCover(coverPath);
+                    musicData.setUrl(file.getPath());
+                    musicData.setFav(musicEntityDao.queryBuilder().where(MusicEntityDao.Properties.Url.eq(musicData.getUrl())).list().size() > 0);
+                    DefaultAlbum.DefaultMusic music = new DefaultAlbum.DefaultMusic();
+                    music.setName(title);
+                    music.setMusicId(String.format(Locale.getDefault(), AppData.FORMAT_MUSIC_ID,
+                            tagId, musicData.getUrl()));
+                    music.setUrl(file.getPath());
+                    music.setCover(coverPath);
+                    if (DefaultPlayerManager.getInstance().isPlaying() &&
+                            music.getMusicId().equals(DefaultPlayerManager.getInstance().getCurrentPlayingMusic().getMusicId())) {
+                        musicData.setSelected(true);
+                    }
+                    itemList.add(musicData);
+                    musics.add(music);
+                }
+            }
         }
     }
 

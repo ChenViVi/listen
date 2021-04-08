@@ -44,7 +44,7 @@ public class BilibiliFragment extends Fragment {
         RxHttpUtils.createApi(VideoService.class)
                 .tags()
                 .compose(Transformer.<BaseData<List<VideoTag>>>switchSchedulers())
-                .subscribe(new DataObserver<List<VideoTag>>() {
+                .subscribe(new DataObserver<List<VideoTag>>(this) {
 
                     @Override
                     protected void onSuccess(List<VideoTag> tags) {

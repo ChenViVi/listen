@@ -25,7 +25,6 @@ import com.yellowzero.listen.R;
 import com.yellowzero.listen.fragment.BilibiliFragment;
 import com.yellowzero.listen.fragment.ImageFragment;
 import com.yellowzero.listen.fragment.MusicTagFragment;
-import com.yellowzero.listen.fragment.ScheduleFragment;
 import com.yellowzero.listen.model.AppInfo;
 import com.yellowzero.listen.observer.DataObserver;
 import com.yellowzero.listen.player.DefaultPlayerManager;
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RxHttpUtils.createApi(AppService.class)
                 .list()
                 .compose(Transformer.<BaseData<List<AppInfo>>>switchSchedulers())
-                .subscribe(new DataObserver<List<AppInfo>>() {
+                .subscribe(new DataObserver<List<AppInfo>>(this) {
 
                     @Override
                     protected void onSuccess(List<AppInfo> data) {

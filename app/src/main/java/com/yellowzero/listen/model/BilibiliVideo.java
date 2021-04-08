@@ -25,10 +25,7 @@ public class BilibiliVideo {
     }
 
     public BilibiliVideo(@NotNull BilibiliFav bilibiliFav) {
-        if (bilibiliFav.getPages() != null && bilibiliFav.getPages().size() > 0)
-            this.title = bilibiliFav.getPages().get(0).getTitle();
-        else
-            title = "";
+        this.title = bilibiliFav.getTitle();
         this.cover = bilibiliFav.getCover();
         this.name = bilibiliFav.getUpper().getName();
         this.avatar = bilibiliFav.getUpper().getFace();

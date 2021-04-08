@@ -124,12 +124,28 @@ public class MusicTagFragment extends Fragment implements OnPermissionCallback {
         RxHttpUtils.createApi(MusicService.class)
                 .tags()
                 .compose(Transformer.<BaseData<List<MusicTag>>>switchSchedulers())
-                .subscribe(new DataObserver<List<MusicTag>>() {
+                .subscribe(new DataObserver<List<MusicTag>>(this) {
 
                     @Override
                     protected void onError(String errorMsg) {
                         super.onError(errorMsg);
                         refreshLayout.setRefreshing(false);
+                        Context context = getContext();
+                        if (context == null)
+                            return;
+                        itemList.clear();
+                        MusicTag favTag = new MusicTag();
+                        favTag.setName(context.getString(R.string.tv_music_fav));
+                        favTag.setId(MusicTag.ID_FAV);
+                        favTag.setCoverRes(R.drawable.ic_music_fav);
+                        favTag.setCount(musicEntityDao.count());
+                        itemList.add(favTag);
+                        MusicTag localTag = new MusicTag();
+                        localTag.setName(context.getString(R.string.tv_music_local));
+                        localTag.setId(MusicTag.ID_LOCAL);
+                        localTag.setCoverRes(R.drawable.ic_music_local);
+                        localTag.setCount(AppData.MUSIC_LOCAL_COUNT);
+                        itemList.add(localTag);
                     }
 
                     @Override

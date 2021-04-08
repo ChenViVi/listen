@@ -133,7 +133,7 @@ public class ImageFragment extends Fragment {
             RxHttpUtils.createApi(ImageService.class)
                     .list(tagId, page * PAGE_SIZE, PAGE_SIZE)
                     .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
-                    .subscribe(new DataObserver<List<Image>>() {
+                    .subscribe(new DataObserver<List<Image>>(this) {
 
                         @Override
                         protected void onError(String errorMsg) {
@@ -193,7 +193,7 @@ public class ImageFragment extends Fragment {
                         tags.add(tagAll.getName());
                         tags.add(tagLike.getName());
                         for (ImageTag tag: data)
-                            tags.add(String.format(getContext().getString(R.string.tv_image_tag_count),
+                            tags.add(String.format(getString(R.string.tv_image_tag_count),
                                     tag.getName(),
                                     tag.getCount()));
                         tagsPopup.setTags(tags);

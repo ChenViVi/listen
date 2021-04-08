@@ -21,7 +21,6 @@ import com.allen.library.RxHttpUtils;
 import com.allen.library.bean.BaseData;
 import com.allen.library.download.DownloadObserver;
 import com.allen.library.interceptor.Transformer;
-import com.allen.library.observer.StringObserver;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,8 +31,8 @@ import com.yellowzero.listen.adapter.ImageDetailAdapter;
 import com.yellowzero.listen.model.Image;
 import com.yellowzero.listen.model.entity.ImageEntity;
 import com.yellowzero.listen.model.entity.ImageEntityDao;
-import com.yellowzero.listen.model.entity.MusicEntityDao;
 import com.yellowzero.listen.observer.DataObserver;
+import com.yellowzero.listen.observer.StringObserver;
 import com.yellowzero.listen.service.ImageService;
 import com.yellowzero.listen.util.PackageUtil;
 import com.yellowzero.listen.view.VerticalLayoutManager;
@@ -106,6 +105,21 @@ public class ImageDetailActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position, boolean isBottom) {
                 currentImage = itemList.get(position);
+                RxHttpUtils.createApi(ImageService.class)
+                        .view(currentImage.getId())
+                        .compose(Transformer.<String>switchSchedulers())
+                        .subscribe(new StringObserver() {
+
+                            @Override
+                            protected void onError(String errorMsg) {
+
+                            }
+
+                            @Override
+                            protected void onSuccess(String data) {
+
+                            }
+                        });
                 loadBarView();
                 if (isBottom)
                    loadList();
@@ -168,7 +182,7 @@ public class ImageDetailActivity extends AppCompatActivity {
             RxHttpUtils.createApi(ImageService.class)
                     .list(tagId, position, PAGE_SIZE)
                     .compose(Transformer.<BaseData<List<Image>>>switchSchedulers())
-                    .subscribe(new DataObserver<List<Image>>() {
+                    .subscribe(new DataObserver<List<Image>>(this) {
 
                         @Override
                         protected void onSuccess(List<Image> data) {
