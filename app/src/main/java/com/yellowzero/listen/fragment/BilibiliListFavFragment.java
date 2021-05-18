@@ -91,7 +91,7 @@ public class BilibiliListFavFragment extends Fragment {
 
     private void loadList() {
         RxHttpUtils.createApi("bilibili","https://api.bilibili.com/", BilibiliService.class)
-                .list(bizId,3,1000)
+                .list(bizId,3,200)
                 .compose(Transformer.<String>switchSchedulers())
                 .subscribe(new StringObserver(this) {
 

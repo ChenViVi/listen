@@ -43,7 +43,7 @@ public class App extends Application {
                 .init(this)
                 .config()
                 .setOkClient(okHttpClient)
-                .setBaseUrl("http://api.yellowzero.wblnb.com/");
+                .setBaseUrl("http://api.iyellowzero.com/");
         DefaultPlayerManager.getInstance().init(this, new IServiceNotifier() {
             @Override
             public void notifyService(boolean startOrStop) {
