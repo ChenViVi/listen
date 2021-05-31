@@ -12,9 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.allen.library.RxHttpUtils;
+import com.allen.library.bean.BaseData;
+import com.allen.library.interceptor.Transformer;
 import com.yellowzero.listen.R;
+import com.yellowzero.listen.activity.SettingActivity;
 import com.yellowzero.listen.adapter.ScheduleAdapter;
+import com.yellowzero.listen.model.AppInfo;
 import com.yellowzero.listen.model.Schedule;
+import com.yellowzero.listen.observer.DataObserver;
+import com.yellowzero.listen.service.AppService;
+import com.yellowzero.listen.service.ScheduleService;
+import com.yellowzero.listen.view.UpdateDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +59,25 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void loadList() {
-        itemList.clear();
-        for (int i = 0; i < 40; i++)
-            itemList.add(new Schedule());
-        adapter.notifyDataSetChanged();
+        RxHttpUtils.createApi(ScheduleService.class)
+                .list()
+                .compose(Transformer.<BaseData<List<Schedule>>>switchSchedulers())
+                .subscribe(new DataObserver<List<Schedule>>(this) {
+
+                    @Override
+                    protected void onError(String errorMsg) {
+                        super.onError(errorMsg);
+                        refreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    protected void onSuccess(List<Schedule> data) {
+                        itemList.clear();
+                        if (data != null)
+                            itemList.addAll(data);
+                        adapter.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
+                    }
+                });
     }
 }

@@ -53,6 +53,7 @@
     <string name="ts_pause_music_mobile">正在使用流量，停止播放</string>
     <string name="ts_permission_storage">无权访问本地文件，请前往设置中开启权限</string>
     <string name="ts_add_tag">请在微博中评论 #你想增加的标签#</string>
+    <string name="ts_clock">闹钟已设置</string>
 
     <string name="play">播放</string>
     <string name="notify_of_play">播放时的通知栏展示</string>

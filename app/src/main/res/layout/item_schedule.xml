@@ -13,23 +13,12 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp">
         <TextView
+            android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_11sdp"
-            android:text="2021-03-12"
-            tools:text="2021-03-12"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_11sdp"
-            android:text="周五"
-            tools:text="周五"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_11sdp"
-            android:text="22:00"
-            tools:text="22:00"/>
+            android:gravity="center"
+            tools:text="2021-03-12\n周五\n22:00"/>
     </LinearLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -41,10 +30,11 @@
             android:layout_centerHorizontal="true"
             android:background="@color/colorAccent" />
         <ImageView
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"
+            android:id="@+id/ivClock"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:layout_centerInParent="true"
-            android:src="@drawable/circle"/>
+            android:src="@drawable/circle" />
     </RelativeLayout>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -59,18 +49,19 @@
             android:orientation="vertical"
             android:padding="@dimen/_4sdp">
             <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/_13sdp"
-                android:text="百变大咖秀"
                 tools:text="百变大咖秀"/>
             <TextView
+                android:id="@+id/tvContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:textSize="@dimen/_11sdp"
-                android:text="收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV"
+                android:textIsSelectable="true"
                 tools:text="收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV收看方式：芒果TV"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

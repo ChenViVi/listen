@@ -99,6 +99,32 @@
                 android:text="@string/tv_video"
                 android:textColor="@color/tabGrey"/>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llTabSchedule"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivTabSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_19sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:src="@drawable/tab_schedule_inactive"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvTabSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/tv_schedule"
+                android:textColor="@color/tabGrey"/>
+        </LinearLayout>
     </LinearLayout>
     <include
         android:id="@+id/llMusic"

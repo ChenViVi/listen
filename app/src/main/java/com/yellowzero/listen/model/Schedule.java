@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class Schedule {
     private long id;
+    private String name;
     private String content;
     private Timestamp time;
 
@@ -13,6 +14,14 @@ public class Schedule {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getContent() {
