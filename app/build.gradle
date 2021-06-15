@@ -100,6 +100,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     //sdp
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.zzhoujay.richtext:richtext:3.0.8'
+
     //implementation 'q.rorbin:badgeview:1.1.3'
     // https://mvnrepository.com/artifact/com.hiczp/bilibili-api
     //implementation group: 'com.hiczp', name: 'bilibili-api', version: '0.2.0'

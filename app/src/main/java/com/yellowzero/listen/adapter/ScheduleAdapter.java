@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allen.library.utils.ToastUtils;
@@ -19,6 +20,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yellowzero.listen.R;
 import com.yellowzero.listen.model.Schedule;
 import com.yellowzero.listen.util.ScreenUtil;
+import com.zzhoujay.richtext.RichText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,8 +41,9 @@ public class ScheduleAdapter extends BaseQuickAdapter<Schedule, BaseViewHolder> 
     @Override
     protected void convert(BaseViewHolder viewHolder, Schedule item) {
         viewHolder.setText(R.id.tvName, item.getName())
-                .setText(R.id.tvContent, Html.fromHtml(item.getContent()))
                 .setText(R.id.tvTime, format.format(item.getTime()));
+        TextView tvContent = viewHolder.getView(R.id.tvContent);
+        RichText.fromMarkdown(item.getContent()).into(tvContent);
         ImageView ivClock = viewHolder.getView(R.id.ivClock);
         if(item.getTime().after(new Date())) {
             ivClock.setImageResource(R.drawable.ic_clock);
